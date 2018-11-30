@@ -133,6 +133,8 @@ export default class NativeUI {
 	private readonly _background: Sprite;
 
 	constructor(title, subtitle, offset, spriteLibrary, spriteName) {
+		if (!(offset instanceof Point)) offset = Point.Parse(offset);
+
 		this.title = title;
 		this.subtitle = subtitle;
 		this.spriteLibrary = spriteLibrary || "commonmenu";
@@ -428,9 +430,10 @@ export default class NativeUI {
 			Common.PlaySound(this.AUDIO_SELECT, this.AUDIO_LIBRARY);
 			this.onItemSelect.emit(it, this.CurrentSelection);
 			if (this.Children.has(it)) {
+				const subMenu = this.Children.get(it);
 				this.Visible = false;
-				this.Children.get(it).Visible = true;
-				this.onMenuChange.emit(this.Children.get(it), true);
+				subMenu.Visible = true;
+				this.onMenuChange.emit(subMenu, true);
 			}
 		}
 		it.fireEvent();
@@ -489,8 +492,8 @@ export default class NativeUI {
 					new Point(topLeft.X + labelSizeX, topLeft.Y),
 					new Size(arrowSizeX, 38)
 			  )
-				? 2
-				: 0;
+			? 2
+			: 0;
 	}
 
 	public ProcessMouse() {
@@ -765,8 +768,7 @@ export default class NativeUI {
 		if (this.MenuItems.length <= this.MaxItemsOnScreen + 1) return;
 		if (this._activeItem % this.MenuItems.length >= this._maxItem) {
 			if (
-				this._activeItem %
-				this.MenuItems.length ==
+				this._activeItem % this.MenuItems.length ==
 				this.MenuItems.length - 1
 			) {
 				this._minItem = 0;
