@@ -7,8 +7,11 @@ import Sprite from "../modules/Sprite";
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
+import UUIDV4 from "../utils/UUIDV4";
 
 export default class UIMenuItem {
+	public readonly Id: string = UUIDV4();
+
 	public static readonly DefaultBackColor: Color = Color.Empty;
 	public static readonly DefaultHighlightedBackColor: Color = Color.White;
 	public static readonly DefaultForeColor: Color = Color.WhiteSmoke;

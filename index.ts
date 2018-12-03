@@ -41,7 +41,7 @@ export default class NativeUI {
 	public ParentMenu: NativeUI;
 	public ParentItem: UIMenuItem;
 
-	public Children: Map<UIMenuItem, NativeUI>;
+	public Children: Map<string, NativeUI>; // (UUIDV4, NativeUI)
 
 	public WidthOffset: number = 0;
 
@@ -396,7 +396,7 @@ export default class NativeUI {
 			Common.PlaySound(this.AUDIO_ERROR, this.AUDIO_LIBRARY);
 			return;
 		}
-		const it = this.MenuItems[this.CurrentSelection];
+		const it: UIMenuCheckboxItem = this.MenuItems[this.CurrentSelection];
 		if (this.MenuItems[this.CurrentSelection] instanceof UIMenuCheckboxItem) {
 			it.Checked = !it.Checked;
 			Common.PlaySound(this.AUDIO_SELECT, this.AUDIO_LIBRARY);
@@ -404,8 +404,8 @@ export default class NativeUI {
 		} else {
 			Common.PlaySound(this.AUDIO_SELECT, this.AUDIO_LIBRARY);
 			this.ItemSelect.emit(it, this.CurrentSelection);
-			if (this.Children.has(it)) {
-				const subMenu = this.Children.get(it);
+			if (this.Children.has(it.Id)) {
+				const subMenu = this.Children.get(it.Id);
 				this.Visible = false;
 				subMenu.Visible = true;
 				this.MenuChange.emit(subMenu, true);
@@ -798,15 +798,15 @@ export default class NativeUI {
 	public BindMenuToItem(menuToBind: NativeUI, itemToBindTo: UIMenuItem) {
 		menuToBind.ParentMenu = this;
 		menuToBind.ParentItem = itemToBindTo;
-		this.Children.set(itemToBindTo, menuToBind);
+		this.Children.set(itemToBindTo.Id, menuToBind);
 	}
 
 	public ReleaseMenuFromItem(releaseFrom: UIMenuItem) {
-		if (!this.Children.has(releaseFrom)) return false;
-		const menu: NativeUI = this.Children.get(releaseFrom);
+		if (!this.Children.has(releaseFrom.Id)) return false;
+		const menu: NativeUI = this.Children.get(releaseFrom.Id);
 		menu.ParentItem = null;
 		menu.ParentMenu = null;
-		this.Children.delete(releaseFrom);
+		this.Children.delete(releaseFrom.Id);
 		return true;
 	}
 
