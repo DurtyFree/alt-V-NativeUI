@@ -16,6 +16,7 @@ import LiteEvent from "./utils/LiteEvent";
 import Point from "./utils/Point";
 import Size from "./utils/Size";
 import StringMeasurer from "./utils/StringMeasurer";
+import UUIDV4 from "./utils/UUIDV4";
 
 const screen: any = mp.game.graphics.getScreenActiveResolution(0, 0);
 mp.game.resolution = {};
@@ -23,6 +24,8 @@ mp.game.resolution.width = screen.x;
 mp.game.resolution.height = screen.y;
 
 export default class NativeUI {
+	public readonly Id: string = UUIDV4();
+
 	private title: string;
 	private subtitle: string;
 	private counterPretext: string = "";
