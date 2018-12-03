@@ -1,6 +1,7 @@
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
+import { Screen } from "../utils/Screen";
 
 export default class Sprite {
 	public TextureName: string;
@@ -70,8 +71,8 @@ export default class Sprite {
 				mp.game.graphics.requestStreamedTextureDict(textureDictionary, true);
 		}
 
-		const screenw = mp.game.resolution.width;
-		const screenh = mp.game.resolution.height;
+		const screenw = Screen.width;
+		const screenh = Screen.height;
 		const height = 1080.0;
 		const ratio = screenw / screenh;
 		const width = height * ratio;

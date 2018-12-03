@@ -1,3 +1,5 @@
+import { Screen } from "../utils/Screen";
+
 export default class StringMeasurer {
 	public static MeasureStringWidthNoConvert(input: string) {
 		mp.game.ui.setTextEntryForWidth("STRING");
@@ -8,8 +10,8 @@ export default class StringMeasurer {
 	}
 
 	public static MeasureString(str: string) {
-		const screenw = mp.game.resolution.width;
-		const screenh = mp.game.resolution.height;
+		const screenw = Screen.width;
+		const screenh = Screen.height;
 		const height = 1080.0;
 		const ratio = screenw / screenh;
 		const width = height * ratio;

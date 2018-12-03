@@ -1,6 +1,7 @@
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Rectangle from "./Rectangle";
+import { Screen } from "../utils/Screen";
 
 export default class ResRectangle extends Rectangle {
 	constructor(pos, size, color) {
@@ -19,8 +20,8 @@ export default class ResRectangle extends Rectangle {
 			color = this.color;
 		}
 
-		const screenw = mp.game.resolution.width;
-		const screenh = mp.game.resolution.height;
+		const screenw = Screen.width;
+		const screenh = Screen.height;
 		const height = 1080.0;
 		const ratio = screenw / screenh;
 		const width = height * ratio;

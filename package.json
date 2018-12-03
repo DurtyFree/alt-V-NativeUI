@@ -9,7 +9,11 @@
 	"private": false,
 	"dependencies": {},
 	"devDependencies": {
+		"@types/node": "^10.12.12",
+		"@types/ragemp-c": "github:CocaColaBear/types-ragemp-c#master",
 		"gulp": "^4.0.0",
+		"ts-loader": "^5.3.1",
+		"typescript": "^3.2.1",
 		"webpack-stream": "^5.2.1"
 	}
 }

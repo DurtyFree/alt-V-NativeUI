@@ -1,6 +1,6 @@
 import Size from "../utils/Size";
 import Rectangle from "./Rectangle";
-
+import { Screen } from "../utils/Screen";
 export default class Container extends Rectangle {
 	public Items: any[];
 
@@ -16,8 +16,8 @@ export default class Container extends Rectangle {
 	Draw(offset?) {
 		if (!this.enabled) return;
 		offset = offset || new Size();
-		const screenw = mp.game.resolution.width;
-		const screenh = mp.game.resolution.height;
+		const screenw = Screen.width;
+		const screenh = Screen.height;
 		const height = 1080.0;
 		const ratio = screenw / screenh;
 		const width = height * ratio;

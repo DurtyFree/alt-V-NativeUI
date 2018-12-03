@@ -17,11 +17,7 @@ import Point from "./utils/Point";
 import Size from "./utils/Size";
 import StringMeasurer from "./utils/StringMeasurer";
 import UUIDV4 from "./utils/UUIDV4";
-
-const screen: any = mp.game.graphics.getScreenActiveResolution(0, 0);
-mp.game.resolution = {};
-mp.game.resolution.width = screen.x;
-mp.game.resolution.height = screen.y;
+import { Screen } from "./utils/Screen";
 
 export default class NativeUI {
 	public readonly Id: string = UUIDV4();
@@ -422,8 +418,8 @@ export default class NativeUI {
 	}
 
 	public getMousePosition(relative: boolean = false) {
-		const screenw = mp.game.resolution.width;
-		const screenh = mp.game.resolution.height;
+		const screenw = Screen.width;
+		const screenh = Screen.height;
 		const cursor = mp.gui.cursor.position;
 		let [mouseX, mouseY] = [cursor[0], cursor[1]];
 		if (relative) [mouseX, mouseY] = [cursor[0] / screenw, cursor[1] / screenh];
@@ -431,8 +427,8 @@ export default class NativeUI {
 	}
 
 	public GetScreenResolutionMantainRatio(): Size {
-		const screenw = mp.game.resolution.width;
-		const screenh = mp.game.resolution.height;
+		const screenw = Screen.width;
+		const screenh = Screen.height;
 		const height = 1080.0;
 		const ratio = screenw / screenh;
 		var width = height * ratio;

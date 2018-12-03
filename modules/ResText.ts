@@ -2,6 +2,7 @@ import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Text from "./Text";
+import { Screen } from "../utils/Screen";
 
 export enum Alignment {
 	Left,
@@ -63,8 +64,8 @@ export default class ResText extends Text {
 			}
 		}
 
-		const screenw = mp.game.resolution.width;
-		const screenh = mp.game.resolution.height;
+		const screenw = Screen.width;
+		const screenh = Screen.height;
 
 		const height = 1080.0;
 		const ratio = screenw / screenh;
