@@ -68,7 +68,11 @@ export default class NativeUI {
 	public AUDIO_BACK: string = "BACK";
 	public AUDIO_ERROR: string = "ERROR";
 
-	public MenuItems: any[] = [];
+	public MenuItems: (
+		| UIMenuItem
+		| UIMenuListItem
+		| UIMenuSliderItem
+		| UIMenuCheckboxItem)[] = [];
 
 	get CurrentSelection() {
 		return this._activeItem % this.MenuItems.length;
@@ -355,7 +359,7 @@ export default class NativeUI {
 		)
 			return;
 		if (this.MenuItems[this.CurrentSelection] instanceof UIMenuListItem) {
-			const it: UIMenuListItem = this.MenuItems[this.CurrentSelection];
+			const it = <UIMenuListItem>this.MenuItems[this.CurrentSelection];
 			if (it.Collection.length == 0) return;
 			it.Index--;
 			Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
@@ -363,7 +367,7 @@ export default class NativeUI {
 		} else if (
 			this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem
 		) {
-			const it: UIMenuSliderItem = this.MenuItems[this.CurrentSelection];
+			const it = <UIMenuSliderItem>this.MenuItems[this.CurrentSelection];
 			it.Index = it.Index - 1;
 			Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
 			this.SliderChange.emit(it, it.Index, it.IndexToItem(it.Index));
@@ -378,7 +382,7 @@ export default class NativeUI {
 		)
 			return;
 		if (this.MenuItems[this.CurrentSelection] instanceof UIMenuListItem) {
-			const it: UIMenuListItem = this.MenuItems[this.CurrentSelection];
+			const it = <UIMenuListItem>this.MenuItems[this.CurrentSelection];
 			if (it.Collection.length == 0) return;
 			it.Index++;
 			Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
@@ -386,7 +390,7 @@ export default class NativeUI {
 		} else if (
 			this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem
 		) {
-			const it: UIMenuSliderItem = this.MenuItems[this.CurrentSelection];
+			const it = <UIMenuSliderItem>this.MenuItems[this.CurrentSelection];
 			it.Index++;
 			Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
 			this.SliderChange.emit(it, it.Index, it.IndexToItem(it.Index));
@@ -399,7 +403,7 @@ export default class NativeUI {
 			Common.PlaySound(this.AUDIO_ERROR, this.AUDIO_LIBRARY);
 			return;
 		}
-		const it: UIMenuCheckboxItem = this.MenuItems[this.CurrentSelection];
+		const it = <UIMenuCheckboxItem>this.MenuItems[this.CurrentSelection];
 		if (this.MenuItems[this.CurrentSelection] instanceof UIMenuCheckboxItem) {
 			it.Checked = !it.Checked;
 			Common.PlaySound(this.AUDIO_SELECT, this.AUDIO_LIBRARY);
@@ -552,7 +556,7 @@ export default class NativeUI {
 									this.ItemSelect.emit(this.MenuItems[i], i);
 									break;
 								case 2:
-									var it = this.MenuItems[i];
+									var it = <any>this.MenuItems[i];
 									if (
 										(it.Collection == null
 											? it.Items.Count
