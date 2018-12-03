@@ -843,8 +843,9 @@ export default class NativeUI {
 
 		this.MenuItems[this._activeItem % this.MenuItems.length].Selected = true;
 		if (
-			this.MenuItems[this._activeItem % this.MenuItems.length].Description !==
-			""
+			this.MenuItems[
+				this._activeItem % this.MenuItems.length
+			].Description.trim() !== ""
 		) {
 			this.RecalculateDescriptionPosition();
 			let descCaption = this.MenuItems[this._activeItem % this.MenuItems.length]
