@@ -1,0 +1,15 @@
+{
+	"name": "NativeUI",
+	"version": "1.0.0",
+	"description": "RageMP NativeUI",
+	"main": "index.js",
+	"repository": "https://github.com/XMGamingMaster/RageMP-NativeUI.git",
+	"author": "GamingMaster",
+	"license": "Apache-2.0",
+	"private": false,
+	"dependencies": {},
+	"devDependencies": {
+		"gulp": "^4.0.0",
+		"webpack-stream": "^5.2.1"
+	}
+}
