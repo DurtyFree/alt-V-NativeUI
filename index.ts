@@ -83,39 +83,14 @@ export default class NativeUI {
 	}
 
 	// Events
-	private readonly onIndexChange = new LiteEvent();
-	private readonly onListChange = new LiteEvent();
-	private readonly onSliderChange = new LiteEvent();
-	private readonly onSliderSelect = new LiteEvent();
-	private readonly onCheckboxChange = new LiteEvent();
-	private readonly onItemSelect = new LiteEvent();
-	private readonly onMenuClose = new LiteEvent();
-	private readonly onMenuChange = new LiteEvent();
-
-	public get IndexChange() {
-		return this.onIndexChange.expose();
-	}
-	public get ListChange() {
-		return this.onListChange.expose();
-	}
-	public get SliderChange() {
-		return this.onSliderChange.expose();
-	}
-	public get SliderSelect() {
-		return this.onSliderSelect.expose();
-	}
-	public get CheckboxChange() {
-		return this.onCheckboxChange.expose();
-	}
-	public get ItemSelect() {
-		return this.onItemSelect.expose();
-	}
-	public get MenuClose() {
-		return this.onMenuClose.expose();
-	}
-	public get MenuChange() {
-		return this.onMenuChange.expose();
-	}
+	private readonly IndexChange = new LiteEvent();
+	private readonly ListChange = new LiteEvent();
+	private readonly SliderChange = new LiteEvent();
+	private readonly SliderSelect = new LiteEvent();
+	private readonly CheckboxChange = new LiteEvent();
+	private readonly ItemSelect = new LiteEvent();
+	private readonly MenuClose = new LiteEvent();
+	private readonly MenuChange = new LiteEvent();
 
 	private MouseEdgeEnabled: boolean = true;
 
@@ -367,7 +342,7 @@ export default class NativeUI {
 	public Close() {
 		Common.PlaySound(this.AUDIO_BACK, this.AUDIO_LIBRARY);
 		this.Visible = false;
-		this.onMenuClose.emit();
+		this.MenuClose.emit();
 	}
 
 	public GoLeft() {
@@ -381,14 +356,14 @@ export default class NativeUI {
 			if (it.Collection.length == 0) return;
 			it.Index--;
 			Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
-			this.onListChange.emit(it, it.Index);
+			this.ListChange.emit(it, it.Index);
 		} else if (
 			this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem
 		) {
 			const it: UIMenuSliderItem = this.MenuItems[this.CurrentSelection];
 			it.Index = it.Index - 1;
 			Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
-			this.onSliderChange.emit(it, it.Index, it.IndexToItem(it.Index));
+			this.SliderChange.emit(it, it.Index, it.IndexToItem(it.Index));
 			// it.SliderChangedTrigger(it.Index);
 		}
 	}
@@ -404,14 +379,14 @@ export default class NativeUI {
 			if (it.Collection.length == 0) return;
 			it.Index++;
 			Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
-			this.onListChange.emit(it, it.Index);
+			this.ListChange.emit(it, it.Index);
 		} else if (
 			this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem
 		) {
 			const it: UIMenuSliderItem = this.MenuItems[this.CurrentSelection];
 			it.Index++;
 			Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
-			this.onSliderChange.emit(it, it.Index, it.IndexToItem(it.Index));
+			this.SliderChange.emit(it, it.Index, it.IndexToItem(it.Index));
 			// it.SliderChangedTrigger(it.Index);
 		}
 	}
@@ -425,15 +400,15 @@ export default class NativeUI {
 		if (this.MenuItems[this.CurrentSelection] instanceof UIMenuCheckboxItem) {
 			it.Checked = !it.Checked;
 			Common.PlaySound(this.AUDIO_SELECT, this.AUDIO_LIBRARY);
-			this.onCheckboxChange.emit(it, it.Checked);
+			this.CheckboxChange.emit(it, it.Checked);
 		} else {
 			Common.PlaySound(this.AUDIO_SELECT, this.AUDIO_LIBRARY);
-			this.onItemSelect.emit(it, this.CurrentSelection);
+			this.ItemSelect.emit(it, this.CurrentSelection);
 			if (this.Children.has(it)) {
 				const subMenu = this.Children.get(it);
 				this.Visible = false;
 				subMenu.Visible = true;
-				this.onMenuChange.emit(subMenu, true);
+				this.MenuChange.emit(subMenu, true);
 			}
 		}
 		it.fireEvent();
@@ -571,7 +546,7 @@ export default class NativeUI {
 									Common.PlaySound(this.AUDIO_SELECT, this.AUDIO_LIBRARY);
 									//this.MenuItems[i].ItemActivate(this);
 									this.MenuItems[i].fireEvent();
-									this.onItemSelect.emit(this.MenuItems[i], i);
+									this.ItemSelect.emit(this.MenuItems[i], i);
 									break;
 								case 2:
 									var it = this.MenuItems[i];
@@ -582,7 +557,7 @@ export default class NativeUI {
 									) {
 										it.Index++;
 										Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
-										this.onListChange.emit(it, it.Index);
+										this.ListChange.emit(it, it.Index);
 									}
 									break;
 							}
@@ -590,7 +565,7 @@ export default class NativeUI {
 					} else if (!uiMenuItem.Selected) {
 						this.CurrentSelection = i;
 						Common.PlaySound(this.AUDIO_UPDOWN, this.AUDIO_LIBRARY);
-						this.onIndexChange.emit(this.CurrentSelection);
+						this.IndexChange.emit(this.CurrentSelection);
 						this.SelectItem();
 					} else if (!uiMenuItem.Enabled && uiMenuItem.Selected) {
 						Common.PlaySound(this.AUDIO_ERROR, this.AUDIO_LIBRARY);
@@ -752,7 +727,7 @@ export default class NativeUI {
 			this.MenuItems[this._activeItem % this.MenuItems.length].Selected = true;
 		}
 		Common.PlaySound(this.AUDIO_UPDOWN, this.AUDIO_LIBRARY);
-		this.onIndexChange.emit(this.CurrentSelection);
+		this.IndexChange.emit(this.CurrentSelection);
 	}
 
 	public GoUp() {
@@ -761,7 +736,7 @@ export default class NativeUI {
 		this._activeItem--;
 		this.MenuItems[this._activeItem % this.MenuItems.length].Selected = true;
 		Common.PlaySound(this.AUDIO_UPDOWN, this.AUDIO_LIBRARY);
-		this.onIndexChange.emit(this.CurrentSelection);
+		this.IndexChange.emit(this.CurrentSelection);
 	}
 
 	public GoDownOverflow() {
@@ -797,7 +772,7 @@ export default class NativeUI {
 			this.MenuItems[this._activeItem % this.MenuItems.length].Selected = true;
 		}
 		Common.PlaySound(this.AUDIO_UPDOWN, this.AUDIO_LIBRARY);
-		this.onIndexChange.emit(this.CurrentSelection);
+		this.IndexChange.emit(this.CurrentSelection);
 	}
 
 	public GoDown() {
@@ -806,7 +781,7 @@ export default class NativeUI {
 		this._activeItem++;
 		this.MenuItems[this._activeItem % this.MenuItems.length].Selected = true;
 		Common.PlaySound(this.AUDIO_UPDOWN, this.AUDIO_LIBRARY);
-		this.onIndexChange.emit(this.CurrentSelection);
+		this.IndexChange.emit(this.CurrentSelection);
 	}
 
 	public GoBack() {
@@ -815,9 +790,9 @@ export default class NativeUI {
 		if (this.ParentMenu != null) {
 			this.ParentMenu.Visible = true;
 			this.ParentMenu._justOpened = true;
-			this.onMenuChange.emit(this.ParentMenu, false);
+			this.MenuChange.emit(this.ParentMenu, false);
 		}
-		this.onMenuClose.emit();
+		this.MenuClose.emit();
 	}
 
 	public BindMenuToItem(menuToBind: NativeUI, itemToBindTo: UIMenuItem) {
