@@ -30,6 +30,10 @@ export default class Sprite {
 
 	LoadTextureDictionary() {
 		mp.game.graphics.requestStreamedTextureDict(this._textureDict, true);
+		while (!this.IsTextureDictionaryLoaded) {
+			//@ts-ignore
+			mp.game.wait(0);
+		}
 	}
 
 	set TextureDict(v) {
