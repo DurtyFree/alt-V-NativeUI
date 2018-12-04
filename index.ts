@@ -681,8 +681,7 @@ export default class NativeUI {
 	}
 
 	private FormatDescription(input: string) {
-		let desc = input;
-		if (desc.length > 99) desc = desc.slice(0, 99 - 3) + "...";
+		if (input.length > 99) input = input.slice(0, 99);
 
 		const maxPixelsPerLine = 425 + this.WidthOffset;
 		let aggregatePixels = 0;
