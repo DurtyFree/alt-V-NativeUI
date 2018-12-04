@@ -8,7 +8,7 @@ import Color from "../utils/Color";
 import LiteEvent from "../utils/LiteEvent";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
-import StringMeasurer from "../utils/StringMeasurer";
+import StringMeasurer from "../modules/StringMeasurer";
 import UIMenuItem from "./UIMenuItem";
 
 export default class UIMenuListItem extends UIMenuItem {
@@ -39,8 +39,8 @@ export default class UIMenuListItem extends UIMenuItem {
 		return this.SelectedItem == null
 			? null
 			: this.SelectedItem.Data == null
-				? this.SelectedItem.DisplayText
-				: this.SelectedItem.Data;
+			? this.SelectedItem.DisplayText
+			: this.SelectedItem.Data;
 	}
 
 	public ScrollingEnabled: boolean = true;

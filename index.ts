@@ -15,7 +15,7 @@ import Common from "./utils/Common";
 import LiteEvent from "./utils/LiteEvent";
 import Point from "./utils/Point";
 import Size from "./utils/Size";
-import StringMeasurer from "./utils/StringMeasurer";
+import StringMeasurer from "./modules/StringMeasurer";
 import UUIDV4 from "./utils/UUIDV4";
 import { Screen } from "./utils/Screen";
 
@@ -86,14 +86,14 @@ export default class NativeUI {
 	}
 
 	// Events
-	private readonly IndexChange = new LiteEvent();
-	private readonly ListChange = new LiteEvent();
-	private readonly SliderChange = new LiteEvent();
-	private readonly SliderSelect = new LiteEvent();
-	private readonly CheckboxChange = new LiteEvent();
-	private readonly ItemSelect = new LiteEvent();
-	private readonly MenuClose = new LiteEvent();
-	private readonly MenuChange = new LiteEvent();
+	public readonly IndexChange = new LiteEvent();
+	public readonly ListChange = new LiteEvent();
+	public readonly SliderChange = new LiteEvent();
+	public readonly SliderSelect = new LiteEvent();
+	public readonly CheckboxChange = new LiteEvent();
+	public readonly ItemSelect = new LiteEvent();
+	public readonly MenuClose = new LiteEvent();
+	public readonly MenuChange = new LiteEvent();
 
 	private MouseEdgeEnabled: boolean = true;
 
