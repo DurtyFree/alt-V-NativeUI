@@ -31,6 +31,12 @@ export default class UIMenuListItem extends UIMenuItem {
 		this.collection = v;
 	}
 
+	set SelectedItem(v: ListItem) {
+		const idx = this.Collection.findIndex(li => li.Id === v.Id);
+		if (idx > 0) this.Index = idx;
+		else this.Index = 0;
+	}
+
 	get SelectedItem() {
 		return this.Collection.length > 0 ? this.Collection[this.Index] : null;
 	}
@@ -104,6 +110,29 @@ export default class UIMenuListItem extends UIMenuItem {
 			Font.ChaletLondon,
 			Alignment.Right
 		);
+	}
+
+	public setCollection(collection: ItemsCollection) {
+		this.Collection = collection.getListItems();
+	}
+
+	public setCollectionItem(
+		index: number,
+		item: ListItem | string,
+		resetSelection: boolean = true
+	) {
+		if (index > this.Collection.length)
+			// Placeholder for formatting
+			throw new Error("Index out of bounds");
+		if (typeof item === "string")
+			// Placeholder for formatting
+			item = new ListItem(item);
+
+		this.Collection.splice(index, 1, item);
+
+		if (resetSelection)
+			// Placeholder for formatting
+			this.Index = 0;
 	}
 
 	public SetVerticalPosition(y: number) {
