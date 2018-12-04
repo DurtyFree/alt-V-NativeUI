@@ -1,6 +1,7 @@
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import IElement from "./IElement";
+import ResText from "./ResText";
 
 export default class Text extends IElement {
 	public caption: string;
@@ -35,7 +36,7 @@ export default class Text extends IElement {
 		mp.game.ui.setTextColour(color.R, color.G, color.B, color.A);
 		mp.game.ui.setTextCentre(centered);
 		mp.game.ui.setTextEntry("STRING");
-		mp.game.ui.addTextComponentSubstringPlayerName(caption);
+		ResText.AddLongString(caption);
 		mp.game.ui.drawText(x, y);
 	}
 }
