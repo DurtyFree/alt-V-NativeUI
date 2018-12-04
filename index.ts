@@ -411,6 +411,7 @@ export default class NativeUI {
 				const subMenu = this.Children.get(it.Id);
 				this.Visible = false;
 				subMenu.Visible = true;
+				subMenu._justOpened = true;
 				this.MenuChange.emit(subMenu, true);
 			}
 		}
