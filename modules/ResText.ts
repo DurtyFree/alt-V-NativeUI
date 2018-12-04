@@ -102,16 +102,15 @@ export default class ResText extends Text {
 		}
 
 		mp.game.ui.setTextEntry("STRING");
-		mp.game.ui.addTextComponentSubstringPlayerName(caption);
+		ResText.AddLongString(caption);
 		mp.game.ui.drawText(x, y);
 	}
 
-	// Not implemented yet
 	public static AddLongString(str: string) {
 		const strLen = 99;
 		for (var i = 0; i < str.length; i += strLen) {
 			const substr = str.substr(i, Math.min(strLen, str.length - i));
-			// NativeFunction.CallByHash<uint>(0x6c188be134e074aa, substr);      // _ADD_TEXT_COMPONENT_STRING
+			mp.game.ui.addTextComponentSubstringPlayerName(substr);
 		}
 	}
 }
