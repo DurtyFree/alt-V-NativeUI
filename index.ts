@@ -841,26 +841,29 @@ export default class NativeUI {
 				: new Size(431 + this.WidthOffset, 38 * this.MenuItems.length);
 		this._background.Draw();
 
-		this.MenuItems[this._activeItem % this.MenuItems.length].Selected = true;
-		if (
-			this.MenuItems[
-				this._activeItem % this.MenuItems.length
-			].Description.trim() !== ""
-		) {
-			this.RecalculateDescriptionPosition();
-			let descCaption = this.MenuItems[this._activeItem % this.MenuItems.length]
-				.Description;
-			// descCaption = this.FormatDescription(descCaption);
-			this._descriptionText.caption = descCaption;
-			const numLines = this._descriptionText.caption.split("\n").length;
-			this._descriptionRectangle.size = new Size(
-				431 + this.WidthOffset,
-				numLines * 25 + 15
-			);
+		if (this.MenuItems.length > 0) {
+			this.MenuItems[this._activeItem % this.MenuItems.length].Selected = true;
+			if (
+				this.MenuItems[
+					this._activeItem % this.MenuItems.length
+				].Description.trim() !== ""
+			) {
+				this.RecalculateDescriptionPosition();
+				let descCaption = this.MenuItems[
+					this._activeItem % this.MenuItems.length
+				].Description;
+				// descCaption = this.FormatDescription(descCaption);
+				this._descriptionText.caption = descCaption;
+				const numLines = this._descriptionText.caption.split("\n").length;
+				this._descriptionRectangle.size = new Size(
+					431 + this.WidthOffset,
+					numLines * 25 + 15
+				);
 
-			this._descriptionBar.Draw();
-			this._descriptionRectangle.Draw();
-			this._descriptionText.Draw();
+				this._descriptionBar.Draw();
+				this._descriptionRectangle.Draw();
+				this._descriptionText.Draw();
+			}
 		}
 
 		if (this.MenuItems.length <= this.MaxItemsOnScreen + 1) {
