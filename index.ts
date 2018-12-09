@@ -341,6 +341,7 @@ export default class NativeUI {
 	public Open() {
 		Common.PlaySound(this.AUDIO_BACK, this.AUDIO_LIBRARY);
 		this.Visible = true;
+		this._justOpened = true;
 	}
 	public Close() {
 		Common.PlaySound(this.AUDIO_BACK, this.AUDIO_LIBRARY);
