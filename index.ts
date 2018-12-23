@@ -92,6 +92,7 @@ export default class NativeUI {
 	public readonly SliderSelect = new LiteEvent();
 	public readonly CheckboxChange = new LiteEvent();
 	public readonly ItemSelect = new LiteEvent();
+	public readonly MenuOpen = new LiteEvent();
 	public readonly MenuClose = new LiteEvent();
 	public readonly MenuChange = new LiteEvent();
 
@@ -342,6 +343,7 @@ export default class NativeUI {
 		Common.PlaySound(this.AUDIO_BACK, this.AUDIO_LIBRARY);
 		this.Visible = true;
 		this._justOpened = true;
+		this.MenuOpen.emit();
 	}
 	public Close() {
 		Common.PlaySound(this.AUDIO_BACK, this.AUDIO_LIBRARY);
@@ -419,6 +421,7 @@ export default class NativeUI {
 				this.Visible = false;
 				subMenu.Visible = true;
 				subMenu._justOpened = true;
+				subMenu.MenuOpen.emit();
 				this.MenuChange.emit(subMenu, true);
 			}
 		}
@@ -803,6 +806,7 @@ export default class NativeUI {
 		if (this.ParentMenu != null) {
 			this.ParentMenu.Visible = true;
 			this.ParentMenu._justOpened = true;
+			this.ParentMenu.MenuOpen.emit();
 			this.MenuChange.emit(this.ParentMenu, false);
 		}
 		this.MenuClose.emit();
