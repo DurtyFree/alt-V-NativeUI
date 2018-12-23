@@ -350,6 +350,11 @@ export default class NativeUI {
 		this.MenuClose.emit();
 	}
 
+	set Subtitle(text: string) {
+		this.subtitle = text;
+		this._subtitle.caption = text;
+	}
+
 	public GoLeft() {
 		if (
 			!(this.MenuItems[this.CurrentSelection] instanceof UIMenuListItem) &&
