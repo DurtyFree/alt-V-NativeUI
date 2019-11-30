@@ -1,10 +1,10 @@
 import game from 'natives';
 import { Screen } from "../utils/Screen";
-import ResText from "./ResText";
+import Text from './Text';
 export default class StringMeasurer {
     static MeasureStringWidthNoConvert(input) {
         game.beginTextCommandGetWidth("STRING");
-        ResText.AddLongString(input);
+        Text.AddLongString(input);
         game.setTextFont(0);
         game.setTextScale(0.35, 0.35);
         return game.endTextCommandGetWidth(true);

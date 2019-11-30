@@ -2,12 +2,13 @@ import * as alt from 'alt';
 import BadgeStyle from "../enums/BadgeStyle";
 import Font from "../enums/Font";
 import ResRectangle from "../modules/ResRectangle";
-import ResText, { Alignment } from "../modules/ResText";
+import ResText from "../modules/ResText";
 import Sprite from "../modules/Sprite";
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import UUIDV4 from "../utils/UUIDV4";
+import Alignment from '../enums/Alignment';
 export default class UIMenuItem {
     constructor(text, description = "") {
         this.Id = UUIDV4();

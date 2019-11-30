@@ -5,12 +5,7 @@ import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Text from "./Text";
 import { Screen } from "../utils/Screen";
-
-export enum Alignment {
-	Left,
-	Centered,
-	Right
-}
+import Alignment from '../enums/Alignment';
 
 export default class ResText extends Text {
 	public TextAlignment: Alignment = Alignment.Left;
@@ -104,15 +99,7 @@ export default class ResText extends Text {
 		}
 
         game.beginTextCommandDisplayText("STRING");
-        ResText.AddLongString(caption as string);
+        Text.AddLongString(caption as string);
         game.endTextCommandDisplayText(x, y, 0);
-	}
-
-	public static AddLongString(str: string) {
-        const strLen = 99;
-        for (var i = 0; i < str.length; i += strLen) {
-            const substr = str.substr(i, Math.min(strLen, str.length - i));
-            game.addTextComponentSubstringPlayerName(substr);
-        }
 	}
 }

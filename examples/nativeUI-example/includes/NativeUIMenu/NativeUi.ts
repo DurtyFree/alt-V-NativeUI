@@ -2,6 +2,7 @@ import * as alt from 'alt';
 import game from 'natives';
 import BadgeStyle from "./enums/BadgeStyle";
 import Font from "./enums/Font";
+import Alignment from "./enums/Alignment";
 import UIMenuCheckboxItem from "./items/UIMenuCheckboxItem";
 import UIMenuItem from "./items/UIMenuItem";
 import UIMenuListItem from "./items/UIMenuListItem";
@@ -10,7 +11,7 @@ import Container from "./modules/Container";
 import ItemsCollection from "./modules/ItemsCollection";
 import ListItem from "./modules/ListItem";
 import ResRectangle from "./modules/ResRectangle";
-import ResText, { Alignment } from "./modules/ResText";
+import ResText from "./modules/ResText";
 import Sprite from "./modules/Sprite";
 import Color from "./utils/Color";
 import Common from "./utils/Common";
@@ -20,6 +21,9 @@ import Size from "./utils/Size";
 import StringMeasurer from "./modules/StringMeasurer";
 import UUIDV4 from "./utils/UUIDV4";
 import { Screen } from "./utils/Screen";
+import Text from './modules/Text';
+import Rectangle from './modules/Rectangle';
+import IElement from './modules/IElement';
 
 export default class NativeUI {
 	public readonly Id: string = UUIDV4();
@@ -91,7 +95,7 @@ export default class NativeUI {
 	public readonly IndexChange = new LiteEvent();
 	public readonly ListChange = new LiteEvent();
 	public readonly SliderChange = new LiteEvent();
-	public readonly SliderSelect = new LiteEvent();
+	//public readonly SliderSelect = new LiteEvent();
 	public readonly CheckboxChange = new LiteEvent();
 	public readonly ItemSelect = new LiteEvent();
 	public readonly MenuOpen = new LiteEvent();
@@ -247,7 +251,7 @@ export default class NativeUI {
 		);
 
         alt.everyTick(this.render.bind(this));
-		alt.log(`Created Native UI! ${this.title}`);
+		//alt.log(`Created Native UI! ${this.title}`);
 	}
 
 	private RecalculateDescriptionPosition() {
@@ -813,7 +817,11 @@ export default class NativeUI {
 		menuToBind.ParentMenu = this;
 		menuToBind.ParentItem = itemToBindTo;
 		this.Children.set(itemToBindTo.Id, menuToBind);
-	}
+    }
+
+    public AddSubMenu(subMenu: NativeUI, itemToBindTo: UIMenuItem) {
+        this.BindMenuToItem(subMenu, itemToBindTo);
+    }
 
 	public ReleaseMenuFromItem(releaseFrom: UIMenuItem) {
 		if (!this.Children.has(releaseFrom.Id)) return false;
@@ -822,7 +830,7 @@ export default class NativeUI {
 		menu.ParentMenu = null;
 		this.Children.delete(releaseFrom.Id);
 		return true;
-	}
+    }
 
 	private render() {
 		if (!this.Visible) return;
@@ -924,15 +932,24 @@ export default class NativeUI {
 
 export {
     NativeUI as Menu,
+    Alignment,
+    BadgeStyle,
+    Font,
     UIMenuItem,
     UIMenuListItem,
     UIMenuCheckboxItem,
     UIMenuSliderItem,
-    BadgeStyle,
-    Point,
-    Size,
-    Color,
-    Font,
+    Container,
+    IElement,
     ItemsCollection,
-    ListItem
+    ListItem,
+    Rectangle,
+    ResRectangle,
+    ResText,
+    Sprite,
+    StringMeasurer,
+    Text,
+    Color,
+    Point,
+    Size
 };

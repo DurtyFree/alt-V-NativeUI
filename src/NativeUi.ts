@@ -95,7 +95,7 @@ export default class NativeUI {
 	public readonly IndexChange = new LiteEvent();
 	public readonly ListChange = new LiteEvent();
 	public readonly SliderChange = new LiteEvent();
-	public readonly SliderSelect = new LiteEvent();
+	//public readonly SliderSelect = new LiteEvent();
 	public readonly CheckboxChange = new LiteEvent();
 	public readonly ItemSelect = new LiteEvent();
 	public readonly MenuOpen = new LiteEvent();
@@ -251,7 +251,7 @@ export default class NativeUI {
 		);
 
         alt.everyTick(this.render.bind(this));
-		alt.log(`Created Native UI! ${this.title}`);
+		//alt.log(`Created Native UI! ${this.title}`);
 	}
 
 	private RecalculateDescriptionPosition() {
@@ -817,7 +817,11 @@ export default class NativeUI {
 		menuToBind.ParentMenu = this;
 		menuToBind.ParentItem = itemToBindTo;
 		this.Children.set(itemToBindTo.Id, menuToBind);
-	}
+    }
+
+    public AddSubMenu(subMenu: NativeUI, itemToBindTo: UIMenuItem) {
+        this.BindMenuToItem(subMenu, itemToBindTo);
+    }
 
 	public ReleaseMenuFromItem(releaseFrom: UIMenuItem) {
 		if (!this.Children.has(releaseFrom.Id)) return false;
@@ -826,7 +830,7 @@ export default class NativeUI {
 		menu.ParentMenu = null;
 		this.Children.delete(releaseFrom.Id);
 		return true;
-	}
+    }
 
 	private render() {
 		if (!this.Visible) return;

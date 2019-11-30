@@ -2,6 +2,7 @@ import * as alt from 'alt';
 import game from 'natives';
 import BadgeStyle from "./enums/BadgeStyle";
 import Font from "./enums/Font";
+import Alignment from "./enums/Alignment";
 import UIMenuCheckboxItem from "./items/UIMenuCheckboxItem";
 import UIMenuItem from "./items/UIMenuItem";
 import UIMenuListItem from "./items/UIMenuListItem";
@@ -10,7 +11,7 @@ import Container from "./modules/Container";
 import ItemsCollection from "./modules/ItemsCollection";
 import ListItem from "./modules/ListItem";
 import ResRectangle from "./modules/ResRectangle";
-import ResText, { Alignment } from "./modules/ResText";
+import ResText from "./modules/ResText";
 import Sprite from "./modules/Sprite";
 import Color from "./utils/Color";
 import Common from "./utils/Common";
@@ -20,6 +21,9 @@ import Size from "./utils/Size";
 import StringMeasurer from "./modules/StringMeasurer";
 import UUIDV4 from "./utils/UUIDV4";
 import { Screen } from "./utils/Screen";
+import Text from './modules/Text';
+import Rectangle from './modules/Rectangle';
+import IElement from './modules/IElement';
 export default class NativeUI {
     constructor(title, subtitle, offset, spriteLibrary, spriteName) {
         this.Id = UUIDV4();
@@ -46,7 +50,6 @@ export default class NativeUI {
         this.IndexChange = new LiteEvent();
         this.ListChange = new LiteEvent();
         this.SliderChange = new LiteEvent();
-        this.SliderSelect = new LiteEvent();
         this.CheckboxChange = new LiteEvent();
         this.ItemSelect = new LiteEvent();
         this.MenuOpen = new LiteEvent();
@@ -94,7 +97,6 @@ export default class NativeUI {
         this._descriptionText = new ResText("Description", new Point(this.offset.X + 5, 125), 0.35, new Color(255, 255, 255, 255), Font.ChaletLondon, Alignment.Left);
         this._background = new Sprite("commonmenu", "gradient_bgd", new Point(this.offset.X, 144 + this.offset.Y - 37 + this.extraOffset), new Size(290, 25));
         alt.everyTick(this.render.bind(this));
-        alt.log(`Created Native UI! ${this.title}`);
     }
     get CurrentSelection() {
         return this._activeItem % this.MenuItems.length;
@@ -561,6 +563,9 @@ export default class NativeUI {
         menuToBind.ParentItem = itemToBindTo;
         this.Children.set(itemToBindTo.Id, menuToBind);
     }
+    AddSubMenu(subMenu, itemToBindTo) {
+        this.BindMenuToItem(subMenu, itemToBindTo);
+    }
     ReleaseMenuFromItem(releaseFrom) {
         if (!this.Children.has(releaseFrom.Id))
             return false;
@@ -649,4 +654,4 @@ export default class NativeUI {
         this._logo.Draw();
     }
 }
-export { NativeUI as Menu, UIMenuItem, UIMenuListItem, UIMenuCheckboxItem, UIMenuSliderItem, BadgeStyle, Point, Size, Color, Font, ItemsCollection, ListItem };
+export { NativeUI as Menu, Alignment, BadgeStyle, Font, UIMenuItem, UIMenuListItem, UIMenuCheckboxItem, UIMenuSliderItem, Container, IElement, ItemsCollection, ListItem, Rectangle, ResRectangle, ResText, Sprite, StringMeasurer, Text, Color, Point, Size };

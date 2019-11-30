@@ -5,12 +5,7 @@ import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Text from "./Text";
 import { Screen } from "../utils/Screen";
-export var Alignment;
-(function (Alignment) {
-    Alignment[Alignment["Left"] = 0] = "Left";
-    Alignment[Alignment["Centered"] = 1] = "Centered";
-    Alignment[Alignment["Right"] = 2] = "Right";
-})(Alignment || (Alignment = {}));
+import Alignment from '../enums/Alignment';
 export default class ResText extends Text {
     constructor(caption, pos, scale, color, font, centered) {
         super(caption, pos, scale, color || new Color(255, 255, 255), font || 0, false);
@@ -74,14 +69,7 @@ export default class ResText extends Text {
             }
         }
         game.beginTextCommandDisplayText("STRING");
-        ResText.AddLongString(caption);
+        Text.AddLongString(caption);
         game.endTextCommandDisplayText(x, y, 0);
-    }
-    static AddLongString(str) {
-        const strLen = 99;
-        for (var i = 0; i < str.length; i += strLen) {
-            const substr = str.substr(i, Math.min(strLen, str.length - i));
-            game.addTextComponentSubstringPlayerName(substr);
-        }
     }
 }

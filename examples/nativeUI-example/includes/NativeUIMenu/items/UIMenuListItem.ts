@@ -1,8 +1,9 @@
 import BadgeStyle from "../enums/BadgeStyle";
 import Font from "../enums/Font";
+import Alignment from "../enums/Alignment";
 import ItemsCollection from "../modules/ItemsCollection";
 import ListItem from "../modules/ListItem";
-import ResText, { Alignment } from "../modules/ResText";
+import ResText from "../modules/ResText";
 import Sprite from "../modules/Sprite";
 import Color from "../utils/Color";
 import LiteEvent from "../utils/LiteEvent";

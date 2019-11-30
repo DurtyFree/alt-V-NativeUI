@@ -2,7 +2,6 @@ import game from 'natives';
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import IElement from "./IElement";
-import ResText from "./ResText";
 export default class Text extends IElement {
     constructor(caption, pos, scale, color, font, centered) {
         super();
@@ -28,7 +27,14 @@ export default class Text extends IElement {
         game.setTextColour(color.R, color.G, color.B, color.A);
         game.setTextCentre(centered);
         game.beginTextCommandDisplayText("STRING");
-        ResText.AddLongString(caption);
+        Text.AddLongString(caption);
         game.endTextCommandDisplayText(x, y, 0);
+    }
+    static AddLongString(str) {
+        const strLen = 99;
+        for (var i = 0; i < str.length; i += strLen) {
+            const substr = str.substr(i, Math.min(strLen, str.length - i));
+            game.addTextComponentSubstringPlayerName(substr);
+        }
     }
 }
