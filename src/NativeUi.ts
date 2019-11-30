@@ -2,6 +2,7 @@ import * as alt from 'alt';
 import game from 'natives';
 import BadgeStyle from "./enums/BadgeStyle";
 import Font from "./enums/Font";
+import Alignment from "./enums/Alignment";
 import UIMenuCheckboxItem from "./items/UIMenuCheckboxItem";
 import UIMenuItem from "./items/UIMenuItem";
 import UIMenuListItem from "./items/UIMenuListItem";
@@ -10,7 +11,7 @@ import Container from "./modules/Container";
 import ItemsCollection from "./modules/ItemsCollection";
 import ListItem from "./modules/ListItem";
 import ResRectangle from "./modules/ResRectangle";
-import ResText, { Alignment } from "./modules/ResText";
+import ResText from "./modules/ResText";
 import Sprite from "./modules/Sprite";
 import Color from "./utils/Color";
 import Common from "./utils/Common";
@@ -20,6 +21,9 @@ import Size from "./utils/Size";
 import StringMeasurer from "./modules/StringMeasurer";
 import UUIDV4 from "./utils/UUIDV4";
 import { Screen } from "./utils/Screen";
+import Text from './modules/Text';
+import Rectangle from './modules/Rectangle';
+import IElement from './modules/IElement';
 
 export default class NativeUI {
 	public readonly Id: string = UUIDV4();
@@ -113,7 +117,7 @@ export default class NativeUI {
 	private readonly _counterText: ResText;
 	private readonly _background: Sprite;
 
-    constructor(title: string, subtitle: string, offset: Point, spriteLibrary: string, spriteName: string) {
+    constructor(title: string, subtitle: string, offset: Point, spriteLibrary?: string, spriteName?: string) {
 		if (!(offset instanceof Point)) offset = Point.Parse(offset);
 
 		this.title = title;
@@ -924,15 +928,24 @@ export default class NativeUI {
 
 export {
     NativeUI as Menu,
+    Alignment,
+    BadgeStyle,
+    Font,
     UIMenuItem,
     UIMenuListItem,
     UIMenuCheckboxItem,
     UIMenuSliderItem,
-    BadgeStyle,
-    Point,
-    Size,
-    Color,
-    Font,
+    Container,
+    IElement,
     ItemsCollection,
-    ListItem
+    ListItem,
+    Rectangle,
+    ResRectangle,
+    ResText,
+    Sprite,
+    StringMeasurer,
+    Text,
+    Color,
+    Point,
+    Size
 };
