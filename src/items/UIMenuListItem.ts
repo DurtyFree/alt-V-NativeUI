@@ -72,7 +72,7 @@ export default class UIMenuListItem extends UIMenuItem {
 		if (this.Collection == null) return;
 		if (this.Collection != null && this.Collection.length == 0) return;
 
-		this._index = 100000 - (100000 % this.Collection.length) + value;
+        this._index = 100000000 - (100000000 % this.Collection.length) + value;
 
 		const caption =
 			this.Collection.length >= this.Index

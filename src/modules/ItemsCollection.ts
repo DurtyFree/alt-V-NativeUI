@@ -1,9 +1,9 @@
 import ListItem from "../modules/ListItem";
 
 export default class ItemsCollection {
-	private items: any[];
+    private items: ListItem[] | string[];
 
-	constructor(items: any[]) {
+    constructor(items: ListItem[] | string[]) {
 		if (items.length === 0) throw new Error("ItemsCollection cannot be empty");
 		this.items = items;
 	}
