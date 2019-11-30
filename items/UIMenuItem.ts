@@ -1,6 +1,8 @@
+import * as alt from 'alt';
+import game from 'natives';
 import BadgeStyle from "../enums/BadgeStyle";
 import Font from "../enums/Font";
-import NativeUI from "../index";
+import NativeUI from "../NativeUi";
 import ResRectangle from "../modules/ResRectangle";
 import ResText, { Alignment } from "../modules/ResText";
 import Sprite from "../modules/Sprite";
@@ -53,7 +55,7 @@ export default class UIMenuItem {
 	public LeftBadge: BadgeStyle = BadgeStyle.None;
 	public RightBadge: BadgeStyle = BadgeStyle.None;
 
-	constructor(text, description = "") {
+    constructor(text: string, description = "") {
 		this.Enabled = true;
 
 		this._rectangle = new ResRectangle(
@@ -125,8 +127,8 @@ export default class UIMenuItem {
 	}
 
 	public fireEvent() {
-		if (this._event) {
-			mp.events.call(this._event.event, this, ...this._event.args);
+        if (this._event) {
+            alt.emit(this._event.event, ...this._event.args);
 		}
 	}
 

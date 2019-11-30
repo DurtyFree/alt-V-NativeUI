@@ -1,21 +1,23 @@
+import game from 'natives';
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Rectangle from "./Rectangle";
 import { Screen } from "../utils/Screen";
+import Color from '../utils/Color';
 
 export default class ResRectangle extends Rectangle {
-	constructor(pos, size, color) {
+    constructor(pos: Point, size: Size, color: Color) {
 		super(pos, size, color);
 	}
 
 	public Draw(): void;
-	public Draw(offset): void;
-	public Draw(pos, size, color): void;
+	public Draw(offset: any): void;
+    public Draw(pos: Point | Size, size: Size, color: Color): void;
 
-	Draw(pos?, size?, color?) {
+    Draw(pos?: Point | Size, size?: Size, color?: Color) {
 		if (!pos) pos = new Size();
 		if (pos && !size && !color) {
-			pos = new Point(this.pos.X + pos.Width, this.pos.Y + pos.Height);
+            pos = new Point(this.pos.X + (pos as Size).Width, this.pos.Y + (pos as Size).Height);
 			size = this.size;
 			color = this.color;
 		}
@@ -28,9 +30,9 @@ export default class ResRectangle extends Rectangle {
 
 		const w = size.Width / width;
 		const h = size.Height / height;
-		const x = pos.X / width + w * 0.5;
-		const y = pos.Y / height + h * 0.5;
+        const x = (pos as Point).X / width + w * 0.5;
+        const y = (pos as Point).Y / height + h * 0.5;
 
-		mp.game.graphics.drawRect(x, y, w, h, color.R, color.G, color.B, color.A);
+        game.drawRect(x, y, w, h, color.R, color.G, color.B, color.A, false);
 	}
 }

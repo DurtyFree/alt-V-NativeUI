@@ -1,5 +1,8 @@
-const gameScreen = mp.game.graphics.getScreenActiveResolution(0, 0);
+import game from 'natives';
+
+const gameScreen = game.getActiveScreenResolution(0, 0);
+
 export const Screen = {
-	width: gameScreen.x,
-	height: gameScreen.y
+    width: gameScreen[1],
+    height: gameScreen[2]
 };

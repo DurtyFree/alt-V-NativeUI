@@ -8,8 +8,9 @@ export default class Color {
 	public R: number;
 	public G: number;
 	public B: number;
-	public A: number;
-	constructor(r, g, b, a = 255) {
+    public A: number;
+
+	constructor(r: number, g: number, b: number, a = 255) {
 		this.R = r;
 		this.G = g;
 		this.B = b;

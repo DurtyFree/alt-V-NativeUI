@@ -1,3 +1,5 @@
+import * as alt from 'alt';
+import game from 'natives';
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
@@ -14,9 +16,9 @@ export default class ResText extends Text {
 	public TextAlignment: Alignment = Alignment.Left;
 	public DropShadow: boolean;
 	public Outline: boolean;
-	public WordWrap: Size;
+    public WordWrap: Size;
 
-	constructor(caption, pos, scale, color?, font?, justify?) {
+    constructor(caption: string, pos: Point, scale: number, color?: Color, font?: number, centered?: Alignment) {
 		super(
 			caption,
 			pos,
@@ -25,23 +27,23 @@ export default class ResText extends Text {
 			font || 0,
 			false
 		);
-		if (justify) this.TextAlignment = justify;
+        if (centered) this.TextAlignment = centered;
 	}
 
 	public Draw(): void;
 	public Draw(offset: Size): void;
-	public Draw(caption, pos, scale, color, font, arg2): void;
+    public Draw(caption: Size, pos: Point, scale: number, color: Color, font: string | number, arg2: any): void;
 
 	Draw(
-		arg1?,
-		pos?,
-		scale?,
-		color?,
-		font?,
-		arg2?,
-		dropShadow?,
-		outline?,
-		wordWrap?
+		arg1?: any,
+		pos?: Point,
+		scale?: number,
+		color?: Color,
+		font?: string | number,
+		arg2?: any,
+		dropShadow?: boolean,
+		outline?: boolean,
+		wordWrap?: Size
 	) {
 		let caption = arg1;
 		let centered = arg2;
@@ -49,7 +51,7 @@ export default class ResText extends Text {
 		if (!arg1) arg1 = new Size(0, 0);
 		if (arg1 && !pos) {
 			textAlignment = this.TextAlignment;
-			caption = this.caption;
+			caption = this.caption as any;
 			pos = new Point(this.pos.X + arg1.Width, this.pos.Y + arg1.Height);
 			scale = this.scale;
 			color = this.color;
@@ -74,43 +76,43 @@ export default class ResText extends Text {
 		const x = this.pos.X / width;
 		const y = this.pos.Y / height;
 
-		mp.game.ui.setTextFont(parseInt(font));
-		mp.game.ui.setTextScale(1.0, scale);
-		mp.game.ui.setTextColour(color.R, color.G, color.B, color.A);
+        game.setTextFont(parseInt(font as string));
+        game.setTextScale(1.0, scale);
+        game.setTextColour(color.R, color.G, color.B, color.A);
 
 		if (centered !== undefined) {
-			mp.game.ui.setTextCentre(centered);
+            game.setTextCentre(centered);
 		} else {
-			if (dropShadow) mp.game.ui.setTextDropshadow(2, 0, 0, 0, 0);
+            if (dropShadow) game.setTextDropshadow(2, 0, 0, 0, 0);
 
-			if (outline) console.warn("not working!");
+            if (outline) alt.logWarning("[NativeUI] ResText outline not working!");
 
 			switch (textAlignment) {
 				case Alignment.Centered:
-					mp.game.ui.setTextCentre(true);
+                    game.setTextCentre(true);
 					break;
 				case Alignment.Right:
-					mp.game.ui.setTextRightJustify(true);
-					mp.game.ui.setTextWrap(0.0, x);
+                    game.setTextRightJustify(true);
+                    game.setTextWrap(0.0, x);
 					break;
 			}
 
 			if (wordWrap) {
 				const xsize = (this.pos.X + wordWrap.Width) / width;
-				mp.game.ui.setTextWrap(x, xsize);
+                game.setTextWrap(x, xsize);
 			}
 		}
 
-		mp.game.ui.setTextEntry("STRING");
-		ResText.AddLongString(caption);
-		mp.game.ui.drawText(x, y);
+        game.beginTextCommandDisplayText("STRING");
+        ResText.AddLongString(caption as string);
+        game.endTextCommandDisplayText(x, y, 0);
 	}
 
 	public static AddLongString(str: string) {
-		const strLen = 99;
-		for (var i = 0; i < str.length; i += strLen) {
-			const substr = str.substr(i, Math.min(strLen, str.length - i));
-			mp.game.ui.addTextComponentSubstringPlayerName(substr);
-		}
+        const strLen = 99;
+        for (var i = 0; i < str.length; i += strLen) {
+            const substr = str.substr(i, Math.min(strLen, str.length - i));
+            game.addTextComponentSubstringPlayerName(substr);
+        }
 	}
 }

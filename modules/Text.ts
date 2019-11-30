@@ -1,7 +1,9 @@
+import game from 'natives';
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import IElement from "./IElement";
 import ResText from "./ResText";
+import Size from '../utils/Size';
 
 export default class Text extends IElement {
 	public caption: string;
@@ -9,8 +11,9 @@ export default class Text extends IElement {
 	public scale: number;
 	public color: Color;
 	public font: number;
-	public centered: boolean;
-	constructor(caption, pos, scale, color, font, centered) {
+    public centered: boolean;
+
+	constructor(caption: string, pos: Point, scale: number, color: Color, font: number, centered: boolean) {
 		super();
 		this.caption = caption;
 		this.pos = pos;
@@ -20,7 +23,7 @@ export default class Text extends IElement {
 		this.centered = centered || false;
 	}
 
-	Draw(caption, pos, scale, color, font, centered) {
+    Draw(caption: Size, pos: Point, scale: number, color: Color, font: string | number, centered: boolean) {
 		if (caption && !pos && !scale && !color && !font && !centered) {
 			pos = new Point(this.pos.X + caption.Width, this.pos.Y + caption.Height);
 			scale = this.scale;
@@ -31,14 +34,12 @@ export default class Text extends IElement {
 		const x = pos.X / 1280.0;
 		const y = pos.Y / 720.0;
 
-		mp.game.ui.setTextFont(parseInt(font));
-		mp.game.ui.setTextScale(scale, scale);
-		mp.game.ui.setTextColour(color.R, color.G, color.B, color.A);
-		mp.game.ui.setTextCentre(centered);
-		mp.game.ui.setTextEntry("STRING");
-		ResText.AddLongString(caption);
-		mp.game.ui.drawText(x, y);
+        game.setTextFont(parseInt(font as string));
+        game.setTextScale(scale, scale);
+        game.setTextColour(color.R, color.G, color.B, color.A);
+        game.setTextCentre(centered);
+        game.beginTextCommandDisplayText("STRING");
+        ResText.AddLongString(caption as any);
+        game.endTextCommandDisplayText(x, y, 0);
 	}
 }
-
-exports = Text;

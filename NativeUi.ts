@@ -1,3 +1,5 @@
+import * as alt from 'alt';
+import game from 'natives';
 import BadgeStyle from "./enums/BadgeStyle";
 import Font from "./enums/Font";
 import UIMenuCheckboxItem from "./items/UIMenuCheckboxItem";
@@ -111,7 +113,7 @@ export default class NativeUI {
 	private readonly _counterText: ResText;
 	private readonly _background: Sprite;
 
-	constructor(title, subtitle, offset, spriteLibrary, spriteName) {
+    constructor(title: string, subtitle: string, offset: Point, spriteLibrary: string, spriteName: string) {
 		if (!(offset instanceof Point)) offset = Point.Parse(offset);
 
 		this.title = title;
@@ -244,8 +246,8 @@ export default class NativeUI {
 			new Size(290, 25)
 		);
 
-		mp.events.add("render", this.render.bind(this));
-		console.log(`Created Native UI! ${this.title}`);
+        alt.everyTick(this.render.bind(this));
+		alt.log(`Created Native UI! ${this.title}`);
 	}
 
 	private RecalculateDescriptionPosition() {
@@ -430,11 +432,12 @@ export default class NativeUI {
 
 	public getMousePosition(relative: boolean = false) {
 		const screenw = Screen.width;
-		const screenh = Screen.height;
-		const cursor = mp.gui.cursor.position;
-		let [mouseX, mouseY] = [cursor[0], cursor[1]];
-		if (relative) [mouseX, mouseY] = [cursor[0] / screenw, cursor[1] / screenh];
-		return [mouseX, mouseY];
+        const screenh = Screen.height;
+        const cursor = alt.getCursorPos();
+        let [mouseX, mouseY] = [cursor.x, cursor.y];
+        if (relative)
+            [mouseX, mouseY] = [cursor.x / screenw, cursor.y / screenh];
+        return [mouseX, mouseY];
 	}
 
 	public GetScreenResolutionMantainRatio(): Size {
@@ -458,20 +461,19 @@ export default class NativeUI {
 	}
 
 	public IsMouseInListItemArrows(
-		item,
-		topLeft,
-		safezone // TODO: Ability to scroll left and right
+        item: UIMenuItem,
+        topLeft: Point,
+        safezone: any // TODO: Ability to scroll left and right
 	) {
-		mp.game.invoke("0x54ce8ac98e120cab".toUpperCase(), "jamyfafi");
-		mp.game.ui.addTextComponentSubstringPlayerName(item.Text);
+        game.beginTextCommandGetWidth("jamyfafi");
+        game.addTextComponentSubstringPlayerName(item.Text);
 		var res = this.GetScreenResolutionMantainRatio();
 		var screenw = res.Width;
 		var screenh = res.Height;
 		const height = 1080.0;
 		const ratio = screenw / screenh;
 		var width = height * ratio;
-		const labelSize =
-			mp.game.invoke("0x85f061da64ed2f67".toUpperCase(), 0) * width * 0.35;
+        const labelSize = game.endTextCommandGetWidth(false) * width * 0.35;
 
 		const labelSizeX = 5 + labelSize + 10;
 		const arrowSizeX = 431 - labelSizeX;
@@ -500,20 +502,17 @@ export default class NativeUI {
 			return;
 		}
 
-		if (!mp.gui.cursor.visible) mp.gui.cursor.visible = true;
+        alt.showCursor(true);
 		let limit = this.MenuItems.length - 1;
 		let counter = 0;
 		if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
 			limit = this._maxItem;
-
 		if (
 			this.IsMouseInBounds(new Point(0, 0), new Size(30, 1080)) &&
 			this.MouseEdgeEnabled
 		) {
-			mp.game.cam.setGameplayCamRelativeHeading(
-				mp.game.cam.getGameplayCamRelativeHeading() + 5.0
-			);
-			mp.game.ui.setCursorSprite(6);
+            game.setGameplayCamRelativeHeading(game.getGameplayCamRelativeHeading() + 5.0);
+            game.setMouseCursorSprite(6);
 		} else if (
 			this.IsMouseInBounds(
 				new Point(this.GetScreenResolutionMantainRatio().Width - 30.0, 0),
@@ -521,12 +520,10 @@ export default class NativeUI {
 			) &&
 			this.MouseEdgeEnabled
 		) {
-			mp.game.cam.setGameplayCamRelativeHeading(
-				mp.game.cam.getGameplayCamRelativeHeading() - 5.0
-			);
-			mp.game.ui.setCursorSprite(7);
+            game.setGameplayCamRelativeHeading(game.getGameplayCamRelativeHeading() - 5.0);
+            game.setMouseCursorSprite(7);
 		} else if (this.MouseEdgeEnabled) {
-			mp.game.ui.setCursorSprite(1);
+            game.setMouseCursorSprite(1);
 		}
 
 		for (let i = this._minItem; i <= limit; i++) {
@@ -538,8 +535,8 @@ export default class NativeUI {
 			if (this.IsMouseInBounds(new Point(xpos, ypos), new Size(xsize, ysize))) {
 				uiMenuItem.Hovered = true;
 				if (
-					mp.game.controls.isControlJustPressed(0, 24) ||
-					mp.game.controls.isDisabledControlJustPressed(0, 24)
+					game.isControlJustPressed(0, 24) ||
+					game.isDisabledControlJustPressed(0, 24)
 				)
 					if (uiMenuItem.Selected && uiMenuItem.Enabled) {
 						if (
@@ -604,8 +601,8 @@ export default class NativeUI {
 		) {
 			this._extraRectangleUp.color = new Color(30, 30, 30, 255);
 			if (
-				mp.game.controls.isControlJustPressed(0, 24) ||
-				mp.game.controls.isDisabledControlJustPressed(0, 24)
+				game.isControlJustPressed(0, 24) ||
+				game.isDisabledControlJustPressed(0, 24)
 			) {
 				if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
 					this.GoUpOverflow();
@@ -621,8 +618,8 @@ export default class NativeUI {
 		) {
 			this._extraRectangleDown.color = new Color(30, 30, 30, 255);
 			if (
-				mp.game.controls.isControlJustPressed(0, 24) ||
-				mp.game.controls.isDisabledControlJustPressed(0, 24)
+				game.isControlJustPressed(0, 24) ||
+				game.isDisabledControlJustPressed(0, 24)
 			) {
 				if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
 					this.GoDownOverflow();
@@ -638,13 +635,13 @@ export default class NativeUI {
 			return;
 		}
 
-		if (mp.game.controls.isControlJustReleased(0, 177)) {
+		if (game.isControlJustReleased(0, 177)) {
 			// Back
 			this.GoBack();
 		}
 		if (this.MenuItems.length == 0) return;
 		if (
-			mp.game.controls.isControlPressed(0, 172) &&
+			game.isControlPressed(0, 172) &&
 			this.lastUpDownNavigation + 120 < Date.now()
 		) {
 			// isControlJustPressed
@@ -653,10 +650,10 @@ export default class NativeUI {
 			if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
 				this.GoUpOverflow();
 			else this.GoUp();
-		} else if (mp.game.controls.isControlJustReleased(0, 172)) {
+		} else if (game.isControlJustReleased(0, 172)) {
 			this.lastUpDownNavigation = 0;
 		} else if (
-			mp.game.controls.isControlPressed(0, 173) &&
+			game.isControlPressed(0, 173) &&
 			this.lastUpDownNavigation + 120 < Date.now()
 		) {
 			// isControlJustPressed
@@ -665,27 +662,27 @@ export default class NativeUI {
 			if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
 				this.GoDownOverflow();
 			else this.GoDown();
-		} else if (mp.game.controls.isControlJustReleased(0, 173)) {
+		} else if (game.isControlJustReleased(0, 173)) {
 			this.lastUpDownNavigation = 0;
 		} else if (
-			mp.game.controls.isControlPressed(0, 174) &&
+			game.isControlPressed(0, 174) &&
 			this.lastLeftRightNavigation + 100 < Date.now()
 		) {
 			// Left
 			this.lastLeftRightNavigation = Date.now();
 			this.GoLeft();
-		} else if (mp.game.controls.isControlJustReleased(0, 174)) {
+		} else if (game.isControlJustReleased(0, 174)) {
 			this.lastLeftRightNavigation = 0;
 		} else if (
-			mp.game.controls.isControlPressed(0, 175) &&
+			game.isControlPressed(0, 175) &&
 			this.lastLeftRightNavigation + 100 < Date.now()
 		) {
 			// Right
 			this.lastLeftRightNavigation = Date.now();
 			this.GoRight();
-		} else if (mp.game.controls.isControlJustReleased(0, 175)) {
+		} else if (game.isControlJustReleased(0, 175)) {
 			this.lastLeftRightNavigation = 0;
-		} else if (mp.game.controls.isControlJustPressed(0, 201)) {
+		} else if (game.isControlJustPressed(0, 201)) {
 			// Select
 			this.SelectItem();
 		}
@@ -925,15 +922,17 @@ export default class NativeUI {
 	}
 }
 
-exports.Menu = NativeUI;
-exports.UIMenuItem = UIMenuItem;
-exports.UIMenuListItem = UIMenuListItem;
-exports.UIMenuCheckboxItem = UIMenuCheckboxItem;
-exports.UIMenuSliderItem = UIMenuSliderItem;
-exports.BadgeStyle = BadgeStyle;
-exports.Point = Point;
-exports.Size = Size;
-exports.Color = Color;
-exports.Font = Font;
-exports.ItemsCollection = ItemsCollection;
-exports.ListItem = ListItem;
+export {
+    NativeUI as Menu,
+    UIMenuItem,
+    UIMenuListItem,
+    UIMenuCheckboxItem,
+    UIMenuSliderItem,
+    BadgeStyle,
+    Point,
+    Size,
+    Color,
+    Font,
+    ItemsCollection,
+    ListItem
+};

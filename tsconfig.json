@@ -1,8 +1,0 @@
-{
-	"compilerOptions": {
-		"module": "es2015",
-		"removeComments": true,
-		"target": "es6"
-	},
-	"include": ["**/*.ts"]
-}

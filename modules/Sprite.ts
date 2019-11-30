@@ -1,3 +1,5 @@
+import * as alt from 'alt';
+import game from 'natives';
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
@@ -13,10 +15,10 @@ export default class Sprite {
 	private _textureDict: string;
 
 	constructor(
-		textureDict,
-		textureName,
-		pos,
-		size,
+		textureDict: string,
+		textureName: string,
+		pos: Point,
+		size: Size,
 		heading = 0,
 		color = new Color(255, 255, 255)
 	) {
@@ -30,12 +32,19 @@ export default class Sprite {
 	}
 
 	LoadTextureDictionary() {
-		mp.game.graphics.requestStreamedTextureDict(this._textureDict, true);
-		while (!this.IsTextureDictionaryLoaded) {
-			//@ts-ignore
-			mp.game.wait(0);
-		}
-	}
+        this.requestTextureDictPromise(this._textureDict).then((succ) => { });
+    }
+    requestTextureDictPromise(textureDict: string) {
+        return new Promise((resolve, reject) => {
+            game.requestStreamedTextureDict(textureDict, true);
+            let inter = alt.setInterval(() => {
+                if (game.hasStreamedTextureDictLoaded(textureDict)) {
+                    alt.clearInterval(inter);
+                    return resolve(true);
+                }
+            }, 10);
+        });
+    }
 
 	set TextureDict(v) {
 		this._textureDict = v;
@@ -46,17 +55,17 @@ export default class Sprite {
 	}
 
 	get IsTextureDictionaryLoaded() {
-		return mp.game.graphics.hasStreamedTextureDictLoaded(this._textureDict);
+        return game.hasStreamedTextureDictLoaded(this._textureDict);
 	}
 
 	Draw(
-		textureDictionary?,
-		textureName?,
-		pos?,
-		size?,
-		heading?,
-		color?,
-		loadTexture?
+		textureDictionary?: string,
+		textureName?: string,
+		pos?: Point,
+		size?: Size,
+		heading?: number,
+		color?: Color,
+		loadTexture?: boolean
 	) {
 		textureDictionary = textureDictionary || this.TextureDict;
 		textureName = textureName || this.TextureName;
@@ -67,8 +76,8 @@ export default class Sprite {
 		loadTexture = loadTexture || true;
 
 		if (loadTexture) {
-			if (!mp.game.graphics.hasStreamedTextureDictLoaded(textureDictionary))
-				mp.game.graphics.requestStreamedTextureDict(textureDictionary, true);
+            if (!game.hasStreamedTextureDictLoaded(textureDictionary))
+                game.requestStreamedTextureDict(textureDictionary, true);
 		}
 
 		const screenw = Screen.width;
@@ -82,18 +91,6 @@ export default class Sprite {
 		const x = this.pos.X / width + w * 0.5;
 		const y = this.pos.Y / height + h * 0.5;
 
-		mp.game.graphics.drawSprite(
-			textureDictionary,
-			textureName,
-			x,
-			y,
-			w,
-			h,
-			heading,
-			color.R,
-			color.G,
-			color.B,
-			color.A
-		);
+        game.drawSprite(textureDictionary, textureName, x, y, w, h, heading, color.R, color.G, color.B, color.A, true);
 	}
 }
