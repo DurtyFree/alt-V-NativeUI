@@ -15,12 +15,12 @@ export default class Sprite {
 	private _textureDict: string;
 
 	constructor(
-		textureDict: string,
-		textureName: string,
-		pos: Point,
-		size: Size,
-		heading = 0,
-		color = new Color(255, 255, 255)
+        textureDict: string,
+        textureName: string,
+        pos: Point,
+        size: Size,
+        heading = 0,
+        color = new Color(255, 255, 255)
 	) {
 		this.TextureDict = textureDict;
 		this.TextureName = textureName;
@@ -31,7 +31,7 @@ export default class Sprite {
 		this.visible = true;
 	}
 
-	LoadTextureDictionary() {
+    LoadTextureDictionary() {
         this.requestTextureDictPromise(this._textureDict).then((succ) => { });
     }
     requestTextureDictPromise(textureDict: string) {
@@ -59,13 +59,13 @@ export default class Sprite {
 	}
 
 	Draw(
-		textureDictionary?: string,
-		textureName?: string,
-		pos?: Point,
-		size?: Size,
-		heading?: number,
-		color?: Color,
-		loadTexture?: boolean
+        textureDictionary?: string,
+        textureName?: string,
+        pos?: Point,
+        size?: Size,
+        heading?: number,
+        color?: Color,
+        loadTexture?: boolean
 	) {
 		textureDictionary = textureDictionary || this.TextureDict;
 		textureName = textureName || this.TextureName;

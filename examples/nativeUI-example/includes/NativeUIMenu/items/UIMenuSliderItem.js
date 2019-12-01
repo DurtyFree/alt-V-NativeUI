@@ -5,8 +5,8 @@ import Point from "../utils/Point";
 import Size from "../utils/Size";
 import UIMenuItem from "./UIMenuItem";
 export default class UIMenuSliderItem extends UIMenuItem {
-    constructor(text, items, index, description = "", divider = false) {
-        super(text, description);
+    constructor(text, items, index, description = "", divider = false, data = null) {
+        super(text, description, data);
         const y = 0;
         this._items = items;
         this._arrowLeft = new Sprite("commonmenutu", "arrowleft", new Point(0, 105 + y), new Size(15, 15));

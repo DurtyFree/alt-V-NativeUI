@@ -1,19 +1,12 @@
 import BadgeStyle from "../enums/BadgeStyle";
 import Sprite from "../modules/Sprite";
 import Color from "../utils/Color";
-import LiteEvent from "../utils/LiteEvent";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import UIMenuItem from "./UIMenuItem";
 
 export default class UIMenuCheckboxItem extends UIMenuItem {
 	private readonly _checkedSprite: Sprite;
-
-	private readonly OnCheckedChanged = new LiteEvent();
-
-	public get CheckedChanged() {
-		return this.OnCheckedChanged.expose();
-	}
 
 	public Checked: boolean = false;
 

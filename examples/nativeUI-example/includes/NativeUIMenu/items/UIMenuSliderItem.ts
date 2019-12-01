@@ -30,9 +30,10 @@ export default class UIMenuSliderItem extends UIMenuItem {
 		items: any[],
 		index: number,
 		description: string = "",
-		divider: boolean = false
+        divider: boolean = false,
+        data: any = null
 	) {
-		super(text, description);
+		super(text, description, data);
 		const y: number = 0;
 		this._items = items;
 		this._arrowLeft = new Sprite(

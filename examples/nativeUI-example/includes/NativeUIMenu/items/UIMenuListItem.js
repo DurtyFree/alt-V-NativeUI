@@ -5,19 +5,17 @@ import ListItem from "../modules/ListItem";
 import ResText from "../modules/ResText";
 import Sprite from "../modules/Sprite";
 import Color from "../utils/Color";
-import LiteEvent from "../utils/LiteEvent";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
-import StringMeasurer from "../modules/StringMeasurer";
+import { Screen } from "../utils/Screen";
 import UIMenuItem from "./UIMenuItem";
 export default class UIMenuListItem extends UIMenuItem {
-    constructor(text, description = "", collection = new ItemsCollection([]), startIndex = 0) {
-        super(text, description);
-        this.currOffset = 0;
-        this.collection = [];
+    constructor(text, description = "", collection = new ItemsCollection([]), startIndex = 0, data = null) {
+        super(text, description, data);
         this.ScrollingEnabled = true;
         this.HoldTimeBeforeScroll = 200;
-        this.OnListChanged = new LiteEvent();
+        this.currOffset = 0;
+        this.collection = [];
         this._index = 0;
         let y = 0;
         this.Collection = collection.getListItems();
@@ -51,9 +49,6 @@ export default class UIMenuListItem extends UIMenuItem {
                 ? this.SelectedItem.DisplayText
                 : this.SelectedItem.Data;
     }
-    get ListChanged() {
-        return this.OnListChanged.expose();
-    }
     get Index() {
         if (this.Collection == null)
             return -1;
@@ -66,11 +61,11 @@ export default class UIMenuListItem extends UIMenuItem {
             return;
         if (this.Collection != null && this.Collection.length == 0)
             return;
-        this._index = 100000 - (100000 % this.Collection.length) + value;
+        this._index = 100000000 - (100000000 % this.Collection.length) + value;
         const caption = this.Collection.length >= this.Index
             ? this.Collection[this.Index].DisplayText
             : " ";
-        this.currOffset = StringMeasurer.MeasureString(caption);
+        this.currOffset = Screen.GetTextWidth(caption, this._itemText && this._itemText.font ? this._itemText.font : 0, 0.35);
     }
     setCollection(collection) {
         this.Collection = collection.getListItems();
@@ -118,7 +113,7 @@ export default class UIMenuListItem extends UIMenuItem {
                 ? this.HighlightedForeColor
                 : this.ForeColor
             : new Color(163, 159, 148);
-        this._arrowLeft.pos = new Point(375 - offset + this.Offset.X + this.Parent.WidthOffset, this._arrowLeft.pos.Y);
+        this._arrowLeft.pos = new Point(390 - offset + this.Offset.X + this.Parent.WidthOffset, this._arrowLeft.pos.Y);
         if (this.Selected) {
             this._arrowLeft.Draw();
             this._arrowRight.Draw();

@@ -5,6 +5,14 @@ menu.AddItem(new NativeUI.UIMenuListItem("List Item", "Description for List Item
 menu.AddItem(new NativeUI.UIMenuSliderItem("Slider Item", ["Fugiat", "pariatur", "consectetur", "ex", "duis", "magna", "nostrud", "et", "dolor", "laboris"], 5, "Fugiat pariatur consectetur ex duis magna nostrud et dolor laboris est do pariatur amet sint.", true));
 menu.AddItem(new NativeUI.UIMenuCheckboxItem("Checkbox Item", false, "Fugiat pariatur consectetur ex duis magna nostrud et dolor laboris est do pariatur amet sint."));
 menu.AddItem(new NativeUI.UIMenuItem("Dumb menu item", "Just a menu item description"));
+const maxListItems = 100;
+let itemData = {
+    name: "test",
+    data: "great"
+};
+let dynamicListItem = new NativeUI.UIMenuDynamicListItem('Dynamic list item: Discard item(s)', `Discard an amount (~y~${maxListItems}~s~ max) of this item on the ground.`, 1, maxListItems, 1, itemData);
+dynamicListItem.PreCaptionText = '~HUD_COLOUR_RED~';
+menu.AddItem(dynamicListItem);
 let menuItem = new NativeUI.UIMenuItem("Test Sub Menu", "Just a sub menu.");
 menu.AddItem(menuItem);
 const subMenu = new NativeUI.Menu("NativeUI Sub Menu Test", "Sub Menu Subtitle", new NativeUI.Point(50, 50));
@@ -27,6 +35,12 @@ menu.ItemSelect.on((selectedItem, selectedItemIndex) => {
 });
 menu.ListChange.on((item, newListItemIndex) => {
     alt.log("[ListChange] " + newListItemIndex, item.Text);
+});
+menu.DynamicListChange.on((item, newListItemIndex) => {
+    alt.log("[DynamicListChange] " + newListItemIndex, item.Text);
+    if (item == dynamicListItem) {
+        alt.log("[DynamicListChange] " + item.Data.name + " " + item.Data.data);
+    }
 });
 menu.IndexChange.on(newIndex => {
     alt.log("[IndexChange] " + "Current Selection: " + newIndex);

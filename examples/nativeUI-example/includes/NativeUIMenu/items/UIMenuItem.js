@@ -1,6 +1,7 @@
 import * as alt from 'alt';
 import BadgeStyle from "../enums/BadgeStyle";
 import Font from "../enums/Font";
+import Alignment from "../enums/Alignment";
 import ResRectangle from "../modules/ResRectangle";
 import ResText from "../modules/ResText";
 import Sprite from "../modules/Sprite";
@@ -8,9 +9,8 @@ import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import UUIDV4 from "../utils/UUIDV4";
-import Alignment from '../enums/Alignment';
 export default class UIMenuItem {
-    constructor(text, description = "") {
+    constructor(text, description = "", data = null) {
         this.Id = UUIDV4();
         this.BackColor = UIMenuItem.DefaultBackColor;
         this.HighlightedBackColor = UIMenuItem.DefaultHighlightedBackColor;
@@ -20,6 +20,7 @@ export default class UIMenuItem {
         this.LeftBadge = BadgeStyle.None;
         this.RightBadge = BadgeStyle.None;
         this.Enabled = true;
+        this.Data = data;
         this._rectangle = new ResRectangle(new Point(0, 0), new Size(431, 38), new Color(150, 0, 0, 0));
         this._text = new ResText(text, new Point(8, 0), 0.33, Color.WhiteSmoke, Font.ChaletLondon, Alignment.Left);
         this.Description = description;
@@ -31,8 +32,17 @@ export default class UIMenuItem {
     get Text() {
         return this._text.caption;
     }
-    set Text(v) {
-        this._text.caption = v;
+    set Text(text) {
+        this._text.caption = text;
+    }
+    get Description() {
+        return this._description;
+    }
+    set Description(text) {
+        this._description = text;
+        if (this.hasOwnProperty('Parent')) {
+            this.Parent.recalculateDescriptionNextFrame += 1;
+        }
     }
     SetVerticalPosition(y) {
         this._rectangle.pos = new Point(this.Offset.X, y + 144 + this.Offset.Y);
@@ -117,7 +127,18 @@ export default class UIMenuItem {
         this.RightLabel = text;
     }
     BadgeToSpriteLib(badge) {
-        return "commonmenu";
+        switch (badge) {
+            case BadgeStyle.Sale:
+                return "mpshopsale";
+            case BadgeStyle.Audio1:
+            case BadgeStyle.Audio2:
+            case BadgeStyle.Audio3:
+            case BadgeStyle.AudioInactive:
+            case BadgeStyle.AudioMute:
+                return "mpleaderboard";
+            default:
+                return "commonmenu";
+        }
     }
     BadgeToSpriteName(badge, selected) {
         switch (badge) {
@@ -167,6 +188,22 @@ export default class UIMenuItem {
                 return "shop_tick_icon";
             case BadgeStyle.Trevor:
                 return selected ? "shop_trevor_icon_b" : "shop_trevor_icon_a";
+            case BadgeStyle.Sale:
+                return "saleicon";
+            case BadgeStyle.ArrowLeft:
+                return "arrowleft";
+            case BadgeStyle.ArrowRight:
+                return "arrowright";
+            case BadgeStyle.Audio1:
+                return "leaderboard_audio_1";
+            case BadgeStyle.Audio2:
+                return "leaderboard_audio_2";
+            case BadgeStyle.Audio3:
+                return "leaderboard_audio_3";
+            case BadgeStyle.AudioInactive:
+                return "leaderboard_audio_inactive";
+            case BadgeStyle.AudioMute:
+                return "leaderboard_audio_mute";
             default:
                 return "";
         }

@@ -14,4 +14,7 @@ export default class LiteEvent {
     expose() {
         return this;
     }
+    count() {
+        return this.handlers.length;
+    }
 }

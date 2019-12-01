@@ -12,9 +12,7 @@ export const Screen = {
     height: gameScreen[2],
 
 	ResolutionMaintainRatio: () => {
-		const screenw = gameScreen.x;
-		const screenh = gameScreen.y;
-		const ratio = screenw / screenh;
+        const ratio = Screen.width / Screen.height;
 		const width = 1080.0 * ratio;
 
 		return new Size(width, 1080.0);
@@ -63,7 +61,7 @@ export const Screen = {
 
 		// Get the resolution with the correct aspect ratio
 		const res: Size = Screen.ResolutionMaintainRatio();
-		// Calculate the x and y positions
+        // Calculate the x and y positions
 		const x: number = position.X / res.Width;
 		const y: number = position.Y / res.Height;
 
@@ -78,7 +76,7 @@ export const Screen = {
 			const end: number = start + (wrap / res.Width);
 			// And apply it
             game.setTextWrap(x, end);
-		}
+        }
 
         // Finally, return the number of lines being made by the string  
         let lineCount = game.endTextCommandLineCount(x, y);

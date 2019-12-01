@@ -1,17 +1,23 @@
 import * as alt from 'alt';
+import Alignment from "../enums/Alignment";
 import game from 'natives';
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Text from "./Text";
 import { Screen } from "../utils/Screen";
-import Alignment from '../enums/Alignment';
 
 export default class ResText extends Text {
 	public TextAlignment: Alignment = Alignment.Left;
 	public DropShadow: boolean;
 	public Outline: boolean;
-    public WordWrap: Size;
+	public Wrap: number = 0;
+	public get WordWrap() {
+		return new Size(this.Wrap, 0);
+	}
+	public set WordWrap(value) {
+		this.Wrap = value.Width;
+	}
 
     constructor(caption: string, pos: Point, scale: number, color?: Color, font?: number, centered?: Alignment) {
 		super(
@@ -21,7 +27,7 @@ export default class ResText extends Text {
 			color || new Color(255, 255, 255),
 			font || 0,
 			false
-		);
+        );
         if (centered) this.TextAlignment = centered;
 	}
 
@@ -29,24 +35,24 @@ export default class ResText extends Text {
 	public Draw(offset: Size): void;
     public Draw(caption: Size, pos: Point, scale: number, color: Color, font: string | number, arg2: any): void;
 
-	Draw(
-		arg1?: any,
-		pos?: Point,
-		scale?: number,
-		color?: Color,
-		font?: string | number,
-		arg2?: any,
-		dropShadow?: boolean,
-		outline?: boolean,
-		wordWrap?: Size
-	) {
+    Draw(
+        arg1?: any,
+        pos?: Point,
+        scale?: number,
+        color?: Color,
+        font?: string | number,
+        arg2?: any,
+        dropShadow?: boolean,
+        outline?: boolean,
+        wordWrap?: Size
+    ) {
 		let caption = arg1;
 		let centered = arg2;
 		let textAlignment = arg2;
 		if (!arg1) arg1 = new Size(0, 0);
 		if (arg1 && !pos) {
 			textAlignment = this.TextAlignment;
-			caption = this.caption as any;
+			caption = this.caption;
 			pos = new Point(this.pos.X + arg1.Width, this.pos.Y + arg1.Height);
 			scale = this.scale;
 			color = this.color;
@@ -92,8 +98,8 @@ export default class ResText extends Text {
 					break;
 			}
 
-			if (wordWrap) {
-				const xsize = (this.pos.X + wordWrap.Width) / width;
+			if (this.Wrap) {
+				const xsize = (this.pos.X + this.Wrap) / width;
                 game.setTextWrap(x, xsize);
 			}
 		}

@@ -1,20 +1,15 @@
 import Sprite from "../modules/Sprite";
 import Color from "../utils/Color";
-import LiteEvent from "../utils/LiteEvent";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import UIMenuItem from "./UIMenuItem";
 export default class UIMenuCheckboxItem extends UIMenuItem {
     constructor(text, check = false, description = "") {
         super(text, description);
-        this.OnCheckedChanged = new LiteEvent();
         this.Checked = false;
         const y = 0;
         this._checkedSprite = new Sprite("commonmenu", "shop_box_blank", new Point(410, y + 95), new Size(50, 50));
         this.Checked = check;
-    }
-    get CheckedChanged() {
-        return this.OnCheckedChanged.expose();
     }
     SetVerticalPosition(y) {
         super.SetVerticalPosition(y);

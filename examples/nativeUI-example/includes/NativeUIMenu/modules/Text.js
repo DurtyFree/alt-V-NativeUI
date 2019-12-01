@@ -30,11 +30,22 @@ export default class Text extends IElement {
         Text.AddLongString(caption);
         game.endTextCommandDisplayText(x, y, 0);
     }
-    static AddLongString(str) {
-        const strLen = 99;
-        for (var i = 0; i < str.length; i += strLen) {
-            const substr = str.substr(i, Math.min(strLen, str.length - i));
-            game.addTextComponentSubstringPlayerName(substr);
+    static AddLongString(text) {
+        if (text.length) {
+            const maxStringLength = 99;
+            for (let i = 0, position; i < text.length; i += maxStringLength) {
+                let currentText = text.substr(i, i + maxStringLength);
+                let currentIndex = i;
+                if ((currentText.match(/~/g) || []).length % 2 !== 0) {
+                    position = currentText.lastIndexOf('~');
+                    i -= (maxStringLength - position);
+                }
+                else {
+                    position = Math.min(maxStringLength, text.length - currentIndex);
+                }
+                game.addTextComponentSubstringPlayerName(text.substr(currentIndex, position));
+            }
         }
     }
 }
+export { Text };

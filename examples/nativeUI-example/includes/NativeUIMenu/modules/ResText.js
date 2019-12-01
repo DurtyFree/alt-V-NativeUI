@@ -1,17 +1,24 @@
 import * as alt from 'alt';
+import Alignment from "../enums/Alignment";
 import game from 'natives';
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Text from "./Text";
 import { Screen } from "../utils/Screen";
-import Alignment from '../enums/Alignment';
 export default class ResText extends Text {
     constructor(caption, pos, scale, color, font, centered) {
         super(caption, pos, scale, color || new Color(255, 255, 255), font || 0, false);
         this.TextAlignment = Alignment.Left;
+        this.Wrap = 0;
         if (centered)
             this.TextAlignment = centered;
+    }
+    get WordWrap() {
+        return new Size(this.Wrap, 0);
+    }
+    set WordWrap(value) {
+        this.Wrap = value.Width;
     }
     Draw(arg1, pos, scale, color, font, arg2, dropShadow, outline, wordWrap) {
         let caption = arg1;
@@ -63,8 +70,8 @@ export default class ResText extends Text {
                     game.setTextWrap(0.0, x);
                     break;
             }
-            if (wordWrap) {
-                const xsize = (this.pos.X + wordWrap.Width) / width;
+            if (this.Wrap) {
+                const xsize = (this.pos.X + this.Wrap) / width;
                 game.setTextWrap(x, xsize);
             }
         }

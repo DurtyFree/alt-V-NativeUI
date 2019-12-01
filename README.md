@@ -1,5 +1,5 @@
 # alt:V-NativeUI
-This project is a (fully TypeScript compatible) port of RageMP-NativeUI by [XMGamingMaster](https://github.com/XMGamingMaster/RageMP-NativeUI) for alt:V. It provides a simple way to use NativeUI menus in your clientside scripts. A lot of credits to [datWeazel](https://github.com/datWeazel/alt-V-NativeUI) who made the initial port of the RageMP-NativeUI and [Kar](https://github.com/karscopsandrobbers/RAGEMP-NativeUI) for his improved version of the RageMP-NativeUI.
+This project is a (fully TypeScript compatible) port of RageMP-NativeUI [Kar](https://github.com/karscopsandrobbers/RAGEMP-NativeUI) for alt:V. It provides a simple way to use NativeUI menus in your clientside scripts. A lot of credits to [datWeazel](https://github.com/datWeazel/alt-V-NativeUI) who made the initial port of the RageMP-NativeUI.
 
 __NativeUI is not a standalone resource!  
 You need to include NativeUI in every resource in which you want to use NativeUI menus!__

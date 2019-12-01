@@ -28,6 +28,22 @@ menu.AddItem(new NativeUI.UIMenuItem(
     "Just a menu item description"
 ));
 
+const maxListItems = 100;
+let itemData = {
+    name: "test",
+    data: "great"
+};
+let dynamicListItem = new NativeUI.UIMenuDynamicListItem(
+    'Dynamic list item: Discard item(s)',
+    `Discard an amount (~y~${maxListItems}~s~ max) of this item on the ground.`,
+    1,
+    maxListItems,
+    1,
+    itemData
+);
+dynamicListItem.PreCaptionText = '~HUD_COLOUR_RED~';
+menu.AddItem(dynamicListItem);
+
 let menuItem = new NativeUI.UIMenuItem(
     "Test Sub Menu", "Just a sub menu."
 );
@@ -56,6 +72,13 @@ menu.ItemSelect.on((selectedItem, selectedItemIndex) => {
 
 menu.ListChange.on((item, newListItemIndex) => {
     alt.log("[ListChange] " + newListItemIndex, (item as NativeUI.UIMenuListItem).Text);
+});
+
+menu.DynamicListChange.on((item, newListItemIndex) => {
+    alt.log("[DynamicListChange] " + newListItemIndex, (item as NativeUI.UIMenuDynamicListItem).Text);
+    if (item == dynamicListItem) {
+        alt.log("[DynamicListChange] " + item.Data.name + " " + item.Data.data);
+    }
 });
 
 menu.IndexChange.on(newIndex => {
