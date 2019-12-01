@@ -15,6 +15,9 @@ export default class ItemsCollection {
                 items.push(item);
             }
             else if (typeof item == "string") {
+                items.push(new ListItem(item));
+            }
+            else if (typeof item == "number") {
                 items.push(new ListItem(item.toString()));
             }
         }

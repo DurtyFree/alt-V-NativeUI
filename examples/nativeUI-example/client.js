@@ -1,6 +1,8 @@
 import * as alt from 'alt';
 import * as NativeUI from './includes/NativeUIMenu/NativeUI';
 const menu = new NativeUI.Menu("NativeUI Test", "Test Subtitle", new NativeUI.Point(50, 50));
+let respectButton = new NativeUI.InstructionalButton("To pay respect", 0, "F");
+menu.AddInstructionalButton(respectButton);
 menu.AddItem(new NativeUI.UIMenuListItem("List Item", "Description for List Item", new NativeUI.ItemsCollection(["Item 1", "Item 2", "Item 3"])));
 menu.AddItem(new NativeUI.UIMenuSliderItem("Slider Item", ["Fugiat", "pariatur", "consectetur", "ex", "duis", "magna", "nostrud", "et", "dolor", "laboris"], 5, "Fugiat pariatur consectetur ex duis magna nostrud et dolor laboris est do pariatur amet sint.", true));
 menu.AddItem(new NativeUI.UIMenuCheckboxItem("Checkbox Item", false, "Fugiat pariatur consectetur ex duis magna nostrud et dolor laboris est do pariatur amet sint."));
@@ -14,6 +16,9 @@ let dynamicListItem = new NativeUI.UIMenuDynamicListItem('Dynamic list item: Dis
 dynamicListItem.PreCaptionText = '~HUD_COLOUR_RED~';
 menu.AddItem(dynamicListItem);
 let menuItem = new NativeUI.UIMenuItem("Test Sub Menu", "Just a sub menu.");
+let niceButton = new NativeUI.InstructionalButton("Nice", NativeUI.Control.Sprint);
+niceButton.BindToItem(menuItem);
+menu.AddInstructionalButton(niceButton);
 menu.AddItem(menuItem);
 const subMenu = new NativeUI.Menu("NativeUI Sub Menu Test", "Sub Menu Subtitle", new NativeUI.Point(50, 50));
 subMenu.Visible = false;
@@ -66,5 +71,8 @@ alt.on('keydown', (key) => {
             menu.Close();
         else
             menu.Open();
+    }
+    else if (key === 70) {
+        alt.log("You paid respect.");
     }
 });

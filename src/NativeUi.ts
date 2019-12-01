@@ -3,6 +3,7 @@ import game from 'natives';
 import BadgeStyle from "./enums/BadgeStyle";
 import Font from "./enums/Font";
 import Alignment from './enums/Alignment';
+import Control from './enums/Control';
 import UIMenuCheckboxItem from "./items/UIMenuCheckboxItem";
 import UIMenuItem from "./items/UIMenuItem";
 import UIMenuListItem from "./items/UIMenuListItem";
@@ -21,6 +22,8 @@ import Point from "./utils/Point";
 import Size from "./utils/Size";
 import UUIDV4 from "./utils/UUIDV4";
 import { Screen } from "./utils/Screen";
+import InstructionalButton from './modules/InstructionalButton';
+import Scaleform from './utils/Scaleform';
 
 let menuPool: NativeUI[] = [];
 
@@ -35,7 +38,9 @@ export default class NativeUI {
 	private counterOverride: string = undefined;
 	private spriteLibrary: string;
 	private spriteName: string;
-	private offset: Point;
+    private offset: Point;
+    private readonly instructionalButtons: InstructionalButton[] = [];
+    private readonly instructionalButtonsScaleform: Scaleform;
 
 	private lastUpDownNavigation = 0;
 	private lastLeftRightNavigation = 0;
@@ -52,6 +57,7 @@ export default class NativeUI {
 
 	public MouseControlsEnabled: boolean = false;
 
+    private _buttonsEnabled: boolean = true;
 	private _justOpened: boolean = true;
 	private _justOpenedFromPool: boolean = false;
 	private _justClosedFromPool: boolean = false;
@@ -64,10 +70,12 @@ export default class NativeUI {
 	private _minItem: number;
 	private _maxItem: number = this.MaxItemsOnScreen;
 
+    readonly selectTextLocalized: string = alt.getGxtText("HUD_INPUT2");
+    readonly backTextLocalized: string = alt.getGxtText("HUD_INPUT3");
+
 	public recalculateDescriptionNextFrame: number = 1;
 
 	public AUDIO_LIBRARY: string = "HUD_FRONTEND_DEFAULT_SOUNDSET";
-
 	public AUDIO_UPDOWN: string = "NAV_UP_DOWN";
 	public AUDIO_LEFTRIGHT: string = "NAV_LEFT_RIGHT";
 	public AUDIO_SELECT: string = "SELECT";
@@ -93,7 +101,8 @@ export default class NativeUI {
 	}
 	set Visible(toggle: boolean) { // Menu pools don't work with submenus
 		this._visible = toggle;
-		Common.PlaySound(this.AUDIO_BACK, this.AUDIO_LIBRARY);
+        Common.PlaySound(this.AUDIO_BACK, this.AUDIO_LIBRARY);
+        this.UpdateScaleform();
 		/*if(!toggle) {
 			alt.emit('server:clientDebug', `Visible = false. _justOpenedFromPool: ${this._justOpenedFromPool}`);
 		}*/
@@ -197,6 +206,9 @@ export default class NativeUI {
 		this.spriteName = spriteName || "interaction_bgd";
 		this.offset = new Point(offset.X, offset.Y);
 		this.Children = new Map();
+
+        this.instructionalButtonsScaleform = new Scaleform("instructional_buttons");
+        this.UpdateScaleform();
 
 		// Create everything
 		this._mainMenu = new Container(
@@ -324,7 +336,23 @@ export default class NativeUI {
 
         alt.everyTick(this.render.bind(this));
 		//alt.log(`Created Native UI! ${this.title}`);
-	}
+    }
+
+    public DisableInstructionalButtons(disable: boolean) {
+        this._buttonsEnabled = !disable;
+    }
+
+    public AddInstructionalButton(button: InstructionalButton): void {
+        this.instructionalButtons.push(button);
+    }
+
+    public RemoveInstructionalButton(button: InstructionalButton): void {
+        for (let i = 0; i < this.instructionalButtons.length; i++) {
+            if (this.instructionalButtons[i] === button) {
+                this.instructionalButtons.splice(i, 1);
+            }
+        }
+    }
 
 	private RecalculateDescriptionPosition() {
 		const count = (this.MenuItems.length > this.MaxItemsOnScreen + 1) ? this.MaxItemsOnScreen + 2 : this.MenuItems.length;
@@ -656,7 +684,8 @@ export default class NativeUI {
 						Common.PlaySound(this.AUDIO_UPDOWN, this.AUDIO_LIBRARY);
 						this.IndexChange.emit(this.CurrentSelection, this.MenuItems[this._activeItem % this.MenuItems.length]);
 						this.SelectItem();
-						this.UpdateDescriptionCaption();
+                        this.UpdateDescriptionCaption();
+                        this.UpdateScaleform();
 					} else if (!uiMenuItem.Enabled && uiMenuItem.Selected) {
 						Common.PlaySound(this.AUDIO_ERROR, this.AUDIO_LIBRARY);
 					}
@@ -728,7 +757,8 @@ export default class NativeUI {
 			this.lastUpDownNavigation = Date.now();
 			if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
 				this.GoUpOverflow();
-			else this.GoUp();
+            else this.GoUp();
+            this.UpdateScaleform();
 		} else if (game.isControlJustReleased(0, 172)) {
 			this.lastUpDownNavigation = 0;
 		} else if (
@@ -740,7 +770,8 @@ export default class NativeUI {
 			this.lastUpDownNavigation = Date.now();
 			if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
 				this.GoDownOverflow();
-			else this.GoDown();
+            else this.GoDown();
+            this.UpdateScaleform();
 		} else if (game.isControlJustReleased(0, 173)) {
 			this.lastUpDownNavigation = 0;
 		} else if (
@@ -916,10 +947,35 @@ export default class NativeUI {
 				this.recalculateDescriptionNextFrame++;
 			}
 		}
-	}
+    }
+
+    public UpdateScaleform() {
+        if (!this.Visible || !this._buttonsEnabled) return;
+        this.instructionalButtonsScaleform.callFunction("CLEAR_ALL");
+        this.instructionalButtonsScaleform.callFunction("TOGGLE_MOUSE_BUTTONS", 0 as number);
+        this.instructionalButtonsScaleform.callFunction("CREATE_CONTAINER");
+
+        this.instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 0 as number, game.getControlInstructionalButton(2, Control.PhoneSelect as number, false) as string, this.selectTextLocalized as string);
+        this.instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 1 as number, game.getControlInstructionalButton(2, Control.PhoneCancel as number, false) as string, this.backTextLocalized as string);
+
+        let count: number = 2;
+        this.instructionalButtons.filter(b => b.ItemBind == null || this.MenuItems[this.CurrentSelection] == b.ItemBind).forEach((button) => {
+            this.instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", count as number, button.GetButtonId() as string, button.Text as string);
+            count++;
+        });
+
+        this.instructionalButtonsScaleform.callFunction("DRAW_INSTRUCTIONAL_BUTTONS", -1 as number);
+    }
 
 	private render() {
 		if (!this.Visible) return;
+
+        if (this._buttonsEnabled) {
+            game.drawScaleformMovieFullscreen(this.instructionalButtonsScaleform.handle, 255, 255, 255, 255, 0);
+            game.hideHudComponentThisFrame(6); // Vehicle Name
+            game.hideHudComponentThisFrame(7); // Area Name
+            game.hideHudComponentThisFrame(9); // Street Name
+        }
 
 		if (this._justOpened) {
 			if (this._logo != null && !this._logo.IsTextureDictionaryLoaded)
@@ -1015,6 +1071,8 @@ export {
     BadgeStyle,
     Font,
     Alignment,
+    Control,
+    InstructionalButton,
     Point,
     Size,
     Color,

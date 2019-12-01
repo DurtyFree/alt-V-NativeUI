@@ -3,6 +3,11 @@ import * as NativeUI from './includes/NativeUIMenu/NativeUI';
 
 const menu = new NativeUI.Menu("NativeUI Test", "Test Subtitle", new NativeUI.Point(50, 50));
 //menu.Visible = false; //Menus are visible per default
+//menu.DisableInstructionalButtons(true); //Instructional Buttons are enabled per default
+
+let respectButton = new NativeUI.InstructionalButton("To pay respect", 0, "F");
+menu.AddInstructionalButton(respectButton);
+
 menu.AddItem(new NativeUI.UIMenuListItem(
     "List Item",
     "Description for List Item",
@@ -47,6 +52,10 @@ menu.AddItem(dynamicListItem);
 let menuItem = new NativeUI.UIMenuItem(
     "Test Sub Menu", "Just a sub menu."
 );
+let niceButton = new NativeUI.InstructionalButton("Nice", NativeUI.Control.Sprint);
+niceButton.BindToItem(menuItem);
+menu.AddInstructionalButton(niceButton);
+
 menu.AddItem(menuItem);
 
 const subMenu = new NativeUI.Menu("NativeUI Sub Menu Test", "Sub Menu Subtitle", new NativeUI.Point(50, 50));
@@ -109,5 +118,7 @@ alt.on('keydown', (key: number) => {
     if (key === 0x4D) { //M Key		
         if (menu.Visible) menu.Close();
         else menu.Open();
+    } else if (key === 70) { //F Key		
+        alt.log("You paid respect.");
     }
 }); 
