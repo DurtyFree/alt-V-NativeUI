@@ -21,4 +21,8 @@ export default class LiteEvent implements ILiteEvent {
 	public expose(): ILiteEvent {
 		return this;
 	}
+
+	public count(): number {
+		return this.handlers.length;
+	}
 }

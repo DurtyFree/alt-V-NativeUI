@@ -12,7 +12,7 @@ export default class Text extends IElement {
 	public font: number;
     public centered: boolean;
 
-	constructor(caption: string, pos: Point, scale: number, color: Color, font: number, centered: boolean) {
+    constructor(caption: string, pos: Point, scale: number, color: Color, font: number, centered: boolean) {
 		super();
 		this.caption = caption;
 		this.pos = pos;
@@ -42,11 +42,28 @@ export default class Text extends IElement {
         game.endTextCommandDisplayText(x, y, 0);
     }
 
-    public static AddLongString(str: string) {
-        const strLen = 99;
-        for (var i = 0; i < str.length; i += strLen) {
-            const substr = str.substr(i, Math.min(strLen, str.length - i));
-            game.addTextComponentSubstringPlayerName(substr);
+    public static AddLongString(text: string) {
+        if (text.length) {
+            const maxStringLength = 99;
+
+            for (let i = 0, position; i < text.length; i += maxStringLength) {
+                let currentText = text.substr(i, i + maxStringLength);
+                let currentIndex = i;
+                if ((currentText.match(/~/g) || []).length % 2 !== 0) {
+                    position = currentText.lastIndexOf('~');
+                    //if(position > 0 && currentText[position - 1] === ' ') { // Doesn't the substring auto add a space?
+                    //	position--;
+                    //}
+                    i -= (maxStringLength - position);
+                } else {
+                    position = Math.min(maxStringLength, text.length - currentIndex);
+                }
+                game.addTextComponentSubstringPlayerName(text.substr(currentIndex, position));
+            }
         }
     }
+}
+
+export {
+    Text
 }

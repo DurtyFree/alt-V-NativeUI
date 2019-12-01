@@ -1,8 +1,6 @@
 import BadgeStyle from "../enums/BadgeStyle";
 import Font from "../enums/Font";
 import Alignment from "../enums/Alignment";
-import ItemsCollection from "../modules/ItemsCollection";
-import ListItem from "../modules/ListItem";
 import ResText from "../modules/ResText";
 import Sprite from "../modules/Sprite";
 import Color from "../utils/Color";
@@ -11,7 +9,7 @@ import Size from "../utils/Size";
 import { Screen } from "../utils/Screen";
 import UIMenuItem from "./UIMenuItem";
 
-export default class UIMenuListItem extends UIMenuItem {
+export default class UIMenuDynamicListItem extends UIMenuItem {
 	protected _itemText: ResText;
 
 	protected _arrowLeft: Sprite;
@@ -25,66 +23,87 @@ export default class UIMenuListItem extends UIMenuItem {
 
 	private currOffset: number = 0;
 
-	private collection: Array<ListItem> = [];
+	private _leftMoveThreshold: number = 1;
+	private _rightMoveThreshold: number = 1;
 
-	get Collection() {
-		return this.collection;
+	private _lowerThreshold: number = 0;
+	private _upperThreshold: number = 10;
+
+	private _preText: string = '';
+
+	private _value: number;
+
+	get PreCaptionText() {
+		return this._preText;
 	}
-	set Collection(v) {
-		if (!v) throw new Error("The collection can't be null");
-		this.collection = v;
+	set PreCaptionText(text) {
+		if (!text) throw new Error("The pre caption text can't be null");
+		if (typeof text !== 'string') throw new Error("The pre caption text must be a string");
+		this._preText = text;
+		this.currOffset = Screen.GetTextWidth(this.PreCaptionText + this._value.toString(), this._itemText && this._itemText.font ? this._itemText.font : 0, 0.35); // this._itemText && this._itemText.scale ? this._itemText.scale : 0.35
 	}
 
-	set SelectedItem(v: ListItem) {
-		const idx = this.Collection.findIndex(li => li.Id === v.Id);
-		if (idx > 0) this.Index = idx;
-		else this.Index = 0;
+	get LeftMoveThreshold() {
+		return this._leftMoveThreshold;
+	}
+	set LeftMoveThreshold(amt) {
+		if (!amt) throw new Error("The left threshold can't be null");
+		this._leftMoveThreshold = amt;
 	}
 
-	get SelectedItem() {
-		return this.Collection.length > 0 ? this.Collection[this.Index] : null;
+	get RightMoveThreshold() {
+		return this._rightMoveThreshold;
+	}
+	set RightMoveThreshold(amt) {
+		if (!amt) throw new Error("The right threshold can't be null");
+		this._rightMoveThreshold = amt;
+	}
+
+	get LowerThreshold() {
+		return this._lowerThreshold;
+	}
+	set LowerThreshold(amt) {
+		if (typeof amt !== 'number' && !amt) throw new Error("The lower threshold can't be null");
+		this._lowerThreshold = amt;
+		if(this.SelectedValue < amt) {
+			this.SelectedValue = amt;
+		}
+	}
+
+	get UpperThreshold() {
+		return this._upperThreshold;
+	}
+	set UpperThreshold(amt) {
+		if (typeof amt !== 'number' && !amt) throw new Error("The upper threshold can't be null");
+		this._upperThreshold = amt;
+		if(this.SelectedValue > amt) {
+			this.SelectedValue = amt;
+		}
 	}
 
 	get SelectedValue() {
-		return this.SelectedItem == null
-			? null
-			: this.SelectedItem.Data == null
-			? this.SelectedItem.DisplayText
-			: this.SelectedItem.Data;
+		return this._value;
 	}
-
-	protected _index: number = 0;
-
-	get Index() {
-		if (this.Collection == null) return -1;
-		if (this.Collection != null && this.Collection.length == 0) return -1;
-
-		return this._index % this.Collection.length;
-	}
-	set Index(value) {
-		if (this.Collection == null) return;
-		if (this.Collection != null && this.Collection.length == 0) return;
-
-        this._index = 100000000 - (100000000 % this.Collection.length) + value;
-
-		const caption =
-			this.Collection.length >= this.Index
-				? this.Collection[this.Index].DisplayText
-				: " ";
-		this.currOffset = Screen.GetTextWidth(caption, this._itemText && this._itemText.font ? this._itemText.font : 0, 0.35); // this._itemText && this._itemText.font ? this._itemText.font : 0, this._itemText && this._itemText.scale ? this._itemText.scale : 0.35
+	set SelectedValue(v: number) {
+		if(v < this._lowerThreshold || v > this._upperThreshold) throw new Error("The value can not be outside the lower or upper limits");
+		
+		this._value = v;
+		this.currOffset = Screen.GetTextWidth(this.PreCaptionText + this._value.toString(), this._itemText && this._itemText.font ? this._itemText.font : 0, this._itemText && this._itemText.scale ? this._itemText.scale : 0.35);
 	}
 
 	constructor(
 		text: string,
 		description: string = "",
-		collection: ItemsCollection = new ItemsCollection([]),
-        startIndex: number = 0,
+		lowerThreshold: number = 0,
+		upperThreshold: number = 10,
+        startValue: number = 0,
         data: any = null
 	) {
 		super(text, description, data);
 		let y = 0;
-		this.Collection = collection.getListItems();
-		this.Index = startIndex;
+		this.LowerThreshold = lowerThreshold;
+		this.UpperThreshold = upperThreshold;
+		this.SelectedValue = (startValue < lowerThreshold || startValue > upperThreshold) ? lowerThreshold : startValue;
 		this._arrowLeft = new Sprite(
 			"commonmenu",
 			"arrowleft",
@@ -105,29 +124,6 @@ export default class UIMenuListItem extends UIMenuItem {
 			Font.ChaletLondon,
 			Alignment.Right
 		);
-	}
-
-	public setCollection(collection: ItemsCollection) {
-		this.Collection = collection.getListItems();
-	}
-
-	public setCollectionItem(
-		index: number,
-		item: ListItem | string,
-		resetSelection: boolean = true
-	) {
-		if (index > this.Collection.length)
-			// Placeholder for formatting
-			throw new Error("Index out of bounds");
-		if (typeof item === "string")
-			// Placeholder for formatting
-			item = new ListItem(item);
-
-		this.Collection.splice(index, 1, item);
-
-		if (resetSelection)
-			// Placeholder for formatting
-			this.Index = 0;
 	}
 
 	public SetVerticalPosition(y: number) {
@@ -156,10 +152,6 @@ export default class UIMenuListItem extends UIMenuItem {
 
 	public Draw() {
 		super.Draw();
-		const caption =
-			this.Collection.length >= this.Index
-				? this.Collection[this.Index].DisplayText
-				: " ";
 		const offset = this.currOffset;
 
 		this._itemText.color = this.Enabled
@@ -168,7 +160,7 @@ export default class UIMenuListItem extends UIMenuItem {
 				: this.ForeColor
 			: new Color(163, 159, 148);
 
-		this._itemText.caption = caption;
+		this._itemText.caption = this.PreCaptionText + this._value.toString();
 
 		this._arrowLeft.color = this.Enabled
 			? this.Selected

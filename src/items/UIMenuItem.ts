@@ -1,7 +1,7 @@
 import * as alt from 'alt';
-import game from 'natives';
 import BadgeStyle from "../enums/BadgeStyle";
 import Font from "../enums/Font";
+import Alignment from "../enums/Alignment";
 import NativeUI from "../NativeUi";
 import ResRectangle from "../modules/ResRectangle";
 import ResText from "../modules/ResText";
@@ -10,7 +10,6 @@ import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import UUIDV4 from "../utils/UUIDV4";
-import Alignment from '../enums/Alignment';
 
 export default class UIMenuItem {
 	public readonly Id: string = UUIDV4();
@@ -24,6 +23,7 @@ export default class UIMenuItem {
 
 	protected _rectangle: ResRectangle;
 	protected _text: ResText;
+	protected _description: string;
 	protected _selectedSprite: Sprite;
 
 	protected _badgeLeft: Sprite;
@@ -40,7 +40,7 @@ export default class UIMenuItem {
 	public Enabled: boolean;
 	public Selected: boolean;
 	public Hovered: boolean;
-	public Description: string;
+	public Data: any;
 
 	public Offset: Point;
 	public Parent: NativeUI;
@@ -48,16 +48,27 @@ export default class UIMenuItem {
 	get Text() {
 		return this._text.caption;
 	}
-	set Text(v) {
-		this._text.caption = v;
+	set Text(text) {
+		this._text.caption = text;
+	}
+
+	get Description() {
+		return this._description;
+	}
+	set Description(text) {
+		this._description = text;
+		if(this.hasOwnProperty('Parent')) {
+			this.Parent.recalculateDescriptionNextFrame += 1;
+		}
 	}
 
 	public RightLabel: string = "";
 	public LeftBadge: BadgeStyle = BadgeStyle.None;
 	public RightBadge: BadgeStyle = BadgeStyle.None;
 
-    constructor(text: string, description = "") {
+    constructor(text: string, description = "", data: any = null) {
 		this.Enabled = true;
+		this.Data = data;
 
 		this._rectangle = new ResRectangle(
 			new Point(0, 0),
@@ -128,7 +139,7 @@ export default class UIMenuItem {
 	}
 
 	public fireEvent() {
-        if (this._event) {
+		if (this._event) {
             alt.emit(this._event.event, ...this._event.args);
 		}
 	}
@@ -208,20 +219,31 @@ export default class UIMenuItem {
 		this._text.Draw();
 	}
 
-	SetLeftBadge(badge: BadgeStyle) {
+	public SetLeftBadge(badge: BadgeStyle) {
 		this.LeftBadge = badge;
 	}
 
-	SetRightBadge(badge: BadgeStyle) {
+	public SetRightBadge(badge: BadgeStyle) {
 		this.RightBadge = badge;
 	}
 
-	SetRightLabel(text: string) {
+	public SetRightLabel(text: string) {
 		this.RightLabel = text;
 	}
 
 	BadgeToSpriteLib(badge: BadgeStyle) {
-		return "commonmenu";
+		switch(badge) {
+			case BadgeStyle.Sale:
+				return "mpshopsale";
+			case BadgeStyle.Audio1:
+			case BadgeStyle.Audio2:
+			case BadgeStyle.Audio3:
+			case BadgeStyle.AudioInactive:
+			case BadgeStyle.AudioMute:
+				return "mpleaderboard";
+			default:
+				return "commonmenu";
+		}
 	}
 
 	BadgeToSpriteName(badge: BadgeStyle, selected: boolean) {
@@ -272,6 +294,22 @@ export default class UIMenuItem {
 				return "shop_tick_icon";
 			case BadgeStyle.Trevor:
 				return selected ? "shop_trevor_icon_b" : "shop_trevor_icon_a";
+			case BadgeStyle.Sale:
+				return "saleicon";
+			case BadgeStyle.ArrowLeft:
+				return "arrowleft";
+			case BadgeStyle.ArrowRight:
+				return "arrowright";
+			case BadgeStyle.Audio1:
+				return "leaderboard_audio_1";
+			case BadgeStyle.Audio2:
+				return "leaderboard_audio_2";
+			case BadgeStyle.Audio3:
+				return "leaderboard_audio_3";
+			case BadgeStyle.AudioInactive:
+				return "leaderboard_audio_inactive";
+			case BadgeStyle.AudioMute:
+				return "leaderboard_audio_mute";
 			default:
 				return "";
 		}

@@ -1,5 +1,5 @@
 # alt:V-NativeUI
-This project is a (fully TypeScript compatible) port of [RageMP-NativeUI by XMGamingMaster](https://github.com/XMGamingMaster/RageMP-NativeUI) for alt:V. It provides a simple way to use NativeUI menus in your clientside scripts. A lot of credits to [datWeazel](https://github.com/datWeazel/alt-V-NativeUI) who made the initial port of the RageMP-NativeUI.
+This project is a (fully TypeScript compatible) port of RageMP-NativeUI by [XMGamingMaster](https://github.com/XMGamingMaster/RageMP-NativeUI) for alt:V. It provides a simple way to use NativeUI menus in your clientside scripts. A lot of credits to [datWeazel](https://github.com/datWeazel/alt-V-NativeUI) who made the initial port of the RageMP-NativeUI and [Kar](https://github.com/karscopsandrobbers/RAGEMP-NativeUI) for his improved version of the RageMP-NativeUI.
 
 __NativeUI is not a standalone resource!  
 You need to include NativeUI in every resource in which you want to use NativeUI menus!__
@@ -10,11 +10,12 @@ You need to include NativeUI in every resource in which you want to use NativeUI
 3. Create another folder called `NativeUIMenu` inside the `includes` folder.
 4. Download NativeUI from github and extract all files inside the `src` folder to your `NativeUIMenu` folder
 	1. Your file structure should look something like this:  
-	`altv-Server/resources/yourResource/includes/NativeUIMenu/NativeUI.mjs`
+	`altv-Server/resources/yourResource/includes/NativeUIMenu/NativeUI`
 5. Finally just include NativeUI inside the clientside script where you want to use NativeUI with this line:  
-`import * as NativeUI from 'includes/NativeUIMenu/NativeUI.mjs';`
+`import * as NativeUI from 'includes/NativeUIMenu/NativeUI';`
   
-You can download an example resource here: https://neo-v.de/altv/files/nativeUI-example.zip (Last updated: 19.06.2019)
+See [examples folder]( https://github.com/DurtyFree/alt-V-NativeUI/tree/master/examples/nativeUI-example) for alt:V resource examples. 
+
 ## Example Menu
 ```javascript
 import * as NativeUI from 'includes/NativeUIMenu/NativeUI.mjs';
@@ -150,7 +151,15 @@ enum BadgeStyle {
 	Tatoo,
 	Trevor,
 	Lock,
-	Tick
+	Tick,
+	Sale,
+	ArrowLeft,
+	ArrowRight,
+	Audio1,
+	Audio2,
+	Audio3,
+	AudioInactive,
+	AudioMute
 }
 ```
 ### Font

@@ -7,7 +7,7 @@ import IElement from "./IElement";
 export default class Rectangle extends IElement {
 	public pos: Point;
 	public size: Size;
-	public color: Color;
+    public color: Color;
 
 	constructor(pos: Point, size: Size, color: Color) {
 		super();
@@ -19,13 +19,13 @@ export default class Rectangle extends IElement {
 
 	Draw(pos: Point | Size, size: Size, color: Color) {
 		if (!pos) pos = new Size(0, 0);
-        if (!size && !color) {
+		if (!size && !color) {
             pos = new Point(this.pos.X + (pos as Size).Width, this.pos.Y + (pos as Size).Height);
 			size = this.size;
 			color = this.color;
 		}
 		const w = size.Width / 1280.0;
-		const h = size.Height / 720.0;
+        const h = size.Height / 720.0;
         const x = (pos as Point).X / 1280.0 + w * 0.5;
         const y = (pos as Point).Y / 720.0 + h * 0.5;
 

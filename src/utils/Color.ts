@@ -10,7 +10,7 @@ export default class Color {
 	public B: number;
     public A: number;
 
-	constructor(r: number, g: number, b: number, a = 255) {
+    constructor(r: number, g: number, b: number, a = 255) {
 		this.R = r;
 		this.G = g;
 		this.B = b;

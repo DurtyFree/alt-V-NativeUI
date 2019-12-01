@@ -10,8 +10,8 @@ export default class ResRectangle extends Rectangle {
 		super(pos, size, color);
 	}
 
-	public Draw(): void;
-	public Draw(offset: any): void;
+    public Draw(): void;
+    public Draw(offset: any): void;
     public Draw(pos: Point | Size, size: Size, color: Color): void;
 
     Draw(pos?: Point | Size, size?: Size, color?: Color) {
