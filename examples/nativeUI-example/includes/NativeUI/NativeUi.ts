@@ -349,6 +349,10 @@ export default class NativeUI {
                 m.Close(true);
             });
         }
+        //Reset current selected value of dynamic list items so they are dynamically set next draw
+        this.MenuItems.filter(menuItem => menuItem instanceof UIMenuDynamicListItem).forEach((menuItem: UIMenuDynamicListItem) => {
+            menuItem.SelectedValue = undefined;
+        });
         this.RefreshIndex();
     }
 
@@ -390,9 +394,11 @@ export default class NativeUI {
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuDynamicListItem) {
             const it = <UIMenuDynamicListItem>this.MenuItems[this.CurrentSelection];
-            it.SelectedValue = it.SelectionChangeHandler(it, it.SelectedValue, ChangeDirection.Left);
+            it.SelectionChangeHandlerPromise(it, it.SelectedValue, ChangeDirection.Left).then((newSelectedValue: string) => {
+                it.SelectedValue = newSelectedValue;
+                this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Left);
+            });
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
-            this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Left);
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem) {
             const it = <UIMenuSliderItem>this.MenuItems[this.CurrentSelection];
@@ -428,9 +434,11 @@ export default class NativeUI {
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuDynamicListItem) {
             const it = <UIMenuDynamicListItem>this.MenuItems[this.CurrentSelection];
-            it.SelectedValue = it.SelectionChangeHandler(it, it.SelectedValue, ChangeDirection.Right);
+            it.SelectionChangeHandlerPromise(it, it.SelectedValue, ChangeDirection.Right).then((newSelectedValue: string) => {
+                it.SelectedValue = newSelectedValue;
+                this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Right);
+            });
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
-            this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Right);
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem) {
             const it = <UIMenuSliderItem>this.MenuItems[this.CurrentSelection];

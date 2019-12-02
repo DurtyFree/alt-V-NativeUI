@@ -1,3 +1,4 @@
+import * as alt from 'alt';
 import BadgeStyle from "../enums/BadgeStyle";
 import Font from "../enums/Font";
 import Alignment from "../enums/Alignment";
@@ -10,6 +11,14 @@ import Size from "../utils/Size";
 import Screen from "../utils/Screen";
 import UIMenuItem from "./UIMenuItem";
 
+interface SelectionChangeHandler {
+    (item: UIMenuDynamicListItem, selectedValue: string, changeDirection: ChangeDirection): string
+}
+
+interface SelectedStartValueHandler {
+    (): string
+}
+
 export default class UIMenuDynamicListItem extends UIMenuItem {
     protected _itemText: ResText;
     protected _arrowLeft: Sprite;
@@ -18,9 +27,16 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
     private _currentOffset: number = 0;
     private _precaptionText: string = '';
     private _selectedValue: string;
+    private readonly _selectedStartValueHandler: SelectedStartValueHandler = null;
 
-    public readonly SelectionChangeHandler: { (item: UIMenuDynamicListItem, selectedValue: string, changeDirection: ChangeDirection): string } = null;
-    
+    public readonly SelectionChangeHandler: SelectionChangeHandler = null;
+    public SelectionChangeHandlerPromise(item: UIMenuDynamicListItem, selectedValue: string, changeDirection: ChangeDirection): Promise<unknown> {
+        return new Promise((resolve, reject) => {
+            let newSelectedValue: string = this.SelectionChangeHandler(item, selectedValue, changeDirection);
+            resolve(newSelectedValue);
+        });
+    }
+
     public get PreCaptionText() {
         return this._precaptionText;
     }
@@ -36,15 +52,26 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
     }
     public set SelectedValue(value: string) {
         this._selectedValue = value;
+        if (value == undefined)
+            return;
+
         this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._selectedValue, this._itemText && this._itemText.font ? this._itemText.font : 0, this._itemText && this._itemText.scale ? this._itemText.scale : 0.35);
     }
 
-    constructor(text: string, selectionChangeHandler: { (item: UIMenuDynamicListItem, selectedValue: string, changeDirection: ChangeDirection): string }, description: string = "", startValue: string = "0", data: any = null) {
+    constructor(text: string, selectionChangeHandler: { (item: UIMenuDynamicListItem, selectedValue: string, changeDirection: ChangeDirection): string }, description: string = "", selectedStartValueHandler: { (): string } = null, data: any = null) {
         super(text, description, data);
 
+        if (!this.isVariableFunction(selectionChangeHandler)) {
+            alt.logError(`[UIMenuDynamicListItem] ${text} is not created with a valid selectionChangeHandler, needs to be function. Please see docs.`);
+        }
+        if (!this.isVariableFunction(selectedStartValueHandler)) {
+            alt.logError(`[UIMenuDynamicListItem] ${text} is not created with a valid selectedStartValueHandler, needs to be function. Please see docs.`);
+        }
+
         this.SelectionChangeHandler = selectionChangeHandler;
+        this._selectedStartValueHandler = selectedStartValueHandler;
         let y = 0;
-        this.SelectedValue = startValue;
+
         this._arrowLeft = new Sprite("commonmenu", "arrowleft", new Point(110, 105 + y), new Size(30, 30));
         this._arrowRight = new Sprite("commonmenu", "arrowright", new Point(280, 105 + y), new Size(30, 30));
         this._itemText = new ResText("", new Point(290, y + 104), 0.35, Color.White, Font.ChaletLondon, Alignment.Right);
@@ -67,6 +94,17 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
 
     public Draw() {
         super.Draw();
+        if (this._selectedValue == undefined) {
+            if (this._selectedStartValueHandler != null) {
+                this._selectedValue = this._selectedStartValueHandler();
+                alt.log("Current selected value = " + this._selectedValue);
+            }
+            else {
+                this._selectedValue = "";
+                alt.log("Current selected value = " + this._selectedValue);
+            }
+        }
+
         const offset = this._currentOffset;
 
         this._itemText.color = this.Enabled
@@ -98,5 +136,9 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
             this._itemText.pos = new Point(420 + this.Offset.X + this.Parent.WidthOffset, this._itemText.pos.Y);
         }
         this._itemText.Draw();
+    }
+
+    private isVariableFunction(functionToCheck: any): boolean {
+        return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
     }
 }

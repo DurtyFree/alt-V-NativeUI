@@ -1,3 +1,4 @@
+import * as alt from 'alt';
 import Font from "../enums/Font";
 import Alignment from "../enums/Alignment";
 import ResText from "../modules/ResText";
@@ -8,17 +9,30 @@ import Size from "../utils/Size";
 import Screen from "../utils/Screen";
 import UIMenuItem from "./UIMenuItem";
 export default class UIMenuDynamicListItem extends UIMenuItem {
-    constructor(text, selectionChangeHandler, description = "", startValue = "0", data = null) {
+    constructor(text, selectionChangeHandler, description = "", selectedStartValueHandler = null, data = null) {
         super(text, description, data);
         this._currentOffset = 0;
         this._precaptionText = '';
+        this._selectedStartValueHandler = null;
         this.SelectionChangeHandler = null;
+        if (!this.isVariableFunction(selectionChangeHandler)) {
+            alt.logError(`[UIMenuDynamicListItem] ${text} is not created with a valid selectionChangeHandler, needs to be function. Please see docs.`);
+        }
+        if (!this.isVariableFunction(selectedStartValueHandler)) {
+            alt.logError(`[UIMenuDynamicListItem] ${text} is not created with a valid selectedStartValueHandler, needs to be function. Please see docs.`);
+        }
         this.SelectionChangeHandler = selectionChangeHandler;
+        this._selectedStartValueHandler = selectedStartValueHandler;
         let y = 0;
-        this.SelectedValue = startValue;
         this._arrowLeft = new Sprite("commonmenu", "arrowleft", new Point(110, 105 + y), new Size(30, 30));
         this._arrowRight = new Sprite("commonmenu", "arrowright", new Point(280, 105 + y), new Size(30, 30));
         this._itemText = new ResText("", new Point(290, y + 104), 0.35, Color.White, Font.ChaletLondon, Alignment.Right);
+    }
+    SelectionChangeHandlerPromise(item, selectedValue, changeDirection) {
+        return new Promise((resolve, reject) => {
+            let newSelectedValue = this.SelectionChangeHandler(item, selectedValue, changeDirection);
+            resolve(newSelectedValue);
+        });
     }
     get PreCaptionText() {
         return this._precaptionText;
@@ -36,6 +50,8 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
     }
     set SelectedValue(value) {
         this._selectedValue = value;
+        if (value == undefined)
+            return;
         this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._selectedValue, this._itemText && this._itemText.font ? this._itemText.font : 0, this._itemText && this._itemText.scale ? this._itemText.scale : 0.35);
     }
     SetVerticalPosition(y) {
@@ -52,6 +68,16 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
     }
     Draw() {
         super.Draw();
+        if (this._selectedValue == undefined) {
+            if (this._selectedStartValueHandler != null) {
+                this._selectedValue = this._selectedStartValueHandler();
+                alt.log("Current selected value = " + this._selectedValue);
+            }
+            else {
+                this._selectedValue = "";
+                alt.log("Current selected value = " + this._selectedValue);
+            }
+        }
         const offset = this._currentOffset;
         this._itemText.color = this.Enabled
             ? this.Selected
@@ -79,5 +105,8 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
             this._itemText.pos = new Point(420 + this.Offset.X + this.Parent.WidthOffset, this._itemText.pos.Y);
         }
         this._itemText.Draw();
+    }
+    isVariableFunction(functionToCheck) {
+        return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
     }
 }

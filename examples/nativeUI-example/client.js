@@ -26,7 +26,7 @@ function onDynamicListItemChange(item, selectedValue, changeDirection) {
     }
     return alt.Player.local.pos.x.toFixed(2);
 }
-let dynamicListItem = new NativeUI.UIMenuDynamicListItem('Player X Position:', onDynamicListItemChange, `Change Players X position.`, alt.Player.local.pos.x.toFixed(2));
+let dynamicListItem = new NativeUI.UIMenuDynamicListItem('Player X Position:', onDynamicListItemChange, `Change Players X position.`, () => alt.Player.local.pos.x.toFixed(2));
 dynamicListItem.PreCaptionText = '~HUD_COLOUR_RED~';
 menu.AddItem(dynamicListItem);
 let menuItem = new NativeUI.UIMenuItem("Test Sub Menu", "Just a sub menu.");

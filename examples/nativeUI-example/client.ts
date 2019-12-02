@@ -58,14 +58,16 @@ function onDynamicListItemChange(item: NativeUI.UIMenuDynamicListItem, selectedV
     else {
         game.setEntityCoordsNoOffset(alt.Player.local.scriptID, alt.Player.local.pos.x - 0.01, alt.Player.local.pos.y, alt.Player.local.pos.z, false, false, false);
     }
+
+    // Return new selected value
     return alt.Player.local.pos.x.toFixed(2);
 }
 
 let dynamicListItem = new NativeUI.UIMenuDynamicListItem(
     'Player X Position:',
-    onDynamicListItemChange,
+    onDynamicListItemChange, // This is called every list item change
     `Change Players X position.`,
-    alt.Player.local.pos.x.toFixed(2)
+    () => alt.Player.local.pos.x.toFixed(2) // This is called once on initial menu list item draw / menu opening 
 );
 dynamicListItem.PreCaptionText = '~HUD_COLOUR_RED~';
 menu.AddItem(dynamicListItem);

@@ -264,6 +264,9 @@ export default class NativeUI {
                 m.Close(true);
             });
         }
+        this.MenuItems.filter(menuItem => menuItem instanceof UIMenuDynamicListItem).forEach((menuItem) => {
+            menuItem.SelectedValue = undefined;
+        });
         this.RefreshIndex();
     }
     Close(closeChildren = false) {
@@ -303,9 +306,11 @@ export default class NativeUI {
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuDynamicListItem) {
             const it = this.MenuItems[this.CurrentSelection];
-            it.SelectedValue = it.SelectionChangeHandler(it, it.SelectedValue, ChangeDirection.Left);
+            it.SelectionChangeHandlerPromise(it, it.SelectedValue, ChangeDirection.Left).then((newSelectedValue) => {
+                it.SelectedValue = newSelectedValue;
+                this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Left);
+            });
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
-            this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Left);
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem) {
             const it = this.MenuItems[this.CurrentSelection];
@@ -342,9 +347,11 @@ export default class NativeUI {
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuDynamicListItem) {
             const it = this.MenuItems[this.CurrentSelection];
-            it.SelectedValue = it.SelectionChangeHandler(it, it.SelectedValue, ChangeDirection.Right);
+            it.SelectionChangeHandlerPromise(it, it.SelectedValue, ChangeDirection.Right).then((newSelectedValue) => {
+                it.SelectedValue = newSelectedValue;
+                this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Right);
+            });
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
-            this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Right);
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem) {
             const it = this.MenuItems[this.CurrentSelection];
