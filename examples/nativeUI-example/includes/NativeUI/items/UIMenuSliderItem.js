@@ -50,16 +50,11 @@ export default class UIMenuSliderItem extends UIMenuItem {
                 ? Color.Black
                 : Color.WhiteSmoke
             : new Color(163, 159, 148);
-        let offset = ((this._rectangleBackground.size.Width -
-            this._rectangleSlider.size.Width) /
-            (this._items.length - 1)) *
-            this.Index;
+        let offset = ((this._rectangleBackground.size.Width - this._rectangleSlider.size.Width) / (this._items.length - 1)) * this.Index;
         this._rectangleSlider.pos = new Point(250 + this.Offset.X + offset + +this.Parent.WidthOffset, this._rectangleSlider.pos.Y);
         if (this.Selected) {
             this._arrowLeft.Draw();
             this._arrowRight.Draw();
-        }
-        else {
         }
         this._rectangleBackground.Draw();
         this._rectangleSlider.Draw();

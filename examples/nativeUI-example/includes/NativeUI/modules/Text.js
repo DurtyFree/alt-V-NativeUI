@@ -31,20 +31,20 @@ export default class Text extends IElement {
         game.endTextCommandDisplayText(x, y, 0);
     }
     static AddLongString(text) {
-        if (text.length) {
-            const maxStringLength = 99;
-            for (let i = 0, position; i < text.length; i += maxStringLength) {
-                let currentText = text.substr(i, i + maxStringLength);
-                let currentIndex = i;
-                if ((currentText.match(/~/g) || []).length % 2 !== 0) {
-                    position = currentText.lastIndexOf('~');
-                    i -= (maxStringLength - position);
-                }
-                else {
-                    position = Math.min(maxStringLength, text.length - currentIndex);
-                }
-                game.addTextComponentSubstringPlayerName(text.substr(currentIndex, position));
+        if (!text.length)
+            return;
+        const maxStringLength = 99;
+        for (let i = 0, position; i < text.length; i += maxStringLength) {
+            let currentText = text.substr(i, i + maxStringLength);
+            let currentIndex = i;
+            if ((currentText.match(/~/g) || []).length % 2 !== 0) {
+                position = currentText.lastIndexOf('~');
+                i -= (maxStringLength - position);
             }
+            else {
+                position = Math.min(maxStringLength, text.length - currentIndex);
+            }
+            game.addTextComponentSubstringPlayerName(text.substr(currentIndex, position));
         }
     }
 }

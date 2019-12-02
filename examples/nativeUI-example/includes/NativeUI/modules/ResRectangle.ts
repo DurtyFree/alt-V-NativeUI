@@ -14,7 +14,7 @@ export default class ResRectangle extends Rectangle {
     public Draw(offset: any): void;
     public Draw(pos: Point | Size, size: Size, color: Color): void;
 
-    Draw(pos?: Point | Size, size?: Size, color?: Color) {
+    public Draw(pos?: Point | Size, size?: Size, color?: Color) {
 		if (!pos) pos = new Size();
 		if (pos && !size && !color) {
             pos = new Point(this.pos.X + (pos as Size).Width, this.pos.Y + (pos as Size).Height);

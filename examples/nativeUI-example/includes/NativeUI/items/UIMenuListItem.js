@@ -14,8 +14,8 @@ export default class UIMenuListItem extends UIMenuItem {
         super(text, description, data);
         this.ScrollingEnabled = true;
         this.HoldTimeBeforeScroll = 200;
-        this.currOffset = 0;
-        this.collection = [];
+        this._currentOffset = 0;
+        this._itemsCollection = [];
         this._index = 0;
         let y = 0;
         this.Collection = collection.getListItems();
@@ -25,12 +25,12 @@ export default class UIMenuListItem extends UIMenuItem {
         this._itemText = new ResText("", new Point(290, y + 104), 0.35, Color.White, Font.ChaletLondon, Alignment.Right);
     }
     get Collection() {
-        return this.collection;
+        return this._itemsCollection;
     }
     set Collection(v) {
         if (!v)
             throw new Error("The collection can't be null");
-        this.collection = v;
+        this._itemsCollection = v;
     }
     set SelectedItem(v) {
         const idx = this.Collection.findIndex(li => li.Id === v.Id);
@@ -65,7 +65,7 @@ export default class UIMenuListItem extends UIMenuItem {
         const caption = this.Collection.length >= this.Index
             ? this.Collection[this.Index].DisplayText
             : " ";
-        this.currOffset = Screen.GetTextWidth(caption, this._itemText && this._itemText.font ? this._itemText.font : 0, 0.35);
+        this._currentOffset = Screen.GetTextWidth(caption, this._itemText && this._itemText.font ? this._itemText.font : 0, 0.35);
     }
     setCollection(collection) {
         this.Collection = collection.getListItems();
@@ -96,7 +96,7 @@ export default class UIMenuListItem extends UIMenuItem {
         const caption = this.Collection.length >= this.Index
             ? this.Collection[this.Index].DisplayText
             : " ";
-        const offset = this.currOffset;
+        const offset = this._currentOffset;
         this._itemText.color = this.Enabled
             ? this.Selected
                 ? this.HighlightedForeColor

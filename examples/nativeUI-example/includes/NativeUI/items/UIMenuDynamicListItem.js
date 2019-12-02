@@ -12,7 +12,7 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
         super(text, description, data);
         this.ScrollingEnabled = true;
         this.HoldTimeBeforeScroll = 200;
-        this.currOffset = 0;
+        this._currentOffset = 0;
         this._leftMoveThreshold = 1;
         this._rightMoveThreshold = 1;
         this._lowerThreshold = 0;
@@ -35,7 +35,7 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
         if (typeof text !== 'string')
             throw new Error("The pre caption text must be a string");
         this._preText = text;
-        this.currOffset = Screen.GetTextWidth(this.PreCaptionText + this._value.toString(), this._itemText && this._itemText.font ? this._itemText.font : 0, 0.35);
+        this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._value.toString(), this._itemText && this._itemText.font ? this._itemText.font : 0, 0.35);
     }
     get LeftMoveThreshold() {
         return this._leftMoveThreshold;
@@ -82,7 +82,7 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
         if (v < this._lowerThreshold || v > this._upperThreshold)
             throw new Error("The value can not be outside the lower or upper limits");
         this._value = v;
-        this.currOffset = Screen.GetTextWidth(this.PreCaptionText + this._value.toString(), this._itemText && this._itemText.font ? this._itemText.font : 0, this._itemText && this._itemText.scale ? this._itemText.scale : 0.35);
+        this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._value.toString(), this._itemText && this._itemText.font ? this._itemText.font : 0, this._itemText && this._itemText.scale ? this._itemText.scale : 0.35);
     }
     SetVerticalPosition(y) {
         this._arrowLeft.pos = new Point(300 + this.Offset.X + this.Parent.WidthOffset, 147 + y + this.Offset.Y);
@@ -98,7 +98,7 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
     }
     Draw() {
         super.Draw();
-        const offset = this.currOffset;
+        const offset = this._currentOffset;
         this._itemText.color = this.Enabled
             ? this.Selected
                 ? this.HighlightedForeColor

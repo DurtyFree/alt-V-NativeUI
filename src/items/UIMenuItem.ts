@@ -56,7 +56,7 @@ export default class UIMenuItem {
     public set Description(text) {
         this._description = text;
         if (this.hasOwnProperty('Parent')) {
-            this.Parent.recalculateDescriptionNextFrame += 1;
+            this.Parent.RecalculateDescriptionNextFrame += 1;
         }
     }
 

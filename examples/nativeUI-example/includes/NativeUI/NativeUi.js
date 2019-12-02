@@ -30,31 +30,32 @@ import MidsizedMessage from './modules/MidsizedMessage';
 let menuPool = [];
 export default class NativeUI {
     constructor(title, subtitle, offset, spriteLibrary, spriteName) {
-        this.Id = UUIDV4();
         this._visible = true;
-        this.counterPretext = "";
-        this.counterOverride = undefined;
-        this.instructionalButtons = [];
-        this.lastUpDownNavigation = 0;
-        this.lastLeftRightNavigation = 0;
-        this.extraOffset = 0;
-        this.ParentMenu = null;
-        this.ParentItem = null;
-        this._titleScale = 1.15;
-        this.WidthOffset = 0;
-        this.MouseControlsEnabled = false;
+        this._counterPretext = "";
+        this._counterOverride = undefined;
+        this._lastUpDownNavigation = 0;
+        this._lastLeftRightNavigation = 0;
+        this._extraOffset = 0;
         this._buttonsEnabled = true;
         this._justOpened = true;
         this._justOpenedFromPool = false;
         this._justClosedFromPool = false;
         this._poolOpening = null;
-        this.safezoneOffset = new Point(0, 0);
+        this._safezoneOffset = new Point(0, 0);
         this._activeItem = 1000;
-        this.MaxItemsOnScreen = 9;
-        this._maxItem = this.MaxItemsOnScreen;
+        this._maxItemsOnScreen = 9;
+        this._maxItem = this._maxItemsOnScreen;
+        this._mouseEdgeEnabled = true;
+        this._instructionalButtons = [];
+        this._titleScale = 1.15;
+        this.Id = UUIDV4();
         this.selectTextLocalized = alt.getGxtText("HUD_INPUT2");
         this.backTextLocalized = alt.getGxtText("HUD_INPUT3");
-        this.recalculateDescriptionNextFrame = 1;
+        this.RecalculateDescriptionNextFrame = 1;
+        this.WidthOffset = 0;
+        this.ParentMenu = null;
+        this.ParentItem = null;
+        this.MouseControlsEnabled = false;
         this.AUDIO_LIBRARY = "HUD_FRONTEND_DEFAULT_SOUNDSET";
         this.AUDIO_UPDOWN = "NAV_UP_DOWN";
         this.AUDIO_LEFTRIGHT = "NAV_LEFT_RIGHT";
@@ -71,57 +72,43 @@ export default class NativeUI {
         this.MenuOpen = new LiteEvent();
         this.MenuClose = new LiteEvent();
         this.MenuChange = new LiteEvent();
-        this.MouseEdgeEnabled = true;
         if (!(offset instanceof Point))
             offset = Point.Parse(offset);
-        this.title = title;
-        this.subtitle = subtitle;
-        this.spriteLibrary = spriteLibrary || "commonmenu";
-        this.spriteName = spriteName || "interaction_bgd";
-        this.offset = new Point(offset.X, offset.Y);
+        this._title = title;
+        this._subtitle = subtitle;
+        this._spriteLibrary = spriteLibrary || "commonmenu";
+        this._spriteName = spriteName || "interaction_bgd";
+        this._offset = new Point(offset.X, offset.Y);
         this.Children = new Map();
-        this.instructionalButtonsScaleform = new Scaleform("instructional_buttons");
+        this._instructionalButtonsScaleform = new Scaleform("instructional_buttons");
         this.UpdateScaleform();
         this._mainMenu = new Container(new Point(0, 0), new Size(700, 500), new Color(0, 0, 0, 0));
-        this._logo = new Sprite(this.spriteLibrary, this.spriteName, new Point(0 + this.offset.X, 0 + this.offset.Y), new Size(431, 107));
-        this._mainMenu.addItem((this._title = new ResText(this.title, new Point(215 + this.offset.X, 20 + this.offset.Y), this._titleScale, new Color(255, 255, 255), 1, Alignment.Centered)));
-        if (this.subtitle !== "") {
-            this._mainMenu.addItem(new ResRectangle(new Point(0 + this.offset.X, 107 + this.offset.Y), new Size(431, 37), new Color(0, 0, 0, 255)));
-            this._mainMenu.addItem((this._subtitle = new ResText(this.subtitle, new Point(8 + this.offset.X, 110 + this.offset.Y), 0.35, new Color(255, 255, 255), 0, Alignment.Left)));
-            if (this.subtitle.startsWith("~")) {
-                this.counterPretext = this.subtitle.substr(0, 3);
+        this._logo = new Sprite(this._spriteLibrary, this._spriteName, new Point(0 + this._offset.X, 0 + this._offset.Y), new Size(431, 107));
+        this._mainMenu.addItem((this._titleResText = new ResText(this._title, new Point(215 + this._offset.X, 20 + this._offset.Y), this._titleScale, new Color(255, 255, 255), 1, Alignment.Centered)));
+        if (this._subtitle !== "") {
+            this._mainMenu.addItem(new ResRectangle(new Point(0 + this._offset.X, 107 + this._offset.Y), new Size(431, 37), new Color(0, 0, 0, 255)));
+            this._mainMenu.addItem((this._subtitleResText = new ResText(this._subtitle, new Point(8 + this._offset.X, 110 + this._offset.Y), 0.35, new Color(255, 255, 255), 0, Alignment.Left)));
+            if (this._subtitle.startsWith("~")) {
+                this._counterPretext = this._subtitle.substr(0, 3);
             }
-            this._counterText = new ResText("", new Point(425 + this.offset.X, 110 + this.offset.Y), 0.35, new Color(255, 255, 255), 0, Alignment.Right);
-            this.extraOffset += 37;
+            this._counterText = new ResText("", new Point(425 + this._offset.X, 110 + this._offset.Y), 0.35, new Color(255, 255, 255), 0, Alignment.Right);
+            this._extraOffset += 37;
         }
-        this._upAndDownSprite = new Sprite("commonmenu", "shop_arrows_upanddown", new Point(190 + this.offset.X, 147 +
-            37 * (this.MaxItemsOnScreen + 1) +
-            this.offset.Y -
-            37 +
-            this.extraOffset), new Size(50, 50));
-        this._extraRectangleUp = new ResRectangle(new Point(0 + this.offset.X, 144 +
-            38 * (this.MaxItemsOnScreen + 1) +
-            this.offset.Y -
-            37 +
-            this.extraOffset), new Size(431, 18), new Color(0, 0, 0, 200));
-        this._extraRectangleDown = new ResRectangle(new Point(0 + this.offset.X, 144 +
-            18 +
-            38 * (this.MaxItemsOnScreen + 1) +
-            this.offset.Y -
-            37 +
-            this.extraOffset), new Size(431, 18), new Color(0, 0, 0, 200));
-        this._descriptionBar = new ResRectangle(new Point(this.offset.X, 123), new Size(431, 4), Color.Black);
-        this._descriptionRectangle = new Sprite("commonmenu", "gradient_bgd", new Point(this.offset.X, 127), new Size(431, 30));
-        this._descriptionText = new ResText("", new Point(this.offset.X + 5, 125), 0.35, new Color(255, 255, 255, 255), Font.ChaletLondon, Alignment.Left);
-        this._background = new Sprite("commonmenu", "gradient_bgd", new Point(this.offset.X, 144 + this.offset.Y - 37 + this.extraOffset), new Size(290, 25));
+        this._upAndDownSprite = new Sprite("commonmenu", "shop_arrows_upanddown", new Point(190 + this._offset.X, 147 + 37 * (this._maxItemsOnScreen + 1) + this._offset.Y - 37 + this._extraOffset), new Size(50, 50));
+        this._extraRectangleUp = new ResRectangle(new Point(0 + this._offset.X, 144 + 38 * (this._maxItemsOnScreen + 1) + this._offset.Y - 37 + this._extraOffset), new Size(431, 18), new Color(0, 0, 0, 200));
+        this._extraRectangleDown = new ResRectangle(new Point(0 + this._offset.X, 144 + 18 + 38 * (this._maxItemsOnScreen + 1) + this._offset.Y - 37 + this._extraOffset), new Size(431, 18), new Color(0, 0, 0, 200));
+        this._descriptionBar = new ResRectangle(new Point(this._offset.X, 123), new Size(431, 4), Color.Black);
+        this._descriptionRectangle = new Sprite("commonmenu", "gradient_bgd", new Point(this._offset.X, 127), new Size(431, 30));
+        this._descriptionText = new ResText("", new Point(this._offset.X + 5, 125), 0.35, new Color(255, 255, 255, 255), Font.ChaletLondon, Alignment.Left);
+        this._background = new Sprite("commonmenu", "gradient_bgd", new Point(this._offset.X, 144 + this._offset.Y - 37 + this._extraOffset), new Size(290, 25));
         this._visible = false;
         alt.everyTick(this.render.bind(this));
     }
     get TitleScale() {
-        return this._title.scale;
+        return this._titleResText.scale;
     }
     set TitleScale(scale) {
-        this._title.scale = scale;
+        this._titleResText.scale = scale;
     }
     get Visible() {
         return this._visible;
@@ -182,10 +169,10 @@ export default class NativeUI {
         this._activeItem = 1000 - (1000 % this.MenuItems.length) + v;
         if (this.CurrentSelection > this._maxItem) {
             this._maxItem = this.CurrentSelection;
-            this._minItem = this.CurrentSelection - this.MaxItemsOnScreen;
+            this._minItem = this.CurrentSelection - this._maxItemsOnScreen;
         }
         else if (this.CurrentSelection < this._minItem) {
-            this._maxItem = this.MaxItemsOnScreen + this.CurrentSelection;
+            this._maxItem = this._maxItemsOnScreen + this.CurrentSelection;
             this._minItem = this.CurrentSelection;
         }
         this.UpdateDescriptionCaption();
@@ -194,34 +181,34 @@ export default class NativeUI {
         this._buttonsEnabled = !disable;
     }
     AddInstructionalButton(button) {
-        this.instructionalButtons.push(button);
+        this._instructionalButtons.push(button);
     }
     RemoveInstructionalButton(button) {
-        for (let i = 0; i < this.instructionalButtons.length; i++) {
-            if (this.instructionalButtons[i] === button) {
-                this.instructionalButtons.splice(i, 1);
+        for (let i = 0; i < this._instructionalButtons.length; i++) {
+            if (this._instructionalButtons[i] === button) {
+                this._instructionalButtons.splice(i, 1);
             }
         }
     }
     RecalculateDescriptionPosition() {
-        const count = (this.MenuItems.length > this.MaxItemsOnScreen + 1) ? this.MaxItemsOnScreen + 2 : this.MenuItems.length;
+        const count = (this.MenuItems.length > this._maxItemsOnScreen + 1) ? this._maxItemsOnScreen + 2 : this.MenuItems.length;
         this._descriptionBar.size = new Size(431 + this.WidthOffset, 4);
         this._descriptionRectangle.size = new Size(431 + this.WidthOffset, 30);
-        this._descriptionBar.pos = new Point(this.offset.X, 149 - 37 + this.extraOffset + this.offset.Y);
-        this._descriptionRectangle.pos = new Point(this.offset.X, 149 - 37 + this.extraOffset + this.offset.Y);
-        this._descriptionText.pos = new Point(this.offset.X + 8, 155 - 37 + this.extraOffset + this.offset.Y);
-        this._descriptionBar.pos = new Point(this.offset.X, 38 * count + this._descriptionBar.pos.Y);
-        this._descriptionRectangle.pos = new Point(this.offset.X, 38 * count + this._descriptionRectangle.pos.Y);
-        this._descriptionText.pos = new Point(this.offset.X + 8, 38 * count + this._descriptionText.pos.Y);
+        this._descriptionBar.pos = new Point(this._offset.X, 149 - 37 + this._extraOffset + this._offset.Y);
+        this._descriptionRectangle.pos = new Point(this._offset.X, 149 - 37 + this._extraOffset + this._offset.Y);
+        this._descriptionText.pos = new Point(this._offset.X + 8, 155 - 37 + this._extraOffset + this._offset.Y);
+        this._descriptionBar.pos = new Point(this._offset.X, 38 * count + this._descriptionBar.pos.Y);
+        this._descriptionRectangle.pos = new Point(this._offset.X, 38 * count + this._descriptionRectangle.pos.Y);
+        this._descriptionText.pos = new Point(this._offset.X + 8, 38 * count + this._descriptionText.pos.Y);
     }
     SetMenuWidthOffset(widthOffset) {
         this.WidthOffset = widthOffset;
         if (this._logo != null) {
             this._logo.size = new Size(431 + this.WidthOffset, 107);
         }
-        this._mainMenu.Items[0].pos = new Point((this.WidthOffset + this.offset.X + 431) / 2, 20 + this.offset.Y);
+        this._mainMenu.Items[0].pos = new Point((this.WidthOffset + this._offset.X + 431) / 2, 20 + this._offset.Y);
         if (this._counterText) {
-            this._counterText.pos = new Point(425 + this.offset.X + widthOffset, 110 + this.offset.Y);
+            this._counterText.pos = new Point(425 + this._offset.X + widthOffset, 110 + this._offset.Y);
         }
         if (this._mainMenu.Items.length >= 2) {
             const tmp = this._mainMenu.Items[1];
@@ -231,9 +218,9 @@ export default class NativeUI {
     AddItem(item) {
         if (this._justOpened)
             this._justOpened = false;
-        item.Offset = this.offset;
+        item.Offset = this._offset;
         item.Parent = this;
-        item.SetVerticalPosition(this.MenuItems.length * 25 - 37 + this.extraOffset);
+        item.SetVerticalPosition(this.MenuItems.length * 25 - 37 + this._extraOffset);
         this.MenuItems.push(item);
         this.RefreshIndex();
     }
@@ -248,14 +235,14 @@ export default class NativeUI {
     RefreshIndex() {
         if (this.MenuItems.length == 0) {
             this._activeItem = 1000;
-            this._maxItem = this.MaxItemsOnScreen;
+            this._maxItem = this._maxItemsOnScreen;
             this._minItem = 0;
             return;
         }
         for (let i = 0; i < this.MenuItems.length; i++)
             this.MenuItems[i].Selected = false;
         this._activeItem = 1000 - (1000 % this.MenuItems.length);
-        this._maxItem = this.MaxItemsOnScreen;
+        this._maxItem = this._maxItemsOnScreen;
         this._minItem = 0;
         if (this._visible) {
             this.UpdateDescriptionCaption();
@@ -282,8 +269,8 @@ export default class NativeUI {
         this.MenuClose.emit(true);
     }
     set Subtitle(text) {
-        this.subtitle = text;
-        this._subtitle.caption = text;
+        this._subtitle = text;
+        this._subtitleResText.caption = text;
     }
     GoLeft() {
         if (!(this.MenuItems[this.CurrentSelection] instanceof UIMenuListItem) &&
@@ -391,35 +378,30 @@ export default class NativeUI {
                 : 0;
     }
     ProcessMouse() {
-        if (!this.Visible ||
-            this._justOpened ||
-            this.MenuItems.length == 0 ||
-            !this.MouseControlsEnabled) {
+        if (!this.Visible || this._justOpened || this.MenuItems.length == 0 || !this.MouseControlsEnabled) {
             this.MenuItems.filter(i => i.Hovered).forEach(i => (i.Hovered = false));
             return;
         }
         alt.showCursor(true);
         let limit = this.MenuItems.length - 1;
         let counter = 0;
-        if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
+        if (this.MenuItems.length > this._maxItemsOnScreen + 1)
             limit = this._maxItem;
-        if (Screen.IsMouseInBounds(new Point(0, 0), new Size(30, 1080)) &&
-            this.MouseEdgeEnabled) {
+        if (Screen.IsMouseInBounds(new Point(0, 0), new Size(30, 1080)) && this._mouseEdgeEnabled) {
             game.setGameplayCamRelativeHeading(game.getGameplayCamRelativeHeading() + 5.0);
             game.setMouseCursorSprite(6);
         }
-        else if (Screen.IsMouseInBounds(new Point(Screen.ResolutionMaintainRatio().Width - 30.0, 0), new Size(30, 1080)) &&
-            this.MouseEdgeEnabled) {
+        else if (Screen.IsMouseInBounds(new Point(Screen.ResolutionMaintainRatio().Width - 30.0, 0), new Size(30, 1080)) && this._mouseEdgeEnabled) {
             game.setGameplayCamRelativeHeading(game.getGameplayCamRelativeHeading() - 5.0);
             game.setMouseCursorSprite(7);
         }
-        else if (this.MouseEdgeEnabled) {
+        else if (this._mouseEdgeEnabled) {
             game.setMouseCursorSprite(1);
         }
         for (let i = this._minItem; i <= limit; i++) {
-            let xpos = this.offset.X;
-            let ypos = this.offset.Y + 144 - 37 + this.extraOffset + counter * 38;
-            let yposSelected = this.offset.Y + 144 - 37 + this.extraOffset + this.safezoneOffset.Y + this.CurrentSelection * 38;
+            let xpos = this._offset.X;
+            let ypos = this._offset.Y + 144 - 37 + this._extraOffset + counter * 38;
+            let yposSelected = this._offset.Y + 144 - 37 + this._extraOffset + this._safezoneOffset.Y + this.CurrentSelection * 38;
             let xsize = 431 + this.WidthOffset;
             const ysize = 38;
             const uiMenuItem = this.MenuItems[i];
@@ -429,11 +411,10 @@ export default class NativeUI {
                 if (uiMenuItem.Hovered && res == 1 && (this.MenuItems[i] instanceof UIMenuListItem || this.MenuItems[i] instanceof UIMenuDynamicListItem)) {
                     game.setMouseCursorSprite(5);
                 }
-                if (game.isControlJustPressed(0, 24) ||
-                    game.isDisabledControlJustPressed(0, 24))
+                if (game.isControlJustPressed(0, 24) || game.isDisabledControlJustPressed(0, 24))
                     if (uiMenuItem.Selected && uiMenuItem.Enabled) {
-                        if ((this.MenuItems[i] instanceof UIMenuListItem || this.MenuItems[i] instanceof UIMenuDynamicListItem) &&
-                            this.IsMouseInListItemArrows(this.MenuItems[i], new Point(xpos, ypos), 0) > 0) {
+                        if ((this.MenuItems[i] instanceof UIMenuListItem || this.MenuItems[i] instanceof UIMenuDynamicListItem)
+                            && this.IsMouseInListItemArrows(this.MenuItems[i], new Point(xpos, ypos), 0) > 0) {
                             switch (res) {
                                 case 1:
                                     Common.PlaySound(this.AUDIO_SELECT, this.AUDIO_LIBRARY);
@@ -442,9 +423,7 @@ export default class NativeUI {
                                     break;
                                 case 2:
                                     let it = this.MenuItems[i];
-                                    if ((it.Collection == null
-                                        ? it.Items.Count
-                                        : it.Collection.Count) > 0) {
+                                    if ((it.Collection == null ? it.Items.Count : it.Collection.Count) > 0) {
                                         it.Index++;
                                         Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
                                         this.ListChange.emit(it, it.Index);
@@ -471,20 +450,14 @@ export default class NativeUI {
                 uiMenuItem.Hovered = false;
             counter++;
         }
-        const extraY = 144 +
-            38 * (this.MaxItemsOnScreen + 1) +
-            this.offset.Y -
-            37 +
-            this.extraOffset +
-            this.safezoneOffset.Y;
-        const extraX = this.safezoneOffset.X + this.offset.X;
-        if (this.MenuItems.length <= this.MaxItemsOnScreen + 1)
+        const extraY = 144 + 38 * (this._maxItemsOnScreen + 1) + this._offset.Y - 37 + this._extraOffset + this._safezoneOffset.Y;
+        const extraX = this._safezoneOffset.X + this._offset.X;
+        if (this.MenuItems.length <= this._maxItemsOnScreen + 1)
             return;
         if (Screen.IsMouseInBounds(new Point(extraX, extraY), new Size(431 + this.WidthOffset, 18))) {
             this._extraRectangleUp.color = new Color(30, 30, 30, 255);
-            if (game.isControlJustPressed(0, 24) ||
-                game.isDisabledControlJustPressed(0, 24)) {
-                if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
+            if (game.isControlJustPressed(0, 24) || game.isDisabledControlJustPressed(0, 24)) {
+                if (this.MenuItems.length > this._maxItemsOnScreen + 1)
                     this.GoUpOverflow();
                 else
                     this.GoUp();
@@ -494,9 +467,8 @@ export default class NativeUI {
             this._extraRectangleUp.color = new Color(0, 0, 0, 200);
         if (Screen.IsMouseInBounds(new Point(extraX, extraY + 18), new Size(431 + this.WidthOffset, 18))) {
             this._extraRectangleDown.color = new Color(30, 30, 30, 255);
-            if (game.isControlJustPressed(0, 24) ||
-                game.isDisabledControlJustPressed(0, 24)) {
-                if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
+            if (game.isControlJustPressed(0, 24) || game.isDisabledControlJustPressed(0, 24)) {
+                if (this.MenuItems.length > this._maxItemsOnScreen + 1)
                     this.GoDownOverflow();
                 else
                     this.GoDown();
@@ -517,56 +489,52 @@ export default class NativeUI {
         }
         if (this.MenuItems.length == 0)
             return;
-        if (game.isControlPressed(0, 172) &&
-            this.lastUpDownNavigation + 120 < Date.now()) {
-            this.lastUpDownNavigation = Date.now();
-            if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
+        if (game.isControlPressed(0, 172) && this._lastUpDownNavigation + 120 < Date.now()) {
+            this._lastUpDownNavigation = Date.now();
+            if (this.MenuItems.length > this._maxItemsOnScreen + 1)
                 this.GoUpOverflow();
             else
                 this.GoUp();
             this.UpdateScaleform();
         }
         else if (game.isControlJustReleased(0, 172)) {
-            this.lastUpDownNavigation = 0;
+            this._lastUpDownNavigation = 0;
         }
-        else if (game.isControlPressed(0, 173) &&
-            this.lastUpDownNavigation + 120 < Date.now()) {
-            this.lastUpDownNavigation = Date.now();
-            if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
+        else if (game.isControlPressed(0, 173) && this._lastUpDownNavigation + 120 < Date.now()) {
+            this._lastUpDownNavigation = Date.now();
+            if (this.MenuItems.length > this._maxItemsOnScreen + 1)
                 this.GoDownOverflow();
             else
                 this.GoDown();
             this.UpdateScaleform();
         }
         else if (game.isControlJustReleased(0, 173)) {
-            this.lastUpDownNavigation = 0;
+            this._lastUpDownNavigation = 0;
         }
-        else if (game.isControlPressed(0, 174) &&
-            this.lastLeftRightNavigation + 100 < Date.now()) {
-            this.lastLeftRightNavigation = Date.now();
+        else if (game.isControlPressed(0, 174) && this._lastLeftRightNavigation + 100 < Date.now()) {
+            this._lastLeftRightNavigation = Date.now();
             this.GoLeft();
         }
         else if (game.isControlJustReleased(0, 174)) {
-            this.lastLeftRightNavigation = 0;
+            this._lastLeftRightNavigation = 0;
         }
-        else if (game.isControlPressed(0, 175) &&
-            this.lastLeftRightNavigation + 100 < Date.now()) {
-            this.lastLeftRightNavigation = Date.now();
+        else if (game.isControlPressed(0, 175) && this._lastLeftRightNavigation + 100 < Date.now()) {
+            this._lastLeftRightNavigation = Date.now();
             this.GoRight();
         }
         else if (game.isControlJustReleased(0, 175)) {
-            this.lastLeftRightNavigation = 0;
+            this._lastLeftRightNavigation = 0;
         }
         else if (game.isControlJustPressed(0, 201)) {
             this.SelectItem();
         }
     }
     GoUpOverflow() {
-        if (this.MenuItems.length <= this.MaxItemsOnScreen + 1)
+        if (this.MenuItems.length <= this._maxItemsOnScreen + 1)
             return;
         if (this._activeItem % this.MenuItems.length <= this._minItem) {
             if (this._activeItem % this.MenuItems.length == 0) {
-                this._minItem = this.MenuItems.length - this.MaxItemsOnScreen - 1;
+                this._minItem = this.MenuItems.length - this._maxItemsOnScreen - 1;
                 this._maxItem = this.MenuItems.length - 1;
                 this.MenuItems[this._activeItem % this.MenuItems.length].Selected = false;
                 this._activeItem = 1000 - (1000 % this.MenuItems.length);
@@ -591,7 +559,7 @@ export default class NativeUI {
         this.UpdateDescriptionCaption();
     }
     GoUp() {
-        if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
+        if (this.MenuItems.length > this._maxItemsOnScreen + 1)
             return;
         this.MenuItems[this._activeItem % this.MenuItems.length].Selected = false;
         this._activeItem--;
@@ -601,13 +569,12 @@ export default class NativeUI {
         this.UpdateDescriptionCaption();
     }
     GoDownOverflow() {
-        if (this.MenuItems.length <= this.MaxItemsOnScreen + 1)
+        if (this.MenuItems.length <= this._maxItemsOnScreen + 1)
             return;
         if (this._activeItem % this.MenuItems.length >= this._maxItem) {
-            if (this._activeItem % this.MenuItems.length ==
-                this.MenuItems.length - 1) {
+            if (this._activeItem % this.MenuItems.length == this.MenuItems.length - 1) {
                 this._minItem = 0;
-                this._maxItem = this.MaxItemsOnScreen;
+                this._maxItem = this._maxItemsOnScreen;
                 this.MenuItems[this._activeItem % this.MenuItems.length].Selected = false;
                 this._activeItem = 1000 - (1000 % this.MenuItems.length);
                 this.MenuItems[this._activeItem % this.MenuItems.length].Selected = true;
@@ -630,7 +597,7 @@ export default class NativeUI {
         this.UpdateDescriptionCaption();
     }
     GoDown() {
-        if (this.MenuItems.length > this.MaxItemsOnScreen + 1)
+        if (this.MenuItems.length > this._maxItemsOnScreen + 1)
             return;
         this.MenuItems[this._activeItem % this.MenuItems.length].Selected = false;
         this._activeItem++;
@@ -674,42 +641,42 @@ export default class NativeUI {
         if (this.MenuItems.length) {
             this._descriptionText.caption = this.MenuItems[this._activeItem % this.MenuItems.length].Description;
             this._descriptionText.Wrap = 400;
-            this.recalculateDescriptionNextFrame++;
+            this.RecalculateDescriptionNextFrame++;
         }
     }
     CalculateDescription() {
-        if (this.recalculateDescriptionNextFrame > 0) {
-            this.recalculateDescriptionNextFrame--;
+        if (this.RecalculateDescriptionNextFrame > 0) {
+            this.RecalculateDescriptionNextFrame--;
         }
         this.RecalculateDescriptionPosition();
         if (this.MenuItems.length > 0 && this._descriptionText.caption && this.MenuItems[this._activeItem % this.MenuItems.length].Description.trim() !== "") {
             const numLines = Screen.GetLineCount(this._descriptionText.caption, this._descriptionText.pos, this._descriptionText.font, this._descriptionText.scale, this._descriptionText.Wrap);
             this._descriptionRectangle.size = new Size(431 + this.WidthOffset, (numLines * 25) + 15);
             if (numLines === 0) {
-                this.recalculateDescriptionNextFrame++;
+                this.RecalculateDescriptionNextFrame++;
             }
         }
     }
     UpdateScaleform() {
         if (!this.Visible || !this._buttonsEnabled)
             return;
-        this.instructionalButtonsScaleform.callFunction("CLEAR_ALL");
-        this.instructionalButtonsScaleform.callFunction("TOGGLE_MOUSE_BUTTONS", 0);
-        this.instructionalButtonsScaleform.callFunction("CREATE_CONTAINER");
-        this.instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 0, game.getControlInstructionalButton(2, Control.PhoneSelect, false), this.selectTextLocalized);
-        this.instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 1, game.getControlInstructionalButton(2, Control.PhoneCancel, false), this.backTextLocalized);
+        this._instructionalButtonsScaleform.callFunction("CLEAR_ALL");
+        this._instructionalButtonsScaleform.callFunction("TOGGLE_MOUSE_BUTTONS", 0);
+        this._instructionalButtonsScaleform.callFunction("CREATE_CONTAINER");
+        this._instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 0, game.getControlInstructionalButton(2, Control.PhoneSelect, false), this.selectTextLocalized);
+        this._instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 1, game.getControlInstructionalButton(2, Control.PhoneCancel, false), this.backTextLocalized);
         let count = 2;
-        this.instructionalButtons.filter(b => b.ItemBind == null || this.MenuItems[this.CurrentSelection] == b.ItemBind).forEach((button) => {
-            this.instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", count, button.GetButtonId(), button.Text);
+        this._instructionalButtons.filter(b => b.ItemBind == null || this.MenuItems[this.CurrentSelection] == b.ItemBind).forEach((button) => {
+            this._instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", count, button.GetButtonId(), button.Text);
             count++;
         });
-        this.instructionalButtonsScaleform.callFunction("DRAW_INSTRUCTIONAL_BUTTONS", -1);
+        this._instructionalButtonsScaleform.callFunction("DRAW_INSTRUCTIONAL_BUTTONS", -1);
     }
     render() {
         if (!this.Visible)
             return;
         if (this._buttonsEnabled) {
-            game.drawScaleformMovieFullscreen(this.instructionalButtonsScaleform.handle, 255, 255, 255, 255, 0);
+            game.drawScaleformMovieFullscreen(this._instructionalButtonsScaleform.handle, 255, 255, 255, 255, 0);
             game.hideHudComponentThisFrame(6);
             game.hideHudComponentThisFrame(7);
             game.hideHudComponentThisFrame(9);
@@ -723,18 +690,17 @@ export default class NativeUI {
                 this._descriptionRectangle.LoadTextureDictionary();
             if (!this._upAndDownSprite.IsTextureDictionaryLoaded)
                 this._upAndDownSprite.LoadTextureDictionary();
-            if (!this.recalculateDescriptionNextFrame)
-                this.recalculateDescriptionNextFrame++;
+            if (!this.RecalculateDescriptionNextFrame)
+                this.RecalculateDescriptionNextFrame++;
         }
         this._mainMenu.Draw();
         this.ProcessMouse();
         this.ProcessControl();
-        this._background.size =
-            this.MenuItems.length > this.MaxItemsOnScreen + 1
-                ? new Size(431 + this.WidthOffset, 38 * (this.MaxItemsOnScreen + 1))
-                : new Size(431 + this.WidthOffset, 38 * this.MenuItems.length);
+        this._background.size = this.MenuItems.length > this._maxItemsOnScreen + 1
+            ? new Size(431 + this.WidthOffset, 38 * (this._maxItemsOnScreen + 1))
+            : new Size(431 + this.WidthOffset, 38 * this.MenuItems.length);
         this._background.Draw();
-        if (this.recalculateDescriptionNextFrame) {
+        if (this.RecalculateDescriptionNextFrame) {
             this.CalculateDescription();
         }
         if (this.MenuItems.length > 0) {
@@ -746,42 +712,37 @@ export default class NativeUI {
             }
         }
         let count = 0;
-        if (this.MenuItems.length <= this.MaxItemsOnScreen + 1) {
+        if (this.MenuItems.length <= this._maxItemsOnScreen + 1) {
             for (const item of this.MenuItems) {
-                item.SetVerticalPosition(count * 38 - 37 + this.extraOffset);
+                item.SetVerticalPosition(count * 38 - 37 + this._extraOffset);
                 item.Draw();
                 count++;
             }
-            if (this._counterText && this.counterOverride) {
-                this._counterText.caption = this.counterPretext + this.counterOverride;
+            if (this._counterText && this._counterOverride) {
+                this._counterText.caption = this._counterPretext + this._counterOverride;
                 this._counterText.Draw();
             }
         }
         else {
             for (let index = this._minItem; index <= this._maxItem; index++) {
                 let item = this.MenuItems[index];
-                item.SetVerticalPosition(count * 38 - 37 + this.extraOffset);
+                item.SetVerticalPosition(count * 38 - 37 + this._extraOffset);
                 item.Draw();
                 count++;
             }
             this._extraRectangleUp.size = new Size(431 + this.WidthOffset, 18);
             this._extraRectangleDown.size = new Size(431 + this.WidthOffset, 18);
-            this._upAndDownSprite.pos = new Point(190 + this.offset.X + this.WidthOffset / 2, 147 +
-                37 * (this.MaxItemsOnScreen + 1) +
-                this.offset.Y -
-                37 +
-                this.extraOffset);
+            this._upAndDownSprite.pos = new Point(190 + this._offset.X + this.WidthOffset / 2, 147 + 37 * (this._maxItemsOnScreen + 1) + this._offset.Y - 37 + this._extraOffset);
             this._extraRectangleUp.Draw();
             this._extraRectangleDown.Draw();
             this._upAndDownSprite.Draw();
             if (this._counterText) {
-                if (!this.counterOverride) {
+                if (!this._counterOverride) {
                     const cap = this.CurrentSelection + 1 + " / " + this.MenuItems.length;
-                    this._counterText.caption = this.counterPretext + cap;
+                    this._counterText.caption = this._counterPretext + cap;
                 }
                 else {
-                    this._counterText.caption =
-                        this.counterPretext + this.counterOverride;
+                    this._counterText.caption = this._counterPretext + this._counterOverride;
                 }
                 this._counterText.Draw();
             }

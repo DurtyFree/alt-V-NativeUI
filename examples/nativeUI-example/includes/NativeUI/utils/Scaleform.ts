@@ -21,7 +21,7 @@ export default class Scaleform {
     public get isLoaded(): boolean {
         return game.hasScaleformMovieLoaded(this._handle);
     }
-    
+
     private callFunctionHead(funcName: string, ...args: any[]): void {
         if (!this.isValid || !this.isLoaded)
             return;
