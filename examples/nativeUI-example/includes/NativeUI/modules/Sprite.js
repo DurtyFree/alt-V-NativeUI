@@ -1,7 +1,7 @@
 import * as alt from 'alt';
 import game from 'natives';
 import Color from "../utils/Color";
-import { Screen } from "../utils/Screen";
+import Screen from "../utils/Screen";
 export default class Sprite {
     constructor(textureDict, textureName, pos, size, heading = 0, color = new Color(255, 255, 255)) {
         this.TextureDict = textureDict;
@@ -49,8 +49,8 @@ export default class Sprite {
             if (!game.hasStreamedTextureDictLoaded(textureDictionary))
                 game.requestStreamedTextureDict(textureDictionary, true);
         }
-        const screenw = Screen.width;
-        const screenh = Screen.height;
+        const screenw = Screen.Width;
+        const screenh = Screen.Height;
         const height = 1080.0;
         const ratio = screenw / screenh;
         const width = height * ratio;

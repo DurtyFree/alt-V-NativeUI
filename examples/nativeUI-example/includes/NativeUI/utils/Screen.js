@@ -3,41 +3,42 @@ import game from 'natives';
 import Size from "./Size";
 import Text from '../modules/Text';
 const gameScreen = game.getActiveScreenResolution(0, 0);
-export const Screen = {
-    width: gameScreen[1],
-    height: gameScreen[2],
-    ResolutionMaintainRatio: () => {
-        const ratio = Screen.width / Screen.height;
+export default class Screen {
+    static get ResolutionMaintainRatio() {
+        const ratio = Screen.Width / Screen.Height;
         const width = 1080.0 * ratio;
         return new Size(width, 1080.0);
-    },
-    getMousePosition: (relative = false) => {
-        const res = Screen.ResolutionMaintainRatio();
+    }
+    static MousePosition(relative = false) {
+        const res = Screen.ResolutionMaintainRatio;
         const cursor = alt.getCursorPos();
         let [mouseX, mouseY] = [cursor.x, cursor.y];
         if (relative)
             [mouseX, mouseY] = [cursor.x / res.Width, cursor.y / res.Height];
-        return [mouseX, mouseY];
-    },
-    IsMouseInBounds: (topLeft, boxSize) => {
-        const [mouseX, mouseY] = Screen.getMousePosition();
-        return (mouseX >= topLeft.X &&
-            mouseX <= topLeft.X + boxSize.Width &&
-            (mouseY > topLeft.Y && mouseY < topLeft.Y + boxSize.Height));
-    },
-    GetTextWidth: (text, font, scale) => {
+        return {
+            X: mouseX,
+            Y: mouseY
+        };
+    }
+    static IsMouseInBounds(topLeft, boxSize) {
+        const mousePosition = Screen.MousePosition();
+        return (mousePosition.X >= topLeft.X &&
+            mousePosition.X <= topLeft.X + boxSize.Width &&
+            (mousePosition.Y > topLeft.Y && mousePosition.Y < topLeft.Y + boxSize.Height));
+    }
+    static GetTextWidth(text, font, scale) {
         game.beginTextCommandGetWidth("THREESTRINGS");
         Text.AddLongString(text);
         game.setTextFont(font);
         game.setTextScale(1.0, scale);
         const width = game.endTextCommandGetWidth(true);
-        const res = Screen.ResolutionMaintainRatio();
+        const res = Screen.ResolutionMaintainRatio;
         return res.Width * width;
-    },
-    GetLineCount: (text, position, font, scale, wrap) => {
+    }
+    static GetLineCount(text, position, font, scale, wrap) {
         game.beginTextCommandLineCount("THREESTRINGS");
         Text.AddLongString(text);
-        const res = Screen.ResolutionMaintainRatio();
+        const res = Screen.ResolutionMaintainRatio;
         const x = position.X / res.Width;
         const y = position.Y / res.Height;
         game.setTextFont(font);
@@ -50,4 +51,6 @@ export const Screen = {
         let lineCount = game.endTextCommandLineCount(x, y);
         return lineCount;
     }
-};
+}
+Screen.Width = gameScreen[1];
+Screen.Height = gameScreen[2];

@@ -5,7 +5,7 @@ import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Text from "./Text";
-import { Screen } from "../utils/Screen";
+import Screen from "../utils/Screen";
 export default class ResText extends Text {
     constructor(caption, pos, scale, color, font, centered) {
         super(caption, pos, scale, color || new Color(255, 255, 255), font || 0, false);
@@ -43,8 +43,8 @@ export default class ResText extends Text {
                 wordWrap = this.WordWrap;
             }
         }
-        const screenw = Screen.width;
-        const screenh = Screen.height;
+        const screenw = Screen.Width;
+        const screenh = Screen.Height;
         const height = 1080.0;
         const ratio = screenw / screenh;
         const width = height * ratio;

@@ -5,7 +5,7 @@ import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Text from "./Text";
-import { Screen } from "../utils/Screen";
+import Screen from "../utils/Screen";
 
 export default class ResText extends Text {
     public TextAlignment: Alignment = Alignment.Left;
@@ -52,8 +52,8 @@ export default class ResText extends Text {
             }
         }
 
-        const screenw = Screen.width;
-        const screenh = Screen.height;
+        const screenw = Screen.Width;
+        const screenh = Screen.Height;
 
         const height = 1080.0;
         const ratio = screenw / screenh;

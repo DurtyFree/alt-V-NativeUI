@@ -22,7 +22,7 @@ import LiteEvent from "./utils/LiteEvent";
 import Point from "./utils/Point";
 import Size from "./utils/Size";
 import UUIDV4 from "./utils/UUIDV4";
-import { Screen } from "./utils/Screen";
+import Screen from "./utils/Screen";
 import InstructionalButton from './modules/InstructionalButton';
 import Scaleform from './utils/Scaleform';
 import BigMessage from './modules/BigMessage';
@@ -450,7 +450,7 @@ export default class NativeUI {
     public IsMouseInListItemArrows(item: UIMenuItem, topLeft: Point, safezone: any) {
         game.beginTextCommandGetWidth("jamyfafi");
         game.addTextComponentSubstringPlayerName(item.Text);
-        let res = Screen.ResolutionMaintainRatio();
+        let res = Screen.ResolutionMaintainRatio;
         let screenw = res.Width;
         let screenh = res.Height;
         const height = 1080.0;
@@ -482,7 +482,7 @@ export default class NativeUI {
         if (Screen.IsMouseInBounds(new Point(0, 0), new Size(30, 1080)) && this._mouseEdgeEnabled) {
             game.setGameplayCamRelativeHeading(game.getGameplayCamRelativeHeading() + 5.0);
             game.setMouseCursorSprite(6);
-        } else if (Screen.IsMouseInBounds(new Point(Screen.ResolutionMaintainRatio().Width - 30.0, 0), new Size(30, 1080)) && this._mouseEdgeEnabled) {
+        } else if (Screen.IsMouseInBounds(new Point(Screen.ResolutionMaintainRatio.Width - 30.0, 0), new Size(30, 1080)) && this._mouseEdgeEnabled) {
             game.setGameplayCamRelativeHeading(game.getGameplayCamRelativeHeading() - 5.0);
             game.setMouseCursorSprite(7);
         } else if (this._mouseEdgeEnabled) {

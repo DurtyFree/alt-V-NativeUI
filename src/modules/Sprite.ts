@@ -3,7 +3,7 @@ import game from 'natives';
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
-import { Screen } from "../utils/Screen";
+import Screen from "../utils/Screen";
 
 export default class Sprite {
     public TextureName: string;
@@ -65,8 +65,8 @@ export default class Sprite {
                 game.requestStreamedTextureDict(textureDictionary, true);
         }
 
-        const screenw = Screen.width;
-        const screenh = Screen.height;
+        const screenw = Screen.Width;
+        const screenh = Screen.Height;
         const height = 1080.0;
         const ratio = screenw / screenh;
         const width = height * ratio;

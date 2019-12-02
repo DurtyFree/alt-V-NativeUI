@@ -7,7 +7,7 @@ import Sprite from "../modules/Sprite";
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
-import { Screen } from "../utils/Screen";
+import Screen from "../utils/Screen";
 import UIMenuItem from "./UIMenuItem";
 export default class UIMenuListItem extends UIMenuItem {
     constructor(text, description = "", collection = new ItemsCollection([]), startIndex = 0, data = null) {

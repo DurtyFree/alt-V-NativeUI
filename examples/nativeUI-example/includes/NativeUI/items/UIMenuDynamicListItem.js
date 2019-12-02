@@ -5,7 +5,7 @@ import Sprite from "../modules/Sprite";
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
-import { Screen } from "../utils/Screen";
+import Screen from "../utils/Screen";
 import UIMenuItem from "./UIMenuItem";
 export default class UIMenuDynamicListItem extends UIMenuItem {
     constructor(text, description = "", lowerThreshold = 0, upperThreshold = 10, startValue = 0, data = null) {

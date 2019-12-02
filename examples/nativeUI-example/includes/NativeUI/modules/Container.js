@@ -1,7 +1,7 @@
 import game from 'natives';
 import Size from "../utils/Size";
 import Rectangle from "./Rectangle";
-import { Screen } from "../utils/Screen";
+import Screen from "../utils/Screen";
 export default class Container extends Rectangle {
     constructor(pos, size, color) {
         super(pos, size, color);
@@ -14,8 +14,8 @@ export default class Container extends Rectangle {
         if (!this.enabled)
             return;
         offset = offset || new Size();
-        const screenw = Screen.width;
-        const screenh = Screen.height;
+        const screenw = Screen.Width;
+        const screenh = Screen.Height;
         const height = 1080.0;
         const ratio = screenw / screenh;
         const width = height * ratio;

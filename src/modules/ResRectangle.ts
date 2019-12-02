@@ -2,7 +2,7 @@ import game from 'natives';
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Rectangle from "./Rectangle";
-import { Screen } from "../utils/Screen";
+import Screen from "../utils/Screen";
 import Color from '../utils/Color';
 
 export default class ResRectangle extends Rectangle {
@@ -22,8 +22,8 @@ export default class ResRectangle extends Rectangle {
 			color = this.color;
 		}
 
-		const screenw = Screen.width;
-		const screenh = Screen.height;
+        const screenw = Screen.Width;
+		const screenh = Screen.Height;
 		const height = 1080.0;
 		const ratio = screenw / screenh;
 		const width = height * ratio;
