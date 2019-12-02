@@ -7,9 +7,9 @@ export default class Point {
 		this.Y = y;
 	}
 
-	static Parse(point: number[]): Point;
-    static Parse(point: { X: number; Y: number }): Point;
-    static Parse(arg: any): Point {
+    public static Parse(point: number[]): Point;
+    public static Parse(point: { X: number; Y: number }): Point;
+    public static Parse(arg: any): Point {
 		if (typeof arg === "object") {
 			if (arg.length) {
 				// Array
