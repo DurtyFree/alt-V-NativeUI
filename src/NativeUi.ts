@@ -9,7 +9,7 @@ import ChangeDirection from './enums/ChangeDirection';
 import UIMenuCheckboxItem from "./items/UIMenuCheckboxItem";
 import UIMenuItem from "./items/UIMenuItem";
 import UIMenuListItem from "./items/UIMenuListItem";
-import UIMenuDynamicListItem from "./items/UIMenuDynamicListItem";
+import UIMenuAutoListItem from "./items/UIMenuAutoListItem";
 import UIMenuSliderItem from "./items/UIMenuSliderItem";
 import Container from "./modules/Container";
 import ItemsCollection from "./modules/ItemsCollection";
@@ -28,6 +28,7 @@ import InstructionalButton from './modules/InstructionalButton';
 import Scaleform from './utils/Scaleform';
 import BigMessage from './modules/BigMessage';
 import MidsizedMessage from './modules/MidsizedMessage';
+import UIMenuDynamicListItem from './items/UIMenuDynamicListItem';
 
 let menuPool: NativeUI[] = [];
 
@@ -89,11 +90,12 @@ export default class NativeUI {
     public AUDIO_BACK: string = "BACK";
     public AUDIO_ERROR: string = "ERROR";
 
-    public MenuItems: (| UIMenuItem | UIMenuListItem | UIMenuDynamicListItem | UIMenuSliderItem | UIMenuCheckboxItem)[] = [];
+    public MenuItems: (| UIMenuItem | UIMenuListItem | UIMenuAutoListItem | UIMenuDynamicListItem | UIMenuSliderItem | UIMenuCheckboxItem)[] = [];
 
     // Events
     public readonly IndexChange = new LiteEvent();
     public readonly ListChange = new LiteEvent();
+    public readonly AutoListChange = new LiteEvent();
     public readonly DynamicListChange = new LiteEvent();
     public readonly SliderChange = new LiteEvent();
     //public readonly SliderSelect = new LiteEvent();
@@ -363,6 +365,7 @@ export default class NativeUI {
 
     public GoLeft() {
         if (!(this.MenuItems[this.CurrentSelection] instanceof UIMenuListItem) &&
+            !(this.MenuItems[this.CurrentSelection] instanceof UIMenuAutoListItem) &&
             !(this.MenuItems[this.CurrentSelection] instanceof UIMenuDynamicListItem) &&
             !(this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem) ||
             !this.MenuItems[this.CurrentSelection].Enabled)
@@ -375,13 +378,19 @@ export default class NativeUI {
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
             this.ListChange.emit(it, it.Index);
         }
-        else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuDynamicListItem) {
-            const it = <UIMenuDynamicListItem>this.MenuItems[this.CurrentSelection];
+        else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuAutoListItem) {
+            const it = <UIMenuAutoListItem>this.MenuItems[this.CurrentSelection];
             if (it.SelectedValue <= it.LowerThreshold) {
                 it.SelectedValue = it.UpperThreshold;
             } else {
                 it.SelectedValue -= it.LeftMoveThreshold;
             }
+            Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
+            this.AutoListChange.emit(it, it.SelectedValue, ChangeDirection.Left);
+        }
+        else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuDynamicListItem) {
+            const it = <UIMenuDynamicListItem>this.MenuItems[this.CurrentSelection];
+            it.SelectedValue = it.SelectionChangeHandler(it, it.SelectedValue, ChangeDirection.Left);
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
             this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Left);
         }
@@ -395,6 +404,7 @@ export default class NativeUI {
 
     public GoRight() {
         if (!(this.MenuItems[this.CurrentSelection] instanceof UIMenuListItem) &&
+            !(this.MenuItems[this.CurrentSelection] instanceof UIMenuAutoListItem) &&
             !(this.MenuItems[this.CurrentSelection] instanceof UIMenuDynamicListItem) &&
             !(this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem) ||
             !this.MenuItems[this.CurrentSelection].Enabled)
@@ -406,13 +416,19 @@ export default class NativeUI {
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
             this.ListChange.emit(it, it.Index);
         }
-        else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuDynamicListItem) {
-            const it = <UIMenuDynamicListItem>this.MenuItems[this.CurrentSelection];
+        else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuAutoListItem) {
+            const it = <UIMenuAutoListItem>this.MenuItems[this.CurrentSelection];
             if (it.SelectedValue >= it.UpperThreshold) {
                 it.SelectedValue = it.LowerThreshold;
             } else {
                 it.SelectedValue += it.RightMoveThreshold;
             }
+            Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
+            this.AutoListChange.emit(it, it.SelectedValue, ChangeDirection.Right);
+        }
+        else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuDynamicListItem) {
+            const it = <UIMenuDynamicListItem>this.MenuItems[this.CurrentSelection];
+            it.SelectedValue = it.SelectionChangeHandler(it, it.SelectedValue, ChangeDirection.Right);
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
             this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Right);
         }
@@ -501,12 +517,12 @@ export default class NativeUI {
             if (Screen.IsMouseInBounds(new Point(xpos, ypos), new Size(xsize, ysize))) {
                 uiMenuItem.Hovered = true;
                 const res = this.IsMouseInListItemArrows(this.MenuItems[i], new Point(xpos, ypos), 0);
-                if (uiMenuItem.Hovered && res == 1 && (this.MenuItems[i] instanceof UIMenuListItem || this.MenuItems[i] instanceof UIMenuDynamicListItem)) {
+                if (uiMenuItem.Hovered && res == 1 && (this.MenuItems[i] instanceof UIMenuListItem || this.MenuItems[i] instanceof UIMenuAutoListItem || this.MenuItems[i] instanceof UIMenuDynamicListItem)) {
                     game.setMouseCursorSprite(5);
                 }
                 if (game.isControlJustPressed(0, 24) || game.isDisabledControlJustPressed(0, 24))
                     if (uiMenuItem.Selected && uiMenuItem.Enabled) {
-                        if ((this.MenuItems[i] instanceof UIMenuListItem || this.MenuItems[i] instanceof UIMenuDynamicListItem)
+                        if ((this.MenuItems[i] instanceof UIMenuListItem || this.MenuItems[i] instanceof UIMenuAutoListItem || this.MenuItems[i] instanceof UIMenuDynamicListItem)
                             && this.IsMouseInListItemArrows(this.MenuItems[i], new Point(xpos, ypos), 0) > 0) {
                             switch (res) {
                                 case 1:
@@ -869,6 +885,7 @@ export {
     NativeUI as Menu,
     UIMenuItem,
     UIMenuListItem,
+    UIMenuAutoListItem,
     UIMenuDynamicListItem,
     UIMenuCheckboxItem,
     UIMenuSliderItem,

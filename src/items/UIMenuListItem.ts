@@ -121,10 +121,9 @@ export default class UIMenuListItem extends UIMenuItem {
 
     public Draw() {
         super.Draw();
-        const caption =
-            this.Collection.length >= this.Index
-                ? this.Collection[this.Index].DisplayText
-                : " ";
+        const caption = this.Collection.length >= this.Index
+            ? this.Collection[this.Index].DisplayText
+            : " ";
         const offset = this._currentOffset;
 
         this._itemText.color = this.Enabled

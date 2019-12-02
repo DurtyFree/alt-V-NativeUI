@@ -1,4 +1,5 @@
 import * as alt from 'alt';
+import * as game from 'natives';
 import * as NativeUI from './includes/NativeUI/NativeUI';
 const menu = new NativeUI.Menu("NativeUI Test", "Test Subtitle", new NativeUI.Point(50, 50));
 menu.TitleScale = 1.5;
@@ -13,7 +14,19 @@ let itemData = {
     name: "test",
     data: "great"
 };
-let dynamicListItem = new NativeUI.UIMenuDynamicListItem('Dynamic list item: Write number', `I want to write ~y~${maxListItems}~s~ in console.`, -maxListItems, maxListItems, 0, itemData);
+let autoListItem = new NativeUI.UIMenuAutoListItem('Auto list item: Write number', `I want to write ~y~${maxListItems}~s~ in console.`, -maxListItems, maxListItems, 0, itemData);
+autoListItem.PreCaptionText = '~HUD_COLOUR_RED~';
+menu.AddItem(autoListItem);
+function onDynamicListItemChange(item, selectedValue, changeDirection) {
+    if (changeDirection == NativeUI.ChangeDirection.Right) {
+        game.setEntityCoordsNoOffset(alt.Player.local.scriptID, alt.Player.local.pos.x + 0.01, alt.Player.local.pos.y, alt.Player.local.pos.z, false, false, false);
+    }
+    else {
+        game.setEntityCoordsNoOffset(alt.Player.local.scriptID, alt.Player.local.pos.x - 0.01, alt.Player.local.pos.y, alt.Player.local.pos.z, false, false, false);
+    }
+    return alt.Player.local.pos.x.toFixed(2);
+}
+let dynamicListItem = new NativeUI.UIMenuDynamicListItem('Player X Position:', onDynamicListItemChange, `Change Players X position.`, alt.Player.local.pos.x.toFixed(2));
 dynamicListItem.PreCaptionText = '~HUD_COLOUR_RED~';
 menu.AddItem(dynamicListItem);
 let menuItem = new NativeUI.UIMenuItem("Test Sub Menu", "Just a sub menu.");
@@ -43,11 +56,17 @@ menu.ItemSelect.on((selectedItem, selectedItemIndex) => {
 menu.ListChange.on((item, newListItemIndex) => {
     alt.log("[ListChange] " + newListItemIndex, item.Text);
 });
+menu.AutoListChange.on((item, newListItemIndex, changeDirection) => {
+    alt.log("[AutoListChange] " + newListItemIndex, item.Text);
+    if (item == autoListItem) {
+        alt.log("[AutoListChange] " + changeDirection + " " + item.Data.name + " " + item.Data.data);
+        alt.log(newListItemIndex);
+    }
+});
 menu.DynamicListChange.on((item, newListItemIndex, changeDirection) => {
     alt.log("[DynamicListChange] " + newListItemIndex, item.Text);
     if (item == dynamicListItem) {
         alt.log("[DynamicListChange] " + changeDirection + " " + item.Data.name + " " + item.Data.data);
-        alt.log(newListItemIndex);
     }
 });
 menu.IndexChange.on((newIndex) => {
