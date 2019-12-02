@@ -97,11 +97,9 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
         if (this._selectedValue == undefined) {
             if (this._selectedStartValueHandler != null) {
                 this._selectedValue = this._selectedStartValueHandler();
-                alt.log("Current selected value = " + this._selectedValue);
             }
             else {
                 this._selectedValue = "";
-                alt.log("Current selected value = " + this._selectedValue);
             }
         }
 
