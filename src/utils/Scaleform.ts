@@ -23,10 +23,11 @@ export default class Scaleform {
     }
     
     private callFunctionHead(funcName: string, ...args: any[]): void {
-        if (!this.isValid)
+        if (!this.isValid || !this.isLoaded)
             return;
 
         game.beginScaleformMovieMethod(this._handle, funcName);
+        alt.log("Running func head " + funcName + "(" + args + ") on " + this.handle + " (" + this.scaleForm + ")");
 
         args.forEach((arg: any) => {
             switch (typeof arg) {
@@ -71,6 +72,13 @@ export default class Scaleform {
         if (!this.isValid || !this.isLoaded)
             return;
         game.drawScaleformMovieFullscreen(this._handle, 255, 255, 255, 255, 0);
+    }
+
+    public recreate(): void {
+        if (!this.isValid || !this.isLoaded)
+            return;
+        game.setScaleformMovieAsNoLongerNeeded(this._handle);
+        this._handle = game.requestScaleformMovie(this.scaleForm);
     }
 
     public destroy(): void {

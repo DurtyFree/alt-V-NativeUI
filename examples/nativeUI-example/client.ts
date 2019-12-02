@@ -1,5 +1,5 @@
 import * as alt from 'alt';
-import * as NativeUI from './includes/NativeUIMenu/NativeUI';
+import * as NativeUI from './includes/NativeUI/NativeUI';
 
 const menu = new NativeUI.Menu("NativeUI Test", "Test Subtitle", new NativeUI.Point(50, 50));
 //menu.Visible = false; //Menus are visible per default
@@ -116,11 +116,14 @@ menu.MenuChange.on((newMenu, enteredSubMenu) => {
     alt.log("[MenuChange] " + (newMenu as NativeUI.Menu).Id, enteredSubMenu);
 });
 
-alt.on('keydown', (key: number) => {
+alt.on('keyup', (key: number) => {
     if (key === 0x4D) { //M Key		
         if (menu.Visible) menu.Close();
         else menu.Open();
-    } else if (key === 70) { //F Key		
-        alt.log("You paid respect.");
+        NativeUI.MidsizedMessage.ShowMidsizedShardMessage("Menu opened", "Awesome", NativeUI.HudColor.HUD_COLOUR_BLACK, true, true);
+    } else if (key === 70 && menu.Visible) { //F Key
+        if (!NativeUI.BigMessage.IsVisible) {
+            NativeUI.BigMessage.ShowRankupMessage("You paid respect", "Well done sir", 1337);
+        }
     }
 }); 

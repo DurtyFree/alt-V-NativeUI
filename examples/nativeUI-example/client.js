@@ -1,5 +1,5 @@
 import * as alt from 'alt';
-import * as NativeUI from './includes/NativeUIMenu/NativeUI';
+import * as NativeUI from './includes/NativeUI/NativeUI';
 const menu = new NativeUI.Menu("NativeUI Test", "Test Subtitle", new NativeUI.Point(50, 50));
 menu.TitleScale = 1.5;
 let respectButton = new NativeUI.InstructionalButton("To pay respect", 0, "F");
@@ -67,14 +67,17 @@ menu.MenuClose.on(() => {
 menu.MenuChange.on((newMenu, enteredSubMenu) => {
     alt.log("[MenuChange] " + newMenu.Id, enteredSubMenu);
 });
-alt.on('keydown', (key) => {
+alt.on('keyup', (key) => {
     if (key === 0x4D) {
         if (menu.Visible)
             menu.Close();
         else
             menu.Open();
+        NativeUI.MidsizedMessage.ShowMidsizedShardMessage("Menu opened", "Awesome", NativeUI.HudColor.HUD_COLOUR_BLACK, true, true);
     }
-    else if (key === 70) {
-        alt.log("You paid respect.");
+    else if (key === 70 && menu.Visible) {
+        if (!NativeUI.BigMessage.IsVisible) {
+            NativeUI.BigMessage.ShowRankupMessage("You paid respect", "Well done sir", 1337);
+        }
     }
 });

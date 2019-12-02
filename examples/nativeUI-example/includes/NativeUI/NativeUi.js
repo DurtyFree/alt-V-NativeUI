@@ -4,6 +4,7 @@ import BadgeStyle from "./enums/BadgeStyle";
 import Font from "./enums/Font";
 import Alignment from './enums/Alignment';
 import Control from './enums/Control';
+import HudColor from './enums/HudColor';
 import UIMenuCheckboxItem from "./items/UIMenuCheckboxItem";
 import UIMenuItem from "./items/UIMenuItem";
 import UIMenuListItem from "./items/UIMenuListItem";
@@ -24,6 +25,8 @@ import UUIDV4 from "./utils/UUIDV4";
 import { Screen } from "./utils/Screen";
 import InstructionalButton from './modules/InstructionalButton';
 import Scaleform from './utils/Scaleform';
+import BigMessage from './modules/BigMessage';
+import MidsizedMessage from './modules/MidsizedMessage';
 let menuPool = [];
 export default class NativeUI {
     constructor(title, subtitle, offset, spriteLibrary, spriteName) {
@@ -786,4 +789,4 @@ export default class NativeUI {
         this._logo.Draw();
     }
 }
-export { NativeUI as Menu, UIMenuItem, UIMenuListItem, UIMenuDynamicListItem, UIMenuCheckboxItem, UIMenuSliderItem, BadgeStyle, Font, Alignment, Control, InstructionalButton, Point, Size, Color, ItemsCollection, ListItem };
+export { NativeUI as Menu, UIMenuItem, UIMenuListItem, UIMenuDynamicListItem, UIMenuCheckboxItem, UIMenuSliderItem, BadgeStyle, Font, Alignment, Control, HudColor, InstructionalButton, Point, Size, Color, ItemsCollection, ListItem, BigMessage, MidsizedMessage };

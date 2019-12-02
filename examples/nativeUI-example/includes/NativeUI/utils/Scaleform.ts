@@ -1,25 +1,35 @@
-import * as alt from 'alt';
+﻿import * as alt from 'alt';
 import * as game from 'natives';
+
 export default class Scaleform {
-    constructor(scaleForm) {
-        this._handle = 0;
+    private _handle: number = 0;
+    private scaleForm: string;
+
+    public constructor(scaleForm: string) {
         this.scaleForm = scaleForm;
         this._handle = game.requestScaleformMovie(this.scaleForm);
     }
-    get handle() {
+
+    public get handle(): number {
         return this._handle;
     }
-    get isValid() {
+
+    public get isValid(): boolean {
         return this._handle != 0;
     }
-    get isLoaded() {
+
+    public get isLoaded(): boolean {
         return game.hasScaleformMovieLoaded(this._handle);
     }
-    callFunctionHead(funcName, ...args) {
-        if (!this.isValid)
+    
+    private callFunctionHead(funcName: string, ...args: any[]): void {
+        if (!this.isValid || !this.isLoaded)
             return;
+
         game.beginScaleformMovieMethod(this._handle, funcName);
-        args.forEach((arg) => {
+        alt.log("Running func head " + funcName + "(" + args + ") on " + this.handle + " (" + this.scaleForm + ")");
+
+        args.forEach((arg: any) => {
             switch (typeof arg) {
                 case "number":
                     {
@@ -32,7 +42,7 @@ export default class Scaleform {
                     }
                 case "string":
                     {
-                        game.scaleformMovieMethodAddParamPlayerNameString(arg);
+                        game.scaleformMovieMethodAddParamPlayerNameString(arg as string);
                         break;
                     }
                 case "boolean":
@@ -47,20 +57,31 @@ export default class Scaleform {
             }
         });
     }
-    callFunction(funcName, ...args) {
+
+    public callFunction(funcName: string, ...args: any[]): void {
         this.callFunctionHead(funcName, ...args);
         game.endScaleformMovieMethod();
     }
-    callFunctionReturn(funcName, ...args) {
+
+    public callFunctionReturn(funcName: string, ...args: any[]): number {
         this.callFunctionHead(funcName, ...args);
         return game.endScaleformMovieMethodReturnValue();
     }
-    render2D() {
+
+    public render2D(): void {
         if (!this.isValid || !this.isLoaded)
             return;
         game.drawScaleformMovieFullscreen(this._handle, 255, 255, 255, 255, 0);
     }
-    destroy() {
+
+    public recreate(): void {
+        if (!this.isValid || !this.isLoaded)
+            return;
+        game.setScaleformMovieAsNoLongerNeeded(this._handle);
+        this._handle = game.requestScaleformMovie(this.scaleForm);
+    }
+
+    public destroy(): void {
         if (!this.isValid)
             return;
         game.setScaleformMovieAsNoLongerNeeded(this._handle);
