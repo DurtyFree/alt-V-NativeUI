@@ -1,6 +1,7 @@
 import * as alt from 'alt';
 import * as NativeUI from './includes/NativeUIMenu/NativeUI';
 const menu = new NativeUI.Menu("NativeUI Test", "Test Subtitle", new NativeUI.Point(50, 50));
+menu.TitleScale = 1.5;
 let respectButton = new NativeUI.InstructionalButton("To pay respect", 0, "F");
 menu.AddInstructionalButton(respectButton);
 menu.AddItem(new NativeUI.UIMenuListItem("List Item", "Description for List Item", new NativeUI.ItemsCollection(["Item 1", "Item 2", "Item 3"])));
@@ -22,6 +23,7 @@ menu.AddInstructionalButton(niceButton);
 menu.AddItem(menuItem);
 const subMenu = new NativeUI.Menu("NativeUI Sub Menu Test", "Sub Menu Subtitle", new NativeUI.Point(50, 50));
 subMenu.Visible = false;
+subMenu.TitleScale = 0.9;
 menu.AddSubMenu(subMenu, menuItem);
 subMenu.AddItem(new NativeUI.UIMenuItem("Sub menu item", "Just a sub menu item"));
 menu.ItemSelect.on((selectedItem, selectedItemIndex) => {

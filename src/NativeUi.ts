@@ -52,7 +52,7 @@ export default class NativeUI {
 
 	public Children: Map<string, NativeUI>; // (UUIDV4, NativeUI)
 
-	private _titleScale: number = 1.15;
+    private readonly _titleScale: number = 1.15;
 	public WidthOffset: number = 0;
 
 	public MouseControlsEnabled: boolean = false;
@@ -90,10 +90,10 @@ export default class NativeUI {
 		| UIMenuCheckboxItem)[] = [];
 
 	get TitleScale() {
-		return this._titleScale;
+        return this._title.scale;
 	}
 	set TitleScale(scale: number) {
-		this._titleScale = scale;
+        this._title.scale = scale;
 	}
 
 	get Visible() {

@@ -115,10 +115,10 @@ export default class NativeUI {
         alt.everyTick(this.render.bind(this));
     }
     get TitleScale() {
-        return this._titleScale;
+        return this._title.scale;
     }
     set TitleScale(scale) {
-        this._titleScale = scale;
+        this._title.scale = scale;
     }
     get Visible() {
         return this._visible;
