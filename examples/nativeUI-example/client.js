@@ -17,6 +17,24 @@ let itemData = {
 let autoListItem = new NativeUI.UIMenuAutoListItem('Auto list item: Write number', `I want to write ~y~${maxListItems}~s~ in console.`, -maxListItems, maxListItems, 0, itemData);
 autoListItem.PreCaptionText = '~HUD_COLOUR_RED~';
 menu.AddItem(autoListItem);
+const players = ["DurtyFree", "Kar", "Tuxick", "Hardy", "Neta"];
+var playerKickIndex = 0;
+function onDynamicPlayerKickItemChange(item, selectedValue, changeDirection) {
+    if (changeDirection == NativeUI.ChangeDirection.Right) {
+        playerKickIndex++;
+        if (playerKickIndex >= players.length)
+            playerKickIndex = 0;
+    }
+    else {
+        playerKickIndex--;
+        if (playerKickIndex < 0)
+            playerKickIndex = players.length - 1;
+    }
+    return players[playerKickIndex];
+}
+let dynamicKickPlayerItem = new NativeUI.UIMenuDynamicListItem('Kick Player:', onDynamicPlayerKickItemChange, `Choose player to kick.`, () => players[0]);
+dynamicKickPlayerItem.PreCaptionText = '~HUD_COLOUR_RED~';
+menu.AddItem(dynamicKickPlayerItem);
 function onDynamicListItemChange(item, selectedValue, changeDirection) {
     if (changeDirection == NativeUI.ChangeDirection.Right) {
         game.setEntityCoordsNoOffset(alt.Player.local.scriptID, alt.Player.local.pos.x + 0.01, alt.Player.local.pos.y, alt.Player.local.pos.z, false, false, false);
@@ -65,8 +83,8 @@ menu.AutoListChange.on((item, newListItemIndex, changeDirection) => {
 });
 menu.DynamicListChange.on((item, newListItemIndex, changeDirection) => {
     alt.log("[DynamicListChange] " + newListItemIndex, item.Text);
-    if (item == dynamicListItem) {
-        alt.log("[DynamicListChange] " + changeDirection + " " + item.Data.name + " " + item.Data.data);
+    if (item == dynamicKickPlayerItem) {
+        alt.log("[DynamicListChange] " + changeDirection);
     }
 });
 menu.IndexChange.on((newIndex) => {

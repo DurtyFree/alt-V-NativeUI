@@ -51,6 +51,35 @@ let autoListItem = new NativeUI.UIMenuAutoListItem(
 autoListItem.PreCaptionText = '~HUD_COLOUR_RED~';
 menu.AddItem(autoListItem);
 
+//Example data, use for example alt.Player.all
+const players: string[] = ["DurtyFree", "Kar", "Tuxick", "Hardy", "Neta"];
+var playerKickIndex = 0;
+
+function onDynamicPlayerKickItemChange(item: NativeUI.UIMenuDynamicListItem, selectedValue: string, changeDirection: NativeUI.ChangeDirection): string {
+    if (changeDirection == NativeUI.ChangeDirection.Right) {
+        playerKickIndex++;
+        if (playerKickIndex >= players.length)
+            playerKickIndex = 0;
+    }
+    else {
+        playerKickIndex--;
+        if (playerKickIndex < 0)
+            playerKickIndex = players.length - 1;
+    }
+
+    //item.Data = playerId; //Set item.Data to player id for example, so you can kick him when menu item OnSelect is triggered
+    return players[playerKickIndex]; // Return players name as new selected value
+}
+
+let dynamicKickPlayerItem = new NativeUI.UIMenuDynamicListItem(
+    'Kick Player:',
+    onDynamicPlayerKickItemChange,
+    `Choose player to kick.`,
+    () => players[0] // First player name to be selected
+);
+dynamicKickPlayerItem.PreCaptionText = '~HUD_COLOUR_RED~';
+menu.AddItem(dynamicKickPlayerItem);
+
 function onDynamicListItemChange(item: NativeUI.UIMenuDynamicListItem, selectedValue: string, changeDirection: NativeUI.ChangeDirection): string {
     if (changeDirection == NativeUI.ChangeDirection.Right) {
         game.setEntityCoordsNoOffset(alt.Player.local.scriptID, alt.Player.local.pos.x + 0.01, alt.Player.local.pos.y, alt.Player.local.pos.z, false, false, false);
@@ -71,7 +100,6 @@ let dynamicListItem = new NativeUI.UIMenuDynamicListItem(
 );
 dynamicListItem.PreCaptionText = '~HUD_COLOUR_RED~';
 menu.AddItem(dynamicListItem);
-
 
 let menuItem = new NativeUI.UIMenuItem(
     "Test Sub Menu", "Just a sub menu."
@@ -118,8 +146,8 @@ menu.AutoListChange.on((item: NativeUI.UIMenuAutoListItem, newListItemIndex: num
 
 menu.DynamicListChange.on((item: NativeUI.UIMenuDynamicListItem, newListItemIndex: number, changeDirection: NativeUI.ChangeDirection) => {
     alt.log("[DynamicListChange] " + newListItemIndex, item.Text);
-    if (item == dynamicListItem) {
-        alt.log("[DynamicListChange] " + changeDirection as string + " " + item.Data.name + " " + item.Data.data);
+    if (item == dynamicKickPlayerItem) {
+        alt.log("[DynamicListChange] " + changeDirection as string);
     }
 });
 
