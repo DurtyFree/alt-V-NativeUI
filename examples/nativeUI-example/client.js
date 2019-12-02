@@ -13,7 +13,7 @@ let itemData = {
     name: "test",
     data: "great"
 };
-let dynamicListItem = new NativeUI.UIMenuDynamicListItem('Dynamic list item: Discard item(s)', `Discard an amount (~y~${maxListItems}~s~ max) of this item on the ground.`, 1, maxListItems, 1, itemData);
+let dynamicListItem = new NativeUI.UIMenuDynamicListItem('Dynamic list item: Write number', `I want to write ~y~${maxListItems}~s~ in console.`, -maxListItems, maxListItems, 0, itemData);
 dynamicListItem.PreCaptionText = '~HUD_COLOUR_RED~';
 menu.AddItem(dynamicListItem);
 let menuItem = new NativeUI.UIMenuItem("Test Sub Menu", "Just a sub menu.");
@@ -43,13 +43,14 @@ menu.ItemSelect.on((selectedItem, selectedItemIndex) => {
 menu.ListChange.on((item, newListItemIndex) => {
     alt.log("[ListChange] " + newListItemIndex, item.Text);
 });
-menu.DynamicListChange.on((item, newListItemIndex) => {
+menu.DynamicListChange.on((item, newListItemIndex, changeDirection) => {
     alt.log("[DynamicListChange] " + newListItemIndex, item.Text);
     if (item == dynamicListItem) {
-        alt.log("[DynamicListChange] " + item.Data.name + " " + item.Data.data);
+        alt.log("[DynamicListChange] " + changeDirection + " " + item.Data.name + " " + item.Data.data);
+        alt.log(newListItemIndex);
     }
 });
-menu.IndexChange.on(newIndex => {
+menu.IndexChange.on((newIndex) => {
     alt.log("[IndexChange] " + "Current Selection: " + newIndex);
 });
 menu.SliderChange.on((item, itemIndex, sliderIndex) => {

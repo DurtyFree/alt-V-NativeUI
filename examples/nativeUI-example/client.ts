@@ -40,11 +40,11 @@ let itemData = {
     data: "great"
 };
 let dynamicListItem = new NativeUI.UIMenuDynamicListItem(
-    'Dynamic list item: Discard item(s)',
-    `Discard an amount (~y~${maxListItems}~s~ max) of this item on the ground.`,
-    1,
+    'Dynamic list item: Write number',
+    `I want to write ~y~${maxListItems}~s~ in console.`,
+    -maxListItems,
     maxListItems,
-    1,
+    0,
     itemData
 );
 dynamicListItem.PreCaptionText = '~HUD_COLOUR_RED~';
@@ -69,7 +69,7 @@ subMenu.AddItem(new NativeUI.UIMenuItem(
     "Just a sub menu item"
 ));
 
-menu.ItemSelect.on((selectedItem, selectedItemIndex) => {
+menu.ItemSelect.on((selectedItem: NativeUI.UIMenuListItem | NativeUI.UIMenuSliderItem | NativeUI.UIMenuCheckboxItem | NativeUI.UIMenuDynamicListItem, selectedItemIndex: number) => {
     if (selectedItem instanceof NativeUI.UIMenuListItem) {
         alt.log("[ItemSelect] " + selectedItemIndex, selectedItem.SelectedItem.DisplayText, selectedItem.SelectedItem.Data);
     } else if (selectedItem instanceof NativeUI.UIMenuSliderItem) {
@@ -81,27 +81,28 @@ menu.ItemSelect.on((selectedItem, selectedItemIndex) => {
     }
 });
 
-menu.ListChange.on((item, newListItemIndex) => {
-    alt.log("[ListChange] " + newListItemIndex, (item as NativeUI.UIMenuListItem).Text);
+menu.ListChange.on((item: NativeUI.UIMenuListItem, newListItemIndex: number) => {
+    alt.log("[ListChange] " + newListItemIndex, item.Text);
 });
 
-menu.DynamicListChange.on((item, newListItemIndex) => {
-    alt.log("[DynamicListChange] " + newListItemIndex, (item as NativeUI.UIMenuDynamicListItem).Text);
+menu.DynamicListChange.on((item: NativeUI.UIMenuDynamicListItem, newListItemIndex: number, changeDirection: NativeUI.ChangeDirection) => {
+    alt.log("[DynamicListChange] " + newListItemIndex, item.Text);
     if (item == dynamicListItem) {
-        alt.log("[DynamicListChange] " + item.Data.name + " " + item.Data.data);
+        alt.log("[DynamicListChange] " + changeDirection as string + " " + item.Data.name + " " + item.Data.data);
+        alt.log(newListItemIndex);
     }
 });
 
-menu.IndexChange.on(newIndex => {
+menu.IndexChange.on((newIndex: number) => {
     alt.log("[IndexChange] " + "Current Selection: " + newIndex);
 });
 
-menu.SliderChange.on((item, itemIndex, sliderIndex) => {
-    alt.log("[SliderChange] " + (item as NativeUI.UIMenuSliderItem).Text, itemIndex, sliderIndex);
+menu.SliderChange.on((item: NativeUI.UIMenuSliderItem, itemIndex: number, sliderIndex: number) => {
+    alt.log("[SliderChange] " + item.Text, itemIndex, sliderIndex);
 });
 
-menu.CheckboxChange.on((item, checkedState) => {
-    alt.log("[CheckboxChange] " + (item as NativeUI.UIMenuCheckboxItem).Text, checkedState);
+menu.CheckboxChange.on((item: NativeUI.UIMenuCheckboxItem, checkedState: boolean) => {
+    alt.log("[CheckboxChange] " + item.Text, checkedState);
 });
 
 menu.MenuOpen.on(() => {
@@ -112,8 +113,8 @@ menu.MenuClose.on(() => {
     alt.log("[NativeUi] Menu closed");
 });
 
-menu.MenuChange.on((newMenu, enteredSubMenu) => {
-    alt.log("[MenuChange] " + (newMenu as NativeUI.Menu).Id, enteredSubMenu);
+menu.MenuChange.on((newMenu: NativeUI.Menu, enteredSubMenu: boolean) => {
+    alt.log("[MenuChange] " + newMenu.Id, enteredSubMenu);
 });
 
 alt.on('keyup', (key: number) => {

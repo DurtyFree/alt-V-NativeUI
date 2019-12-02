@@ -5,6 +5,7 @@ import Font from "./enums/Font";
 import Alignment from './enums/Alignment';
 import Control from './enums/Control';
 import HudColor from './enums/HudColor';
+import ChangeDirection from './enums/ChangeDirection';
 import UIMenuCheckboxItem from "./items/UIMenuCheckboxItem";
 import UIMenuItem from "./items/UIMenuItem";
 import UIMenuListItem from "./items/UIMenuListItem";
@@ -295,7 +296,7 @@ export default class NativeUI {
                 it.SelectedValue -= it.LeftMoveThreshold;
             }
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
-            this.DynamicListChange.emit(it, it.SelectedValue);
+            this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Left);
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem) {
             const it = this.MenuItems[this.CurrentSelection];
@@ -327,7 +328,7 @@ export default class NativeUI {
                 it.SelectedValue += it.RightMoveThreshold;
             }
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
-            this.DynamicListChange.emit(it, it.SelectedValue);
+            this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Right);
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem) {
             const it = this.MenuItems[this.CurrentSelection];
@@ -750,4 +751,4 @@ export default class NativeUI {
         this._logo.Draw();
     }
 }
-export { NativeUI as Menu, UIMenuItem, UIMenuListItem, UIMenuDynamicListItem, UIMenuCheckboxItem, UIMenuSliderItem, BadgeStyle, Font, Alignment, Control, HudColor, InstructionalButton, Point, Size, Color, ItemsCollection, ListItem, BigMessage, MidsizedMessage };
+export { NativeUI as Menu, UIMenuItem, UIMenuListItem, UIMenuDynamicListItem, UIMenuCheckboxItem, UIMenuSliderItem, BadgeStyle, ChangeDirection, Font, Alignment, Control, HudColor, InstructionalButton, Point, Size, Color, ItemsCollection, ListItem, BigMessage, MidsizedMessage };

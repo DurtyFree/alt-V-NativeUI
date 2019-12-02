@@ -27,7 +27,7 @@ export default class Scaleform {
             return;
 
         game.beginScaleformMovieMethod(this._handle, funcName);
-        alt.log("Running func head " + funcName + "(" + args + ") on " + this.handle + " (" + this.scaleForm + ")");
+        //alt.log("Running func head " + funcName + "(" + args + ") on " + this.handle + " (" + this.scaleForm + ")");
 
         args.forEach((arg: any) => {
             switch (typeof arg) {
