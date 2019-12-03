@@ -30,10 +30,10 @@ export default class UIMenuItem {
         this._labelText = new ResText("", new Point(0, 0), 0.35, Color.White, 0, Alignment.Right);
     }
     get Text() {
-        return this._text.caption;
+        return this._text.Caption;
     }
     set Text(text) {
-        this._text.caption = text;
+        this._text.Caption = text;
     }
     get Description() {
         return this._description;
@@ -45,12 +45,12 @@ export default class UIMenuItem {
         }
     }
     SetVerticalPosition(y) {
-        this._rectangle.pos = new Point(this.Offset.X, y + 144 + this.Offset.Y);
-        this._selectedSprite.pos = new Point(0 + this.Offset.X, y + 144 + this.Offset.Y);
-        this._text.pos = new Point(8 + this.Offset.X, y + 147 + this.Offset.Y);
-        this._badgeLeft.pos = new Point(0 + this.Offset.X, y + 142 + this.Offset.Y);
-        this._badgeRight.pos = new Point(385 + this.Offset.X, y + 142 + this.Offset.Y);
-        this._labelText.pos = new Point(420 + this.Offset.X, y + 148 + this.Offset.Y);
+        this._rectangle.Pos = new Point(this.Offset.X, y + 144 + this.Offset.Y);
+        this._selectedSprite.Pos = new Point(0 + this.Offset.X, y + 144 + this.Offset.Y);
+        this._text.Pos = new Point(8 + this.Offset.X, y + 147 + this.Offset.Y);
+        this._badgeLeft.Pos = new Point(0 + this.Offset.X, y + 142 + this.Offset.Y);
+        this._badgeRight.Pos = new Point(385 + this.Offset.X, y + 142 + this.Offset.Y);
+        this._labelText.Pos = new Point(420 + this.Offset.X, y + 148 + this.Offset.Y);
     }
     addEvent(event, ...args) {
         this._event = { event: event, args: args };
@@ -61,26 +61,26 @@ export default class UIMenuItem {
         }
     }
     Draw() {
-        this._rectangle.size = new Size(431 + this.Parent.WidthOffset, 38);
-        this._selectedSprite.size = new Size(431 + this.Parent.WidthOffset, 38);
+        this._rectangle.Size = new Size(431 + this.Parent.WidthOffset, 38);
+        this._selectedSprite.Size = new Size(431 + this.Parent.WidthOffset, 38);
         if (this.Hovered && !this.Selected) {
-            this._rectangle.color = new Color(255, 255, 255, 20);
+            this._rectangle.Color = new Color(255, 255, 255, 20);
             this._rectangle.Draw();
         }
-        this._selectedSprite.color = this.Selected
+        this._selectedSprite.Color = this.Selected
             ? this.HighlightedBackColor
             : this.BackColor;
         this._selectedSprite.Draw();
-        this._text.color = this.Enabled
+        this._text.Color = this.Enabled
             ? this.Selected
                 ? this.HighlightedForeColor
                 : this.ForeColor
             : new Color(163, 159, 148);
         if (this.LeftBadge != BadgeStyle.None) {
-            this._text.pos = new Point(35 + this.Offset.X, this._text.pos.Y);
+            this._text.Pos = new Point(35 + this.Offset.X, this._text.Pos.Y);
             this._badgeLeft.TextureDict = this.BadgeToSpriteLib(this.LeftBadge);
             this._badgeLeft.TextureName = this.BadgeToSpriteName(this.LeftBadge, this.Selected);
-            this._badgeLeft.color = this.IsBagdeWhiteSprite(this.LeftBadge)
+            this._badgeLeft.Color = this.IsBagdeWhiteSprite(this.LeftBadge)
                 ? this.Enabled
                     ? this.Selected
                         ? this.HighlightedForeColor
@@ -90,13 +90,13 @@ export default class UIMenuItem {
             this._badgeLeft.Draw();
         }
         else {
-            this._text.pos = new Point(8 + this.Offset.X, this._text.pos.Y);
+            this._text.Pos = new Point(8 + this.Offset.X, this._text.Pos.Y);
         }
         if (this.RightBadge != BadgeStyle.None) {
-            this._badgeRight.pos = new Point(385 + this.Offset.X + this.Parent.WidthOffset, this._badgeRight.pos.Y);
+            this._badgeRight.Pos = new Point(385 + this.Offset.X + this.Parent.WidthOffset, this._badgeRight.Pos.Y);
             this._badgeRight.TextureDict = this.BadgeToSpriteLib(this.RightBadge);
             this._badgeRight.TextureName = this.BadgeToSpriteName(this.RightBadge, this.Selected);
-            this._badgeRight.color = this.IsBagdeWhiteSprite(this.RightBadge)
+            this._badgeRight.Color = this.IsBagdeWhiteSprite(this.RightBadge)
                 ? this.Enabled
                     ? this.Selected
                         ? this.HighlightedForeColor
@@ -106,9 +106,9 @@ export default class UIMenuItem {
             this._badgeRight.Draw();
         }
         if (this.RightLabel && this.RightLabel !== "") {
-            this._labelText.pos = new Point(420 + this.Offset.X + this.Parent.WidthOffset, this._labelText.pos.Y);
-            this._labelText.caption = this.RightLabel;
-            this._labelText.color = this._text.color = this.Enabled
+            this._labelText.Pos = new Point(420 + this.Offset.X + this.Parent.WidthOffset, this._labelText.Pos.Y);
+            this._labelText.Caption = this.RightLabel;
+            this._labelText.Color = this._text.Color = this.Enabled
                 ? this.Selected
                     ? this.HighlightedForeColor
                     : this.ForeColor

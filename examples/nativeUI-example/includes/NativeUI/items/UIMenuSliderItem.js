@@ -28,11 +28,11 @@ export default class UIMenuSliderItem extends UIMenuItem {
         this._index = 100000000 - (100000000 % this._items.length) + value;
     }
     SetVerticalPosition(y) {
-        this._rectangleBackground.pos = new Point(250 + this.Offset.X + this.Parent.WidthOffset, y + 158.5 + this.Offset.Y);
-        this._rectangleSlider.pos = new Point(250 + this.Offset.X + this.Parent.WidthOffset, y + 158.5 + this.Offset.Y);
-        this._rectangleDivider.pos = new Point(323.5 + this.Offset.X + this.Parent.WidthOffset, y + 153 + this.Offset.Y);
-        this._arrowLeft.pos = new Point(235 + this.Offset.X + this.Parent.WidthOffset, 155.5 + y + this.Offset.Y);
-        this._arrowRight.pos = new Point(400 + this.Offset.X + this.Parent.WidthOffset, 155.5 + y + this.Offset.Y);
+        this._rectangleBackground.Pos = new Point(250 + this.Offset.X + this.Parent.WidthOffset, y + 158.5 + this.Offset.Y);
+        this._rectangleSlider.Pos = new Point(250 + this.Offset.X + this.Parent.WidthOffset, y + 158.5 + this.Offset.Y);
+        this._rectangleDivider.Pos = new Point(323.5 + this.Offset.X + this.Parent.WidthOffset, y + 153 + this.Offset.Y);
+        this._arrowLeft.Pos = new Point(235 + this.Offset.X + this.Parent.WidthOffset, 155.5 + y + this.Offset.Y);
+        this._arrowRight.Pos = new Point(400 + this.Offset.X + this.Parent.WidthOffset, 155.5 + y + this.Offset.Y);
         super.SetVerticalPosition(y);
     }
     IndexToItem(index) {
@@ -40,18 +40,18 @@ export default class UIMenuSliderItem extends UIMenuItem {
     }
     Draw() {
         super.Draw();
-        this._arrowLeft.color = this.Enabled
+        this._arrowLeft.Color = this.Enabled
             ? this.Selected
                 ? Color.Black
                 : Color.WhiteSmoke
             : new Color(163, 159, 148);
-        this._arrowRight.color = this.Enabled
+        this._arrowRight.Color = this.Enabled
             ? this.Selected
                 ? Color.Black
                 : Color.WhiteSmoke
             : new Color(163, 159, 148);
-        let offset = ((this._rectangleBackground.size.Width - this._rectangleSlider.size.Width) / (this._items.length - 1)) * this.Index;
-        this._rectangleSlider.pos = new Point(250 + this.Offset.X + offset + +this.Parent.WidthOffset, this._rectangleSlider.pos.Y);
+        let offset = ((this._rectangleBackground.Size.Width - this._rectangleSlider.Size.Width) / (this._items.length - 1)) * this.Index;
+        this._rectangleSlider.Pos = new Point(250 + this.Offset.X + offset + +this.Parent.WidthOffset, this._rectangleSlider.Pos.Y);
         if (this.Selected) {
             this._arrowLeft.Draw();
             this._arrowRight.Draw();

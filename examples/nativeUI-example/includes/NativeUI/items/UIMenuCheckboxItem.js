@@ -13,11 +13,11 @@ export default class UIMenuCheckboxItem extends UIMenuItem {
     }
     SetVerticalPosition(y) {
         super.SetVerticalPosition(y);
-        this._checkedSprite.pos = new Point(380 + this.Offset.X + this.Parent.WidthOffset, y + 138 + this.Offset.Y);
+        this._checkedSprite.Pos = new Point(380 + this.Offset.X + this.Parent.WidthOffset, y + 138 + this.Offset.Y);
     }
     Draw() {
         super.Draw();
-        this._checkedSprite.pos = this._checkedSprite.pos = new Point(380 + this.Offset.X + this.Parent.WidthOffset, this._checkedSprite.pos.Y);
+        this._checkedSprite.Pos = this._checkedSprite.Pos = new Point(380 + this.Offset.X + this.Parent.WidthOffset, this._checkedSprite.Pos.Y);
         const isDefaultHightlitedForeColor = this.HighlightedForeColor == UIMenuItem.DefaultHighlightedForeColor;
         if (this.Selected && isDefaultHightlitedForeColor) {
             this._checkedSprite.TextureName = this.Checked
@@ -29,7 +29,7 @@ export default class UIMenuCheckboxItem extends UIMenuItem {
                 ? "shop_box_tick"
                 : "shop_box_blank";
         }
-        this._checkedSprite.color = this.Enabled
+        this._checkedSprite.Color = this.Enabled
             ? this.Selected && !isDefaultHightlitedForeColor
                 ? this.HighlightedForeColor
                 : this.ForeColor

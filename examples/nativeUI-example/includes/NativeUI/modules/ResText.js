@@ -28,13 +28,13 @@ export default class ResText extends Text {
             arg1 = new Size(0, 0);
         if (arg1 && !pos) {
             textAlignment = this.TextAlignment;
-            caption = this.caption;
-            pos = new Point(this.pos.X + arg1.Width, this.pos.Y + arg1.Height);
-            scale = this.scale;
-            color = this.color;
-            font = this.font;
+            caption = this.Caption;
+            pos = new Point(this.Pos.X + arg1.Width, this.Pos.Y + arg1.Height);
+            scale = this.Scale;
+            color = this.Color;
+            font = this.Font;
             if (centered == true || centered == false) {
-                centered = this.centered;
+                centered = this.Centered;
             }
             else {
                 centered = undefined;
@@ -48,8 +48,8 @@ export default class ResText extends Text {
         const height = 1080.0;
         const ratio = screenw / screenh;
         const width = height * ratio;
-        const x = this.pos.X / width;
-        const y = this.pos.Y / height;
+        const x = this.Pos.X / width;
+        const y = this.Pos.Y / height;
         game.setTextFont(parseInt(font));
         game.setTextScale(1.0, scale);
         game.setTextColour(color.R, color.G, color.B, color.A);
@@ -71,7 +71,7 @@ export default class ResText extends Text {
                     break;
             }
             if (this.Wrap) {
-                const xsize = (this.pos.X + this.Wrap) / width;
+                const xsize = (this.Pos.X + this.Wrap) / width;
                 game.setTextWrap(x, xsize);
             }
         }

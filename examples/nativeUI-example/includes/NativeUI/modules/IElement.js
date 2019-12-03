@@ -1,5 +1,5 @@
 export default class IElement {
     constructor() {
-        this.enabled = true;
+        this.Enabled = true;
     }
 }

@@ -5,20 +5,20 @@ import IElement from "./IElement";
 export default class Text extends IElement {
     constructor(caption, pos, scale, color, font, centered) {
         super();
-        this.caption = caption;
-        this.pos = pos;
-        this.scale = scale;
-        this.color = color || new Color(255, 255, 255, 255);
-        this.font = font || 0;
-        this.centered = centered || false;
+        this.Caption = caption;
+        this.Pos = pos;
+        this.Scale = scale;
+        this.Color = color || new Color(255, 255, 255, 255);
+        this.Font = font || 0;
+        this.Centered = centered || false;
     }
     Draw(caption, pos, scale, color, font, centered) {
         if (caption && !pos && !scale && !color && !font && !centered) {
-            pos = new Point(this.pos.X + caption.Width, this.pos.Y + caption.Height);
-            scale = this.scale;
-            color = this.color;
-            font = this.font;
-            centered = this.centered;
+            pos = new Point(this.Pos.X + caption.Width, this.Pos.Y + caption.Height);
+            scale = this.Scale;
+            color = this.Color;
+            font = this.Font;
+            centered = this.Centered;
         }
         const x = pos.X / 1280.0;
         const y = pos.Y / 720.0;

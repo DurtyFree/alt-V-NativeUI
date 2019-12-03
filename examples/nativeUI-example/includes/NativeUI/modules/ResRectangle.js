@@ -11,9 +11,9 @@ export default class ResRectangle extends Rectangle {
         if (!pos)
             pos = new Size();
         if (pos && !size && !color) {
-            pos = new Point(this.pos.X + pos.Width, this.pos.Y + pos.Height);
-            size = this.size;
-            color = this.color;
+            pos = new Point(this.Pos.X + pos.Width, this.Pos.Y + pos.Height);
+            size = this.Size;
+            color = this.Color;
         }
         const screenw = Screen.Width;
         const screenh = Screen.Height;

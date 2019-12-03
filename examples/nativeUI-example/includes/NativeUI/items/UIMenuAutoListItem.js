@@ -35,7 +35,7 @@ export default class UIMenuAutoListItem extends UIMenuItem {
         if (typeof text !== 'string')
             throw new Error("The pre caption text must be a string");
         this._preText = text;
-        this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._value.toString(), this._itemText && this._itemText.font ? this._itemText.font : 0, 0.35);
+        this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._value.toString(), this._itemText && this._itemText.Font ? this._itemText.Font : 0, 0.35);
     }
     get LeftMoveThreshold() {
         return this._leftMoveThreshold;
@@ -82,12 +82,12 @@ export default class UIMenuAutoListItem extends UIMenuItem {
         if (v < this._lowerThreshold || v > this._upperThreshold)
             throw new Error("The value can not be outside the lower or upper limits");
         this._value = v;
-        this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._value.toString(), this._itemText && this._itemText.font ? this._itemText.font : 0, this._itemText && this._itemText.scale ? this._itemText.scale : 0.35);
+        this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._value.toString(), this._itemText && this._itemText.Font ? this._itemText.Font : 0, this._itemText && this._itemText.Scale ? this._itemText.Scale : 0.35);
     }
     SetVerticalPosition(y) {
-        this._arrowLeft.pos = new Point(300 + this.Offset.X + this.Parent.WidthOffset, 147 + y + this.Offset.Y);
-        this._arrowRight.pos = new Point(400 + this.Offset.X + this.Parent.WidthOffset, 147 + y + this.Offset.Y);
-        this._itemText.pos = new Point(300 + this.Offset.X + this.Parent.WidthOffset, y + 147 + this.Offset.Y);
+        this._arrowLeft.Pos = new Point(300 + this.Offset.X + this.Parent.WidthOffset, 147 + y + this.Offset.Y);
+        this._arrowRight.Pos = new Point(400 + this.Offset.X + this.Parent.WidthOffset, 147 + y + this.Offset.Y);
+        this._itemText.Pos = new Point(300 + this.Offset.X + this.Parent.WidthOffset, y + 147 + this.Offset.Y);
         super.SetVerticalPosition(y);
     }
     SetRightLabel(text) {
@@ -99,30 +99,30 @@ export default class UIMenuAutoListItem extends UIMenuItem {
     Draw() {
         super.Draw();
         const offset = this._currentOffset;
-        this._itemText.color = this.Enabled
+        this._itemText.Color = this.Enabled
             ? this.Selected
                 ? this.HighlightedForeColor
                 : this.ForeColor
             : new Color(163, 159, 148);
-        this._itemText.caption = this.PreCaptionText + this._value;
-        this._arrowLeft.color = this.Enabled
+        this._itemText.Caption = this.PreCaptionText + this._value;
+        this._arrowLeft.Color = this.Enabled
             ? this.Selected
                 ? this.HighlightedForeColor
                 : this.ForeColor
             : new Color(163, 159, 148);
-        this._arrowRight.color = this.Enabled
+        this._arrowRight.Color = this.Enabled
             ? this.Selected
                 ? this.HighlightedForeColor
                 : this.ForeColor
             : new Color(163, 159, 148);
-        this._arrowLeft.pos = new Point(390 - offset + this.Offset.X + this.Parent.WidthOffset, this._arrowLeft.pos.Y);
+        this._arrowLeft.Pos = new Point(390 - offset + this.Offset.X + this.Parent.WidthOffset, this._arrowLeft.Pos.Y);
         if (this.Selected) {
             this._arrowLeft.Draw();
             this._arrowRight.Draw();
-            this._itemText.pos = new Point(405 + this.Offset.X + this.Parent.WidthOffset, this._itemText.pos.Y);
+            this._itemText.Pos = new Point(405 + this.Offset.X + this.Parent.WidthOffset, this._itemText.Pos.Y);
         }
         else {
-            this._itemText.pos = new Point(420 + this.Offset.X + this.Parent.WidthOffset, this._itemText.pos.Y);
+            this._itemText.Pos = new Point(420 + this.Offset.X + this.Parent.WidthOffset, this._itemText.Pos.Y);
         }
         this._itemText.Draw();
     }

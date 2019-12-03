@@ -1,5 +1,6 @@
 export default function UUIDV4() {
-    let uuid = "", ii;
+    let uuid = "";
+    let ii;
     for (ii = 0; ii < 32; ii += 1) {
         switch (ii) {
             case 8:

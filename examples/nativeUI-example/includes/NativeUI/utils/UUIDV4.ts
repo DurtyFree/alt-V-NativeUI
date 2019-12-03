@@ -1,8 +1,7 @@
 export default function UUIDV4(): string {
-	let
-		uuid = "",
-		ii
-	;
+    let uuid: string = "";
+    let ii: number;
+
 	for (ii = 0; ii < 32; ii += 1) {
 		switch (ii) {
 			case 8:

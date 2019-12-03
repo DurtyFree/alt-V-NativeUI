@@ -34,8 +34,6 @@ let menuPool: NativeUI[] = [];
 
 export default class NativeUI {
     private _visible: boolean = true;
-    private _title: string;
-    private _subtitle: string;
     private _counterPretext: string = "";
     private _counterOverride: string = undefined;
     private _spriteLibrary: string;
@@ -55,12 +53,14 @@ export default class NativeUI {
     private _minItem: number;
     private _maxItem: number = this._maxItemsOnScreen;
     private _mouseEdgeEnabled: boolean = true;
+    private _addedSpriteBanner: boolean = false;
+    private _bannerSprite: Sprite = null;
+    private _bannerRectangle: ResRectangle = null;
 
     private readonly _instructionalButtons: InstructionalButton[] = [];
     private readonly _instructionalButtonsScaleform: Scaleform;
-    private readonly _titleScale: number = 1.15;
+    private readonly _defaultTitleScale: number = 1.15;
     private readonly _mainMenu: Container;
-    private readonly _logo: Sprite;
     private readonly _upAndDownSprite: Sprite;
     private readonly _titleResText: ResText;
     private readonly _subtitleResText: ResText;
@@ -105,11 +105,36 @@ export default class NativeUI {
     public readonly MenuClose = new LiteEvent();
     public readonly MenuChange = new LiteEvent();
 
-    public get TitleScale() {
-        return this._titleResText.Scale;
+    public GetSpriteBanner(): Sprite {
+        return this._bannerSprite;
     }
-    public set TitleScale(scale: number) {
-        this._titleResText.Scale = scale;
+
+    public GetRectangleBanner(): ResRectangle {
+        return this._bannerRectangle;
+    }
+
+    public GetTitle(): ResText {
+        return this._titleResText;
+    }
+
+    public get Title(): string {
+        return this._titleResText.Caption;
+    }
+
+    public set Title(text: string) {
+        this._titleResText.Caption = text;
+    }
+
+    public get GetSubTitle(): ResText {
+        return this._titleResText;
+    }
+
+    public get SubTitle(): string {
+        return this._titleResText.Caption;
+    }
+    
+    public set SubTitle(text: string) {
+        this._subtitleResText.Caption = text;
     }
 
     public get Visible() {
@@ -190,8 +215,6 @@ export default class NativeUI {
     constructor(title: string, subtitle: string, offset: Point, spriteLibrary?: string, spriteName?: string) {
         if (!(offset instanceof Point)) offset = Point.Parse(offset);
 
-        this._title = title;
-        this._subtitle = subtitle;
         this._spriteLibrary = spriteLibrary || "commonmenu";
         this._spriteName = spriteName || "interaction_bgd";
         this._offset = new Point(offset.X, offset.Y);
@@ -202,20 +225,20 @@ export default class NativeUI {
 
         // Create everything
         this._mainMenu = new Container(new Point(0, 0), new Size(700, 500), new Color(0, 0, 0, 0));
-        this._logo = new Sprite(this._spriteLibrary, this._spriteName, new Point(0 + this._offset.X, 0 + this._offset.Y), new Size(431, 107));
+        this._bannerSprite = new Sprite(this._spriteLibrary, this._spriteName, new Point(0 + this._offset.X, 0 + this._offset.Y), new Size(431, 107));
         this._mainMenu.addItem(
-            (this._titleResText = new ResText(this._title, new Point(215 + this._offset.X, 20 + this._offset.Y), this._titleScale, new Color(255, 255, 255), 1, Alignment.Centered))
+            (this._titleResText = new ResText(title, new Point(215 + this._offset.X, 20 + this._offset.Y), this._defaultTitleScale, new Color(255, 255, 255), 1, Alignment.Centered))
         );
 
-        if (this._subtitle !== "") {
+        if (subtitle !== "") {
             this._mainMenu.addItem(
                 new ResRectangle(new Point(0 + this._offset.X, 107 + this._offset.Y), new Size(431, 37), new Color(0, 0, 0, 255))
             );
             this._mainMenu.addItem(
-                (this._subtitleResText = new ResText(this._subtitle, new Point(8 + this._offset.X, 110 + this._offset.Y), 0.35, new Color(255, 255, 255), 0, Alignment.Left))
+                (this._subtitleResText = new ResText(subtitle, new Point(8 + this._offset.X, 110 + this._offset.Y), 0.35, new Color(255, 255, 255), 0, Alignment.Left))
             );
-            if (this._subtitle.startsWith("~")) {
-                this._counterPretext = this._subtitle.substr(0, 3);
+            if (subtitle.startsWith("~")) {
+                this._counterPretext = subtitle.substr(0, 3);
             }
             this._counterText = new ResText("", new Point(425 + this._offset.X, 110 + this._offset.Y), 0.35, new Color(255, 255, 255), 0, Alignment.Right);
             this._extraOffset += 37;
@@ -259,6 +282,29 @@ export default class NativeUI {
         this._instructionalButtons.push(button);
     }
 
+    public SetSpriteBannerType(spriteBanner: Sprite): void {
+        this._bannerRectangle = null;
+        this.AddSpriteBannerType(spriteBanner);
+    }
+
+    public SetRectangleBannerType(rectangle: ResRectangle): void {
+        this._bannerSprite = null;
+        this._bannerRectangle = rectangle;
+        this._bannerRectangle.Pos = new Point(this._offset.X, this._offset.Y);
+        this._bannerRectangle.Size = new Size(431 + this.WidthOffset, 107);
+    }
+
+    public AddSpriteBannerType(spriteBanner: Sprite): void {
+        this._bannerSprite = spriteBanner;
+        this._bannerSprite.Size = new Size(431 + this.WidthOffset, 107);
+        this._bannerSprite.Pos = new Point(this._offset.X, this._offset.Y);
+    }
+
+    public SetNoBannerType(): void {
+        this._bannerSprite = null;
+        this._bannerRectangle = new ResRectangle(new Point(this._offset.X, this._offset.Y), new Size(431 + this.WidthOffset, 107), new Color(0, 0, 0, 0));
+    }
+
     public RemoveInstructionalButton(button: InstructionalButton): void {
         for (let i = 0; i < this._instructionalButtons.length; i++) {
             if (this._instructionalButtons[i] === button) {
@@ -284,8 +330,8 @@ export default class NativeUI {
 
     public SetMenuWidthOffset(widthOffset: number) {
         this.WidthOffset = widthOffset;
-        if (this._logo != null) {
-            this._logo.Size = new Size(431 + this.WidthOffset, 107);
+        if (this._bannerSprite != null) {
+            this._bannerSprite.Size = new Size(431 + this.WidthOffset, 107);
         }
         this._mainMenu.Items[0].pos = new Point((this.WidthOffset + this._offset.X + 431) / 2, 20 + this._offset.Y);
         if (this._counterText) {
@@ -294,6 +340,9 @@ export default class NativeUI {
         if (this._mainMenu.Items.length >= 2) {
             const tmp = this._mainMenu.Items[1];
             tmp.size = new Size(431 + this.WidthOffset, 37);
+        }
+        if (this._bannerRectangle != null) {
+            this._bannerRectangle.Size = new Size(431 + this.WidthOffset, 107);
         }
     }
 
@@ -360,11 +409,6 @@ export default class NativeUI {
         this.Visible = false;
         this.CleanUp(closeChildren);
         this.MenuClose.emit(true);
-    }
-
-    public set Subtitle(text: string) {
-        this._subtitle = text;
-        this._subtitleResText.Caption = text;
     }
 
     public GoLeft() {
@@ -813,8 +857,8 @@ export default class NativeUI {
         }
 
         if (this._justOpened) {
-            if (this._logo != null && !this._logo.IsTextureDictionaryLoaded)
-                this._logo.LoadTextureDictionary();
+            if (this._bannerSprite != null && !this._bannerSprite.IsTextureDictionaryLoaded)
+                this._bannerSprite.LoadTextureDictionary();
             if (!this._background.IsTextureDictionaryLoaded)
                 this._background.LoadTextureDictionary();
             if (!this._descriptionRectangle.IsTextureDictionaryLoaded)
@@ -884,8 +928,12 @@ export default class NativeUI {
                 this._counterText.Draw();
             }
         }
+        
+        if (this._bannerRectangle != null)
+            this._bannerRectangle.Draw();
 
-        this._logo.Draw();
+        if (this._bannerSprite != null)
+            this._bannerSprite.Draw();
     }
 }
 
@@ -903,6 +951,8 @@ export {
     Alignment,
     Control,
     HudColor,
+    Sprite,
+    ResRectangle,
     InstructionalButton,
     Point,
     Size,

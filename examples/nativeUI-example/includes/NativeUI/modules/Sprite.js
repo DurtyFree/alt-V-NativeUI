@@ -6,11 +6,11 @@ export default class Sprite {
     constructor(textureDict, textureName, pos, size, heading = 0, color = new Color(255, 255, 255)) {
         this.TextureDict = textureDict;
         this.TextureName = textureName;
-        this.pos = pos;
-        this.size = size;
-        this.heading = heading;
-        this.color = color;
-        this.visible = true;
+        this.Pos = pos;
+        this.Size = size;
+        this.Heading = heading;
+        this.Color = color;
+        this.Visible = true;
     }
     LoadTextureDictionary() {
         this.requestTextureDictPromise(this._textureDict).then((succ) => { });
@@ -40,10 +40,10 @@ export default class Sprite {
     Draw(textureDictionary, textureName, pos, size, heading, color, loadTexture) {
         textureDictionary = textureDictionary || this.TextureDict;
         textureName = textureName || this.TextureName;
-        pos = pos || this.pos;
-        size = size || this.size;
-        heading = heading || this.heading;
-        color = color || this.color;
+        pos = pos || this.Pos;
+        size = size || this.Size;
+        heading = heading || this.Heading;
+        color = color || this.Color;
         loadTexture = loadTexture || true;
         if (loadTexture) {
             if (!game.hasStreamedTextureDictLoaded(textureDictionary))
@@ -54,10 +54,10 @@ export default class Sprite {
         const height = 1080.0;
         const ratio = screenw / screenh;
         const width = height * ratio;
-        const w = this.size.Width / width;
-        const h = this.size.Height / height;
-        const x = this.pos.X / width + w * 0.5;
-        const y = this.pos.Y / height + h * 0.5;
+        const w = this.Size.Width / width;
+        const h = this.Size.Height / height;
+        const x = this.Pos.X / width + w * 0.5;
+        const y = this.Pos.Y / height + h * 0.5;
         game.drawSprite(textureDictionary, textureName, x, y, w, h, heading, color.R, color.G, color.B, color.A, true);
     }
 }
