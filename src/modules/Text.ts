@@ -5,30 +5,30 @@ import IElement from "./IElement";
 import Size from '../utils/Size';
 
 export default class Text extends IElement {
-    public caption: string;
-    public pos: Point;
-    public scale: number;
-    public color: Color;
-    public font: number;
-    public centered: boolean;
+    public Caption: string;
+    public Pos: Point;
+    public Scale: number;
+    public Color: Color;
+    public Font: number;
+    public Centered: boolean;
 
     constructor(caption: string, pos: Point, scale: number, color: Color, font: number, centered: boolean) {
         super();
-        this.caption = caption;
-        this.pos = pos;
-        this.scale = scale;
-        this.color = color || new Color(255, 255, 255, 255);
-        this.font = font || 0;
-        this.centered = centered || false;
+        this.Caption = caption;
+        this.Pos = pos;
+        this.Scale = scale;
+        this.Color = color || new Color(255, 255, 255, 255);
+        this.Font = font || 0;
+        this.Centered = centered || false;
     }
 
     public Draw(caption: Size, pos: Point, scale: number, color: Color, font: string | number, centered: boolean) {
         if (caption && !pos && !scale && !color && !font && !centered) {
-            pos = new Point(this.pos.X + caption.Width, this.pos.Y + caption.Height);
-            scale = this.scale;
-            color = this.color;
-            font = this.font;
-            centered = this.centered;
+            pos = new Point(this.Pos.X + caption.Width, this.Pos.Y + caption.Height);
+            scale = this.Scale;
+            color = this.Color;
+            font = this.Font;
+            centered = this.Centered;
         }
         const x = pos.X / 1280.0;
         const y = pos.Y / 720.0;

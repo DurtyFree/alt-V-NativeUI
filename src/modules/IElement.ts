@@ -1,7 +1,7 @@
 export default class IElement {
-    public enabled: boolean;
+    public Enabled: boolean;
 
 	constructor() {
-		this.enabled = true;
+		this.Enabled = true;
 	}
 }

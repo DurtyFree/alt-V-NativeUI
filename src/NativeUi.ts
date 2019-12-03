@@ -73,8 +73,8 @@ export default class NativeUI {
     private readonly _background: Sprite;
 
     public readonly Id: string = UUIDV4();
-    public readonly selectTextLocalized: string = alt.getGxtText("HUD_INPUT2");
-    public readonly backTextLocalized: string = alt.getGxtText("HUD_INPUT3");
+    public readonly SelectTextLocalized: string = alt.getGxtText("HUD_INPUT2");
+    public readonly BackTextLocalized: string = alt.getGxtText("HUD_INPUT3");
 
     public RecalculateDescriptionNextFrame: number = 1;
     public WidthOffset: number = 0;
@@ -106,10 +106,10 @@ export default class NativeUI {
     public readonly MenuChange = new LiteEvent();
 
     public get TitleScale() {
-        return this._titleResText.scale;
+        return this._titleResText.Scale;
     }
     public set TitleScale(scale: number) {
-        this._titleResText.scale = scale;
+        this._titleResText.Scale = scale;
     }
 
     public get Visible() {
@@ -270,26 +270,26 @@ export default class NativeUI {
     private RecalculateDescriptionPosition() {
         const count = (this.MenuItems.length > this._maxItemsOnScreen + 1) ? this._maxItemsOnScreen + 2 : this.MenuItems.length;
 
-        this._descriptionBar.size = new Size(431 + this.WidthOffset, 4);
-        this._descriptionRectangle.size = new Size(431 + this.WidthOffset, 30);
+        this._descriptionBar.Size = new Size(431 + this.WidthOffset, 4);
+        this._descriptionRectangle.Size = new Size(431 + this.WidthOffset, 30);
 
-        this._descriptionBar.pos = new Point(this._offset.X, 149 - 37 + this._extraOffset + this._offset.Y);
-        this._descriptionRectangle.pos = new Point(this._offset.X, 149 - 37 + this._extraOffset + this._offset.Y);
-        this._descriptionText.pos = new Point(this._offset.X + 8, 155 - 37 + this._extraOffset + this._offset.Y);
+        this._descriptionBar.Pos = new Point(this._offset.X, 149 - 37 + this._extraOffset + this._offset.Y);
+        this._descriptionRectangle.Pos = new Point(this._offset.X, 149 - 37 + this._extraOffset + this._offset.Y);
+        this._descriptionText.Pos = new Point(this._offset.X + 8, 155 - 37 + this._extraOffset + this._offset.Y);
 
-        this._descriptionBar.pos = new Point(this._offset.X, 38 * count + this._descriptionBar.pos.Y);
-        this._descriptionRectangle.pos = new Point(this._offset.X, 38 * count + this._descriptionRectangle.pos.Y);
-        this._descriptionText.pos = new Point(this._offset.X + 8, 38 * count + this._descriptionText.pos.Y);
+        this._descriptionBar.Pos = new Point(this._offset.X, 38 * count + this._descriptionBar.Pos.Y);
+        this._descriptionRectangle.Pos = new Point(this._offset.X, 38 * count + this._descriptionRectangle.Pos.Y);
+        this._descriptionText.Pos = new Point(this._offset.X + 8, 38 * count + this._descriptionText.Pos.Y);
     }
 
     public SetMenuWidthOffset(widthOffset: number) {
         this.WidthOffset = widthOffset;
         if (this._logo != null) {
-            this._logo.size = new Size(431 + this.WidthOffset, 107);
+            this._logo.Size = new Size(431 + this.WidthOffset, 107);
         }
         this._mainMenu.Items[0].pos = new Point((this.WidthOffset + this._offset.X + 431) / 2, 20 + this._offset.Y);
         if (this._counterText) {
-            this._counterText.pos = new Point(425 + this._offset.X + widthOffset, 110 + this._offset.Y);
+            this._counterText.Pos = new Point(425 + this._offset.X + widthOffset, 110 + this._offset.Y);
         }
         if (this._mainMenu.Items.length >= 2) {
             const tmp = this._mainMenu.Items[1];
@@ -364,7 +364,7 @@ export default class NativeUI {
 
     public set Subtitle(text: string) {
         this._subtitle = text;
-        this._subtitleResText.caption = text;
+        this._subtitleResText.Caption = text;
     }
 
     public GoLeft() {
@@ -572,7 +572,7 @@ export default class NativeUI {
             return;
 
         if (Screen.IsMouseInBounds(new Point(extraX, extraY), new Size(431 + this.WidthOffset, 18))) {
-            this._extraRectangleUp.color = new Color(30, 30, 30, 255);
+            this._extraRectangleUp.Color = new Color(30, 30, 30, 255);
             if (game.isControlJustPressed(0, 24) || game.isDisabledControlJustPressed(0, 24)) {
                 if (this.MenuItems.length > this._maxItemsOnScreen + 1)
                     this.GoUpOverflow();
@@ -580,10 +580,10 @@ export default class NativeUI {
                     this.GoUp();
             }
         } else
-            this._extraRectangleUp.color = new Color(0, 0, 0, 200);
+            this._extraRectangleUp.Color = new Color(0, 0, 0, 200);
 
         if (Screen.IsMouseInBounds(new Point(extraX, extraY + 18), new Size(431 + this.WidthOffset, 18))) {
-            this._extraRectangleDown.color = new Color(30, 30, 30, 255);
+            this._extraRectangleDown.Color = new Color(30, 30, 30, 255);
             if (game.isControlJustPressed(0, 24) || game.isDisabledControlJustPressed(0, 24)) {
                 if (this.MenuItems.length > this._maxItemsOnScreen + 1)
                     this.GoDownOverflow();
@@ -591,7 +591,7 @@ export default class NativeUI {
                     this.GoDown();
             }
         } else
-            this._extraRectangleDown.color = new Color(0, 0, 0, 200);
+            this._extraRectangleDown.Color = new Color(0, 0, 0, 200);
     }
 
     public ProcessControl() {
@@ -760,7 +760,7 @@ export default class NativeUI {
 
     public UpdateDescriptionCaption() {
         if (this.MenuItems.length) {
-            this._descriptionText.caption = this.MenuItems[this._activeItem % this.MenuItems.length].Description;
+            this._descriptionText.Caption = this.MenuItems[this._activeItem % this.MenuItems.length].Description;
             this._descriptionText.Wrap = 400;
             this.RecalculateDescriptionNextFrame++;
         }
@@ -772,10 +772,10 @@ export default class NativeUI {
         }
 
         this.RecalculateDescriptionPosition();
-        if (this.MenuItems.length > 0 && this._descriptionText.caption && this.MenuItems[this._activeItem % this.MenuItems.length].Description.trim() !== "") {
-            const numLines = Screen.GetLineCount(this._descriptionText.caption, this._descriptionText.pos, this._descriptionText.font, this._descriptionText.scale, this._descriptionText.Wrap);
+        if (this.MenuItems.length > 0 && this._descriptionText.Caption && this.MenuItems[this._activeItem % this.MenuItems.length].Description.trim() !== "") {
+            const numLines = Screen.GetLineCount(this._descriptionText.Caption, this._descriptionText.Pos, this._descriptionText.Font, this._descriptionText.Scale, this._descriptionText.Wrap);
 
-            this._descriptionRectangle.size = new Size(431 + this.WidthOffset, (numLines * 25) + 15);
+            this._descriptionRectangle.Size = new Size(431 + this.WidthOffset, (numLines * 25) + 15);
             if (numLines === 0) {
                 this.RecalculateDescriptionNextFrame++;
             }
@@ -789,8 +789,8 @@ export default class NativeUI {
         this._instructionalButtonsScaleform.callFunction("TOGGLE_MOUSE_BUTTONS", 0 as number);
         this._instructionalButtonsScaleform.callFunction("CREATE_CONTAINER");
 
-        this._instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 0 as number, game.getControlInstructionalButton(2, Control.PhoneSelect as number, false) as string, this.selectTextLocalized as string);
-        this._instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 1 as number, game.getControlInstructionalButton(2, Control.PhoneCancel as number, false) as string, this.backTextLocalized as string);
+        this._instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 0 as number, game.getControlInstructionalButton(2, Control.PhoneSelect as number, false) as string, this.SelectTextLocalized as string);
+        this._instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 1 as number, game.getControlInstructionalButton(2, Control.PhoneCancel as number, false) as string, this.BackTextLocalized as string);
 
         let count: number = 2;
         this._instructionalButtons.filter(b => b.ItemBind == null || this.MenuItems[this.CurrentSelection] == b.ItemBind).forEach((button) => {
@@ -829,7 +829,7 @@ export default class NativeUI {
         this.ProcessMouse();
         this.ProcessControl();
 
-        this._background.size = this.MenuItems.length > this._maxItemsOnScreen + 1
+        this._background.Size = this.MenuItems.length > this._maxItemsOnScreen + 1
             ? new Size(431 + this.WidthOffset, 38 * (this._maxItemsOnScreen + 1))
             : new Size(431 + this.WidthOffset, 38 * this.MenuItems.length);
         this._background.Draw();
@@ -855,7 +855,7 @@ export default class NativeUI {
                 count++;
             }
             if (this._counterText && this._counterOverride) {
-                this._counterText.caption = this._counterPretext + this._counterOverride;
+                this._counterText.Caption = this._counterPretext + this._counterOverride;
                 this._counterText.Draw();
             }
         } else {
@@ -866,9 +866,9 @@ export default class NativeUI {
                 count++;
             }
 
-            this._extraRectangleUp.size = new Size(431 + this.WidthOffset, 18);
-            this._extraRectangleDown.size = new Size(431 + this.WidthOffset, 18);
-            this._upAndDownSprite.pos = new Point(190 + this._offset.X + this.WidthOffset / 2, 147 + 37 * (this._maxItemsOnScreen + 1) + this._offset.Y - 37 + this._extraOffset);
+            this._extraRectangleUp.Size = new Size(431 + this.WidthOffset, 18);
+            this._extraRectangleDown.Size = new Size(431 + this.WidthOffset, 18);
+            this._upAndDownSprite.Pos = new Point(190 + this._offset.X + this.WidthOffset / 2, 147 + 37 * (this._maxItemsOnScreen + 1) + this._offset.Y - 37 + this._extraOffset);
 
             this._extraRectangleUp.Draw();
             this._extraRectangleDown.Draw();
@@ -877,9 +877,9 @@ export default class NativeUI {
             if (this._counterText) {
                 if (!this._counterOverride) {
                     const cap = this.CurrentSelection + 1 + " / " + this.MenuItems.length;
-                    this._counterText.caption = this._counterPretext + cap;
+                    this._counterText.Caption = this._counterPretext + cap;
                 } else {
-                    this._counterText.caption = this._counterPretext + this._counterOverride;
+                    this._counterText.Caption = this._counterPretext + this._counterOverride;
                 }
                 this._counterText.Draw();
             }
