@@ -53,9 +53,9 @@ export default class NativeUI {
     private _minItem: number;
     private _maxItem: number = this._maxItemsOnScreen;
     private _mouseEdgeEnabled: boolean = true;
-    private _addedSpriteBanner: boolean = false;
     private _bannerSprite: Sprite = null;
     private _bannerRectangle: ResRectangle = null;
+    private _recalculateDescriptionNextFrame: number = 1;
 
     private readonly _instructionalButtons: InstructionalButton[] = [];
     private readonly _instructionalButtonsScaleform: Scaleform;
@@ -76,7 +76,6 @@ export default class NativeUI {
     public readonly SelectTextLocalized: string = alt.getGxtText("HUD_INPUT2");
     public readonly BackTextLocalized: string = alt.getGxtText("HUD_INPUT3");
 
-    public RecalculateDescriptionNextFrame: number = 1;
     public WidthOffset: number = 0;
     public ParentMenu: NativeUI = null;
     public ParentItem: UIMenuItem = null;
@@ -806,13 +805,13 @@ export default class NativeUI {
         if (this.MenuItems.length) {
             this._descriptionText.Caption = this.MenuItems[this._activeItem % this.MenuItems.length].Description;
             this._descriptionText.Wrap = 400;
-            this.RecalculateDescriptionNextFrame++;
+            this._recalculateDescriptionNextFrame++;
         }
     }
 
     public CalculateDescription() {
-        if (this.RecalculateDescriptionNextFrame > 0) {
-            this.RecalculateDescriptionNextFrame--;
+        if (this._recalculateDescriptionNextFrame > 0) {
+            this._recalculateDescriptionNextFrame--;
         }
 
         this.RecalculateDescriptionPosition();
@@ -821,7 +820,7 @@ export default class NativeUI {
 
             this._descriptionRectangle.Size = new Size(431 + this.WidthOffset, (numLines * 25) + 15);
             if (numLines === 0) {
-                this.RecalculateDescriptionNextFrame++;
+                this._recalculateDescriptionNextFrame++;
             }
         }
     }
@@ -865,8 +864,8 @@ export default class NativeUI {
                 this._descriptionRectangle.LoadTextureDictionary();
             if (!this._upAndDownSprite.IsTextureDictionaryLoaded)
                 this._upAndDownSprite.LoadTextureDictionary();
-            if (!this.RecalculateDescriptionNextFrame)
-                this.RecalculateDescriptionNextFrame++;
+            if (!this._recalculateDescriptionNextFrame)
+                this._recalculateDescriptionNextFrame++;
         }
         this._mainMenu.Draw();
 
@@ -878,7 +877,7 @@ export default class NativeUI {
             : new Size(431 + this.WidthOffset, 38 * this.MenuItems.length);
         this._background.Draw();
 
-        if (this.RecalculateDescriptionNextFrame) {
+        if (this._recalculateDescriptionNextFrame) {
             this.CalculateDescription();
         }
 

@@ -48,15 +48,14 @@ export default class NativeUI {
         this._maxItemsOnScreen = 9;
         this._maxItem = this._maxItemsOnScreen;
         this._mouseEdgeEnabled = true;
-        this._addedSpriteBanner = false;
         this._bannerSprite = null;
         this._bannerRectangle = null;
+        this._recalculateDescriptionNextFrame = 1;
         this._instructionalButtons = [];
         this._defaultTitleScale = 1.15;
         this.Id = UUIDV4();
         this.SelectTextLocalized = alt.getGxtText("HUD_INPUT2");
         this.BackTextLocalized = alt.getGxtText("HUD_INPUT3");
-        this.RecalculateDescriptionNextFrame = 1;
         this.WidthOffset = 0;
         this.ParentMenu = null;
         this.ParentItem = null;
@@ -702,19 +701,19 @@ export default class NativeUI {
         if (this.MenuItems.length) {
             this._descriptionText.Caption = this.MenuItems[this._activeItem % this.MenuItems.length].Description;
             this._descriptionText.Wrap = 400;
-            this.RecalculateDescriptionNextFrame++;
+            this._recalculateDescriptionNextFrame++;
         }
     }
     CalculateDescription() {
-        if (this.RecalculateDescriptionNextFrame > 0) {
-            this.RecalculateDescriptionNextFrame--;
+        if (this._recalculateDescriptionNextFrame > 0) {
+            this._recalculateDescriptionNextFrame--;
         }
         this.RecalculateDescriptionPosition();
         if (this.MenuItems.length > 0 && this._descriptionText.Caption && this.MenuItems[this._activeItem % this.MenuItems.length].Description.trim() !== "") {
             const numLines = Screen.GetLineCount(this._descriptionText.Caption, this._descriptionText.Pos, this._descriptionText.Font, this._descriptionText.Scale, this._descriptionText.Wrap);
             this._descriptionRectangle.Size = new Size(431 + this.WidthOffset, (numLines * 25) + 15);
             if (numLines === 0) {
-                this.RecalculateDescriptionNextFrame++;
+                this._recalculateDescriptionNextFrame++;
             }
         }
     }
@@ -751,8 +750,8 @@ export default class NativeUI {
                 this._descriptionRectangle.LoadTextureDictionary();
             if (!this._upAndDownSprite.IsTextureDictionaryLoaded)
                 this._upAndDownSprite.LoadTextureDictionary();
-            if (!this.RecalculateDescriptionNextFrame)
-                this.RecalculateDescriptionNextFrame++;
+            if (!this._recalculateDescriptionNextFrame)
+                this._recalculateDescriptionNextFrame++;
         }
         this._mainMenu.Draw();
         this.ProcessMouse();
@@ -761,7 +760,7 @@ export default class NativeUI {
             ? new Size(431 + this.WidthOffset, 38 * (this._maxItemsOnScreen + 1))
             : new Size(431 + this.WidthOffset, 38 * this.MenuItems.length);
         this._background.Draw();
-        if (this.RecalculateDescriptionNextFrame) {
+        if (this._recalculateDescriptionNextFrame) {
             this.CalculateDescription();
         }
         if (this.MenuItems.length > 0) {
