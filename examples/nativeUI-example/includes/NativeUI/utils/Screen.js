@@ -27,7 +27,7 @@ export default class Screen {
             (mousePosition.Y > topLeft.Y && mousePosition.Y < topLeft.Y + boxSize.Height));
     }
     static GetTextWidth(text, font, scale) {
-        game.beginTextCommandGetWidth("THREESTRINGS");
+        game.beginTextCommandGetWidth("CELL_EMAIL_BCON");
         Text.AddLongString(text);
         game.setTextFont(font);
         game.setTextScale(1.0, scale);
@@ -36,7 +36,7 @@ export default class Screen {
         return res.Width * width;
     }
     static GetLineCount(text, position, font, scale, wrap) {
-        game.beginTextCommandLineCount("THREESTRINGS");
+        game.beginTextCommandLineCount("CELL_EMAIL_BCON");
         Text.AddLongString(text);
         const res = Screen.ResolutionMaintainRatio;
         const x = position.X / res.Width;

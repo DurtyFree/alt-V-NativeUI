@@ -75,7 +75,7 @@ export default class ResText extends Text {
                 game.setTextWrap(x, xsize);
             }
         }
-        game.beginTextCommandDisplayText("STRING");
+        game.beginTextCommandDisplayText("CELL_EMAIL_BCON");
         Text.AddLongString(caption);
         game.endTextCommandDisplayText(x, y, 0);
     }

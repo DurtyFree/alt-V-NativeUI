@@ -53,6 +53,7 @@ export default class NativeUI {
         this._recalculateDescriptionNextFrame = 1;
         this._instructionalButtons = [];
         this._defaultTitleScale = 1.15;
+        this._maxMenuItems = 1000;
         this.Id = UUIDV4();
         this.SelectTextLocalized = alt.getGxtText("HUD_INPUT2");
         this.BackTextLocalized = alt.getGxtText("HUD_INPUT3");
@@ -187,7 +188,7 @@ export default class NativeUI {
     }
     set CurrentSelection(v) {
         this.MenuItems[this._activeItem % this.MenuItems.length].Selected = false;
-        this._activeItem = 1000 - (1000 % this.MenuItems.length) + v;
+        this._activeItem = this._maxMenuItems - (this._maxMenuItems % this.MenuItems.length) + v;
         if (this.CurrentSelection > this._maxItem) {
             this._maxItem = this.CurrentSelection;
             this._minItem = this.CurrentSelection - this._maxItemsOnScreen;
@@ -277,14 +278,14 @@ export default class NativeUI {
     }
     RefreshIndex() {
         if (this.MenuItems.length == 0) {
-            this._activeItem = 1000;
+            this._activeItem = this._maxMenuItems;
             this._maxItem = this._maxItemsOnScreen;
             this._minItem = 0;
             return;
         }
         for (let i = 0; i < this.MenuItems.length; i++)
             this.MenuItems[i].Selected = false;
-        this._activeItem = 1000 - (1000 % this.MenuItems.length);
+        this._activeItem = this._maxMenuItems - (this._maxMenuItems % this.MenuItems.length);
         this._maxItem = this._maxItemsOnScreen;
         this._minItem = 0;
         if (this._visible) {
@@ -597,7 +598,7 @@ export default class NativeUI {
                 this._minItem = this.MenuItems.length - this._maxItemsOnScreen - 1;
                 this._maxItem = this.MenuItems.length - 1;
                 this.MenuItems[this._activeItem % this.MenuItems.length].Selected = false;
-                this._activeItem = 1000 - (1000 % this.MenuItems.length);
+                this._activeItem = this._maxMenuItems - (this._maxMenuItems % this.MenuItems.length);
                 this._activeItem += this.MenuItems.length - 1;
                 this.MenuItems[this._activeItem % this.MenuItems.length].Selected = true;
             }
@@ -636,7 +637,7 @@ export default class NativeUI {
                 this._minItem = 0;
                 this._maxItem = this._maxItemsOnScreen;
                 this.MenuItems[this._activeItem % this.MenuItems.length].Selected = false;
-                this._activeItem = 1000 - (1000 % this.MenuItems.length);
+                this._activeItem = this._maxMenuItems - (this._maxMenuItems % this.MenuItems.length);
                 this.MenuItems[this._activeItem % this.MenuItems.length].Selected = true;
             }
             else {

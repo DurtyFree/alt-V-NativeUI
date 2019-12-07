@@ -41,7 +41,7 @@ export default class Screen {
 
     public static GetTextWidth(text: string, font: Font, scale: number): number {
         // Start by requesting the game to start processing a width measurement
-        game.beginTextCommandGetWidth("THREESTRINGS"); // CELL_EMAIL_BCON
+        game.beginTextCommandGetWidth("CELL_EMAIL_BCON");
         // Add the text string
         Text.AddLongString(text);
 
@@ -58,7 +58,7 @@ export default class Screen {
 
     public static GetLineCount(text: string, position: Point, font: Font, scale: number, wrap: number): number {
         // Tell the game that we are going to request the number of lines
-        game.beginTextCommandLineCount("THREESTRINGS"); // CELL_EMAIL_BCON
+        game.beginTextCommandLineCount("CELL_EMAIL_BCON");
         // Add the text that has been sent to us
         Text.AddLongString(text);
 

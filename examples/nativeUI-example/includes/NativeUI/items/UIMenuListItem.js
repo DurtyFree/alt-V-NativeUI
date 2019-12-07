@@ -113,7 +113,7 @@ export default class UIMenuListItem extends UIMenuItem {
                 ? this.HighlightedForeColor
                 : this.ForeColor
             : new Color(163, 159, 148);
-        this._arrowLeft.Pos = new Point(390 - offset + this.Offset.X + this.Parent.WidthOffset, this._arrowLeft.Pos.Y);
+        this._arrowLeft.Pos = new Point(380 - offset + this.Offset.X + this.Parent.WidthOffset, this._arrowLeft.Pos.Y);
         if (this.Selected) {
             this._arrowLeft.Draw();
             this._arrowRight.Draw();
