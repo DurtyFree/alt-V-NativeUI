@@ -117,6 +117,14 @@ export default class NativeUI {
         return this._titleResText;
     }
 
+    public get MaxItemsVisible(): number {
+        return this._maxItemsOnScreen;
+    }
+
+    public set MaxItemsVisible(value: number) {
+        this._maxItemsOnScreen = value;
+    }
+
     public get Title(): string {
         return this._titleResText.Caption;
     }
@@ -209,6 +217,7 @@ export default class NativeUI {
             this._maxItem = this._maxItemsOnScreen + this.CurrentSelection;
             this._minItem = this.CurrentSelection;
         }
+        this.IndexChange.emit(this.CurrentSelection, this.MenuItems[this._activeItem % this.MenuItems.length]);
         this.UpdateDescriptionCaption();
     }
 
@@ -515,7 +524,17 @@ export default class NativeUI {
         }
         it.fireEvent();
     }
-
+    
+    public HasCurrentSelectionChildren() {
+        const it = <UIMenuCheckboxItem>this.MenuItems[this.CurrentSelection];
+        if (this.MenuItems[this.CurrentSelection] instanceof UIMenuItem) {
+            if (this.Children.has(it.Id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public IsMouseInListItemArrows(item: UIMenuItem, topLeft: Point, safezone: any) {
         game.beginTextCommandGetWidth("jamyfafi");
         game.addTextComponentSubstringPlayerName(item.Text);
