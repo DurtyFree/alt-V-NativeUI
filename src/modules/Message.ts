@@ -39,13 +39,13 @@ export default class Message {
         }, this._transitionOutTimeMs);
     }
 
-    protected static ShowCustomShard(funcName: string, time: number = 5000, ...funcArgs: any[]): void {
+    public static ShowCustomShard(funcName: string, time: number = 5000, ...funcArgs: any[]): void {
         this.ShowComplexCustomShard(() => {
             this._scaleform.callFunction(funcName, ...funcArgs);
         }, time);
     }
 
-    protected static ShowComplexCustomShard(messageHandler: { (): void }, time: number = 5000): void {
+    public static ShowComplexCustomShard(messageHandler: { (): void }, time: number = 5000): void {
         this.Load();
         if (this._messageVisible) { //When a shard is already shown
             this.TransitionOut();
