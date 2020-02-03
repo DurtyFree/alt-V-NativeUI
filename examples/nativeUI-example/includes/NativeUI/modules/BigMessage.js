@@ -26,6 +26,9 @@ export default class BigMessage extends Message {
     static ShowWeaponPurchasedMessage(bigMessage, weaponName, weaponHash, time = 5000) {
         this.ShowCustomShard("SHOW_WEAPON_PURCHASED", time, bigMessage, weaponName, weaponHash, "", 100);
     }
+    static ShowWastedMessage(title, message, color, darkenBackground, time = 5000) {
+        this.ShowCustomShard("SHOW_SHARD_WASTED_MP_MESSAGE", time, title, message, color, darkenBackground);
+    }
     static ShowMpMessageLarge(msg, subtitle = "", time = 5000) {
         this.ShowComplexCustomShard(() => {
             this.Scaleform.callFunction("SHOW_CENTERED_MP_MESSAGE_LARGE", msg, subtitle, 100, true, 100);

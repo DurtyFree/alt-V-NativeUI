@@ -20,7 +20,7 @@ export default class Screen {
 
     public static MousePosition(relative: boolean = false): { X: number; Y: number } {
         const res = Screen.ResolutionMaintainRatio;
-        const cursor = alt.getCursorPos();
+        const cursor: { x: number; y: number; } = alt.getCursorPos() as { x: number; y: number; };
         let [mouseX, mouseY] = [cursor.x, cursor.y];
         if (relative)
             [mouseX, mouseY] = [cursor.x / res.Width, cursor.y / res.Height];
