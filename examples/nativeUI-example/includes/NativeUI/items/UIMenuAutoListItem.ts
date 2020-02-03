@@ -20,6 +20,7 @@ export default class UIMenuAutoListItem extends UIMenuItem {
     private _lowerThreshold: number = 0;
     private _upperThreshold: number = 10;
     private _preCaptionText: string = '';
+    private _postCaptionText: string = '';
     private _selectedValue: number;
     
     public get PreCaptionText() {
@@ -29,7 +30,17 @@ export default class UIMenuAutoListItem extends UIMenuItem {
         if (!text) throw new Error("The pre caption text can't be null");
         if (typeof text !== 'string') throw new Error("The pre caption text must be a string");
         this._preCaptionText = text;
-        this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._selectedValue.toString(), this._itemText && this._itemText.Font ? this._itemText.Font : 0, 0.35); // this._itemText && this._itemText.scale ? this._itemText.scale : 0.35
+        this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._selectedValue.toString() + this.PostCaptionText, this._itemText && this._itemText.Font ? this._itemText.Font : 0, 0.35); // this._itemText && this._itemText.scale ? this._itemText.scale : 0.35
+    }
+
+    public get PostCaptionText() {
+        return this._postCaptionText;
+    }
+    public set PostCaptionText(text: string) {
+        if (!text) throw new Error("The post caption text can't be null");
+        if (typeof text !== 'string') throw new Error("The post caption text must be a string");
+        this._postCaptionText = text;
+        this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._selectedValue.toString() + this.PostCaptionText, this._itemText && this._itemText.Font ? this._itemText.Font : 0, 0.35); // this._itemText && this._itemText.scale ? this._itemText.scale : 0.35
     }
 
     public get LeftMoveThreshold() {
@@ -81,7 +92,7 @@ export default class UIMenuAutoListItem extends UIMenuItem {
         if (value < this._lowerThreshold || value > this._upperThreshold) throw new Error("The value can not be outside the lower or upper limits");
 
         this._selectedValue = value;
-        this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._selectedValue.toString(), this._itemText && this._itemText.Font ? this._itemText.Font : 0, this._itemText && this._itemText.Scale ? this._itemText.Scale : 0.35);
+        this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._selectedValue.toString() + this.PostCaptionText, this._itemText && this._itemText.Font ? this._itemText.Font : 0, this._itemText && this._itemText.Scale ? this._itemText.Scale : 0.35);
     }
 
     constructor(text: string, description: string = "", lowerThreshold: number = 0, upperThreshold: number = 10, startValue: number = 0, data: any = null) {
@@ -121,7 +132,7 @@ export default class UIMenuAutoListItem extends UIMenuItem {
                 : this.ForeColor
             : new Color(163, 159, 148);
 
-        this._itemText.Caption = this.PreCaptionText + this._selectedValue;
+        this._itemText.Caption = this.PreCaptionText + this._selectedValue + this.PostCaptionText;
 
         this._arrowLeft.Color = this.Enabled
             ? this.Selected
