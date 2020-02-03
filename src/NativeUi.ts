@@ -29,6 +29,7 @@ import Scaleform from './utils/Scaleform';
 import BigMessage from './modules/BigMessage';
 import MidsizedMessage from './modules/MidsizedMessage';
 import UIMenuDynamicListItem from './items/UIMenuDynamicListItem';
+import Funcs from '../Funcs';
 
 let menuPool: NativeUI[] = [];
 
@@ -82,6 +83,7 @@ export default class NativeUI {
     public ParentItem: UIMenuItem = null;
     public Children: Map<string, NativeUI>; // (UUIDV4, NativeUI)
     public MouseControlsEnabled: boolean = false;
+    public CloseableByUser: boolean = true;
 
     public AUDIO_LIBRARY: string = "HUD_FRONTEND_DEFAULT_SOUNDSET";
     public AUDIO_UPDOWN: string = "NAV_UP_DOWN";
@@ -123,6 +125,7 @@ export default class NativeUI {
 
     public set MaxItemsVisible(value: number) {
         this._maxItemsOnScreen = value;
+        this._maxItem = value;
     }
 
     public get Title(): string {
@@ -591,7 +594,7 @@ export default class NativeUI {
                 if (uiMenuItem.Hovered && res == 1 && (this.MenuItems[i] instanceof UIMenuListItem || this.MenuItems[i] instanceof UIMenuAutoListItem || this.MenuItems[i] instanceof UIMenuDynamicListItem)) {
                     game.setMouseCursorSprite(5);
                 }
-                if (game.isControlJustPressed(0, 24) || game.isDisabledControlJustPressed(0, 24))
+                if (game.isControlJustReleased(0, 24) || game.isDisabledControlJustReleased(0, 24))
                     if (uiMenuItem.Selected && uiMenuItem.Enabled) {
                         if ((this.MenuItems[i] instanceof UIMenuListItem || this.MenuItems[i] instanceof UIMenuAutoListItem || this.MenuItems[i] instanceof UIMenuDynamicListItem)
                             && this.IsMouseInListItemArrows(this.MenuItems[i], new Point(xpos, ypos), 0) > 0) {
@@ -699,7 +702,7 @@ export default class NativeUI {
             this.GoRight();
         } else if (game.isControlJustReleased(0, 175)) {
             this._lastLeftRightNavigation = 0;
-        } else if (game.isControlJustPressed(0, 201)) { // Select            
+        } else if (game.isControlJustReleased(0, 201)) { // Select            
             this.SelectItem();
         }
     }
@@ -786,14 +789,16 @@ export default class NativeUI {
     }
 
     public GoBack() {
-        this.Visible = false;
         if (this.ParentMenu != null) {
+            this.Visible = false;
             this.ParentMenu.Visible = true;
             this.MenuChange.emit(this.ParentMenu, false);
-        } else {
+            this.MenuClose.emit(false);
+        } else if (this.CloseableByUser) {
+            this.Visible = false;
             this.CleanUp(true);
+            this.MenuClose.emit(false);
         }
-        this.MenuClose.emit(false);
     }
 
     public BindMenuToItem(menuToBind: NativeUI, itemToBindTo: UIMenuItem) {

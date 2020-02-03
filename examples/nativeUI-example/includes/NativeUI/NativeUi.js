@@ -61,6 +61,7 @@ export default class NativeUI {
         this.ParentMenu = null;
         this.ParentItem = null;
         this.MouseControlsEnabled = false;
+        this.CloseableByUser = true;
         this.AUDIO_LIBRARY = "HUD_FRONTEND_DEFAULT_SOUNDSET";
         this.AUDIO_UPDOWN = "NAV_UP_DOWN";
         this.AUDIO_LEFTRIGHT = "NAV_LEFT_RIGHT";
@@ -116,6 +117,13 @@ export default class NativeUI {
     }
     GetTitle() {
         return this._titleResText;
+    }
+    get MaxItemsVisible() {
+        return this._maxItemsOnScreen;
+    }
+    set MaxItemsVisible(value) {
+        this._maxItemsOnScreen = value;
+        this._maxItem = value;
     }
     get Title() {
         return this._titleResText.Caption;
@@ -197,6 +205,7 @@ export default class NativeUI {
             this._maxItem = this._maxItemsOnScreen + this.CurrentSelection;
             this._minItem = this.CurrentSelection;
         }
+        this.IndexChange.emit(this.CurrentSelection, this.MenuItems[this._activeItem % this.MenuItems.length]);
         this.UpdateDescriptionCaption();
     }
     DisableInstructionalButtons(disable) {
@@ -420,6 +429,15 @@ export default class NativeUI {
         }
         it.fireEvent();
     }
+    HasCurrentSelectionChildren() {
+        const it = this.MenuItems[this.CurrentSelection];
+        if (this.MenuItems[this.CurrentSelection] instanceof UIMenuItem) {
+            if (this.Children.has(it.Id)) {
+                return true;
+            }
+        }
+        return false;
+    }
     IsMouseInListItemArrows(item, topLeft, safezone) {
         game.beginTextCommandGetWidth("jamyfafi");
         game.addTextComponentSubstringPlayerName(item.Text);
@@ -472,7 +490,7 @@ export default class NativeUI {
                 if (uiMenuItem.Hovered && res == 1 && (this.MenuItems[i] instanceof UIMenuListItem || this.MenuItems[i] instanceof UIMenuAutoListItem || this.MenuItems[i] instanceof UIMenuDynamicListItem)) {
                     game.setMouseCursorSprite(5);
                 }
-                if (game.isControlJustPressed(0, 24) || game.isDisabledControlJustPressed(0, 24))
+                if (game.isControlJustReleased(0, 24) || game.isDisabledControlJustReleased(0, 24))
                     if (uiMenuItem.Selected && uiMenuItem.Enabled) {
                         if ((this.MenuItems[i] instanceof UIMenuListItem || this.MenuItems[i] instanceof UIMenuAutoListItem || this.MenuItems[i] instanceof UIMenuDynamicListItem)
                             && this.IsMouseInListItemArrows(this.MenuItems[i], new Point(xpos, ypos), 0) > 0) {
@@ -586,7 +604,7 @@ export default class NativeUI {
         else if (game.isControlJustReleased(0, 175)) {
             this._lastLeftRightNavigation = 0;
         }
-        else if (game.isControlJustPressed(0, 201)) {
+        else if (game.isControlJustReleased(0, 201)) {
             this.SelectItem();
         }
     }
@@ -668,15 +686,17 @@ export default class NativeUI {
         this.UpdateDescriptionCaption();
     }
     GoBack() {
-        this.Visible = false;
         if (this.ParentMenu != null) {
+            this.Visible = false;
             this.ParentMenu.Visible = true;
             this.MenuChange.emit(this.ParentMenu, false);
+            this.MenuClose.emit(false);
         }
-        else {
+        else if (this.CloseableByUser) {
+            this.Visible = false;
             this.CleanUp(true);
+            this.MenuClose.emit(false);
         }
-        this.MenuClose.emit(false);
     }
     BindMenuToItem(menuToBind, itemToBindTo) {
         if (!this.MenuItems.includes(itemToBindTo)) {
