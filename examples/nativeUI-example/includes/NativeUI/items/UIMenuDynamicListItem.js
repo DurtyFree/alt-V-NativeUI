@@ -70,7 +70,7 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
         super.Draw();
         if (this._selectedValue == undefined) {
             if (this._selectedStartValueHandler != null) {
-                this._selectedValue = this._selectedStartValueHandler();
+                this.SelectedValue = this._selectedStartValueHandler();
             }
             else {
                 this._selectedValue = "";
