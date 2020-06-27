@@ -47,24 +47,28 @@ export default class Text extends IElement {
             return;
 
         const maxStringLength = 99;
+        const splittedArrayOfStrings = [];
+        
+        let i = 0;
+        let position;
+        let next;
+        let currentText;
 
-        for (let i = 0, position; i < text.length; i += maxStringLength) {
-            let currentText = text.substr(i, i + maxStringLength);
-            let currentIndex = i;
-            if ((currentText.match(/~/g) || []).length % 2 !== 0) {
+        while(i < text.length) {
+            next = (i + maxStringLength) > text.length ? text.length : i + maxStringLength;
+            position = next;
+            currentText = text.substring(i, position);
+            if(((currentText.match(/~/g)||[]).length % 2) !== 0 && (i + maxStringLength) <= text.length) {
                 position = currentText.lastIndexOf('~');
-                //if(position > 0 && currentText[position - 1] === ' ') { // Doesn't the substring auto add a space?
-                //	position--;
-                //}
-                i -= (maxStringLength - position);
+                currentText = text.substring(i, i + position);
+                i = i + position;
             } else {
-                position = Math.min(maxStringLength, text.length - currentIndex);
-                if(currentText[maxStringLength - 2] === '~') {
-                    position -= 2;
-                    i -= 2;
-                }
+                i = next;
             }
-            game.addTextComponentSubstringPlayerName(text.substr(currentIndex, position));
+            splittedArrayOfStrings.push(currentText);
+        }
+        for(const str of splittedArrayOfStrings) {
+            game.addTextComponentSubstringPlayerName(str);
         }
     }
 }
