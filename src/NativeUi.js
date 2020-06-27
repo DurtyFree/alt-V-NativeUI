@@ -726,6 +726,8 @@ export default class NativeUI {
         }
     }
     CalculateDescription() {
+        if (this.MenuItems.length <= 0)
+            return;
         if (this._recalculateDescriptionNextFrame > 0) {
             this._recalculateDescriptionNextFrame--;
         }
