@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "moduleResolution": "Node",
+      "declaration": true,
+      "resolveJsonModule": true,
+      "declarationDir": "dist/nativeui/types",
+      "allowSyntheticDefaultImports": true,
+      "removeComments": true,
+      "sourceMap": false,
+      "typeRoots": ["./node_modules/@types", "./node_modules/@altv"],
+      "noUnusedLocals": true,
+      "noUnusedParameters": false,
+      "noImplicitReturns": true,
+      "allowJs": false,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true
+    },
+    "include": [
+      "src"
+    ]
+  }

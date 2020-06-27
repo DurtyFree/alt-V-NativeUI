@@ -1,4 +1,4 @@
-import * as alt from 'alt';
+import * as alt from 'alt-client';
 import game from 'natives';
 import BadgeStyle from "./enums/BadgeStyle";
 import Font from "./enums/Font";
@@ -29,7 +29,6 @@ import Scaleform from './utils/Scaleform';
 import BigMessage from './modules/BigMessage';
 import MidsizedMessage from './modules/MidsizedMessage';
 import UIMenuDynamicListItem from './items/UIMenuDynamicListItem';
-import Funcs from '../Funcs';
 
 let menuPool: NativeUI[] = [];
 
@@ -583,7 +582,7 @@ export default class NativeUI {
         for (let i = this._minItem; i <= limit; i++) {
             let xpos = this._offset.X;
             let ypos = this._offset.Y + 144 - 37 + this._extraOffset + counter * 38;
-            let yposSelected = this._offset.Y + 144 - 37 + this._extraOffset + this._safezoneOffset.Y + this.CurrentSelection * 38;
+            // let yposSelected = this._offset.Y + 144 - 37 + this._extraOffset + this._safezoneOffset.Y + this.CurrentSelection * 38;
             let xsize = 431 + this.WidthOffset;
             const ysize = 38;
             const uiMenuItem = this.MenuItems[i];

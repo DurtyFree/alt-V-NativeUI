@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import Scaleform from '../utils/Scaleform';
 
 export default class Message {

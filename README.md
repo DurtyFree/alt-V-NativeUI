@@ -1,18 +1,28 @@
 # alt:V-NativeUI
 This project is a (fully TypeScript compatible) port of RageMP-NativeUI [Kar](https://github.com/karscopsandrobbers/RAGEMP-NativeUI) for alt:V. It provides a simple way to use NativeUI menus in your clientside scripts. A lot of credits to [datWeazel](https://github.com/datWeazel/alt-V-NativeUI) who made the initial port of the RageMP-NativeUI.
 
-__NativeUI is not a standalone resource!  
-You need to include NativeUI in every resource in which you want to use NativeUI menus!__
-# Usage
-1. Create a folder called `includes` inside the resource folder in which you want to use NativeUI. 
-2. Add the new `includes` folder to client-files in the `resource.cfg`. 
-	1. Use `includes/*` to automatically add all subfolders and files inside `includes` to your resource
-3. Create another folder called `NativeUIMenu` inside the `includes` folder.
-4. Download NativeUI from github and extract all files inside the `src` folder to your `NativeUIMenu` folder
-	1. Your file structure should look something like this:  
-	`altv-Server/resources/yourResource/includes/NativeUIMenu/NativeUI`
-5. Finally just include NativeUI inside the clientside script where you want to use NativeUI with this line:  
-`import * as NativeUI from 'includes/NativeUIMenu/NativeUI';`
+## Usage:
+### With bundler:
+1. Create in your `package.json` location file named `.npmrc` and add this line:
+    ```
+    @durtyfree:registry=https://npm.pkg.github.com
+    ```
+2. Install by run `npm install --save @durtyfree/altv-nativeui`.
+3. Add this line to top of file where you want to use NativeUI.
+    ```typescript
+    import * as NativeUI from "@durtyfree/altv-nativeui";
+    ```
+### Without bundler:
+1. Download `.zip` archive you want from [releases page](https://github.com/DurtyFree/alt-V-NativeUI/releases).
+2. Unpack archive in client's folder, and import like any other file:
+    ```javascript
+   # nativeui-min
+   import * as NativeUI from "nativeui/nativeui.min.js";
+   # nativeui
+   import * as NativeUi from "nativeui/nativeui.js";
+    ```
+   - __Don't forget include nativeui folder in `client-files` section of your `resource.cfg` (if needed)__
+
   
 See [examples folder]( https://github.com/DurtyFree/alt-V-NativeUI/tree/master/examples/nativeUI-example) for alt:V resource examples. 
 

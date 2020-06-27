@@ -1,4 +1,4 @@
-import * as alt from 'alt';
+import * as alt from 'alt-client';
 import game from 'natives';
 import Font from "../enums/Font";
 import Point from "./Point";

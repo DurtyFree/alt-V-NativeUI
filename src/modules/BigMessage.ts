@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import HudColor from '../enums/HudColor';
 import Message from './Message';
 

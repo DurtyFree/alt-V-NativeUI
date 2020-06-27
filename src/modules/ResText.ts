@@ -1,4 +1,4 @@
-import * as alt from 'alt';
+import * as alt from 'alt-client';
 import Alignment from "../enums/Alignment";
 import game from 'natives';
 import Color from "../utils/Color";

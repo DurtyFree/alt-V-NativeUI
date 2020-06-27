@@ -1,0 +1,49 @@
+{
+  "name": "@DurtyFree/altv-nativeui",
+  "version": "1.4.1",
+  "description": "NativeUI for GTA V alt:V Multiplayer mod written in Javascript / TypeScript",
+  "main": "dist/nativeui/nativeui.min.js",
+  "types": "dist/nativeui/types/NativeUi.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -cw"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DurtyFree/alt-V-NativeUI.git"
+  },
+  "keywords": [
+    "altv",
+    "nativeui"
+  ],
+  "author": {
+    "name": "DurtyFree",
+    "url": "https://github.com/DurtyFree"
+  },
+  "maintainers": [
+    {
+      "name": "DurtyFree",
+      "url": "https://github.com/DurtyFree"
+    }
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/DurtyFree/alt-V-NativeUI/issues"
+  },
+  "homepage": "https://github.com/DurtyFree/alt-V-NativeUI#readme",
+  "devDependencies": {
+    "@altv/types-client": "^1.1.0",
+    "@altv/types-natives": "^1.1.0",
+    "@types/node": "^14.0.11",
+    "rollup": "^2.15.0",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "typescript": "^3.9.5"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}
