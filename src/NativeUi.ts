@@ -371,6 +371,7 @@ export default class NativeUI {
         for (let i = 0; i < this.MenuItems.length; i++) {
             if (this.MenuItems[i] === item) {
                 this.MenuItems.splice(i, 1);
+                break;
             }
         }
         this.RefreshIndex();
