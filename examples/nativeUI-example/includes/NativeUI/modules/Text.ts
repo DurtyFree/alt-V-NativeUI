@@ -59,6 +59,10 @@ export default class Text extends IElement {
                 i -= (maxStringLength - position);
             } else {
                 position = Math.min(maxStringLength, text.length - currentIndex);
+                if(currentText[maxStringLength - 2] === '~') {
+                    position -= 2;
+                    i -= 2;
+                }
             }
             game.addTextComponentSubstringPlayerName(text.substr(currentIndex, position));
         }
