@@ -18,7 +18,7 @@ enum BadgeStyle {
 	Mask,
 	Michael,
 	Star,
-	Tatoo,
+	Tattoo,
 	Trevor,
 	Lock,
 	Tick,

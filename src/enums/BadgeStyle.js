@@ -19,7 +19,7 @@ var BadgeStyle;
     BadgeStyle[BadgeStyle["Mask"] = 16] = "Mask";
     BadgeStyle[BadgeStyle["Michael"] = 17] = "Michael";
     BadgeStyle[BadgeStyle["Star"] = 18] = "Star";
-    BadgeStyle[BadgeStyle["Tatoo"] = 19] = "Tatoo";
+    BadgeStyle[BadgeStyle["Tattoo"] = 19] = "Tattoo";
     BadgeStyle[BadgeStyle["Trevor"] = 20] = "Trevor";
     BadgeStyle[BadgeStyle["Lock"] = 21] = "Lock";
     BadgeStyle[BadgeStyle["Tick"] = 22] = "Tick";
