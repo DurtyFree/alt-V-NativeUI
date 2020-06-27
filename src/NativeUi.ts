@@ -277,7 +277,8 @@ export default class NativeUI {
         this._descriptionBar = new ResRectangle(new Point(this._offset.X, 123), new Size(431, 4), Color.Black);
         this._descriptionRectangle = new Sprite("commonmenu", "gradient_bgd", new Point(this._offset.X, 127), new Size(431, 30));
         this._descriptionText = new ResText("", new Point(this._offset.X + 5, 125), 0.35, new Color(255, 255, 255, 255), Font.ChaletLondon, Alignment.Left);
-
+        this._descriptionText.Wrap = 400;
+        
         this._background = new Sprite("commonmenu", "gradient_bgd", new Point(this._offset.X, 144 + this._offset.Y - 37 + this._extraOffset), new Size(290, 25));
         this._visible = false;
 
@@ -437,6 +438,7 @@ export default class NativeUI {
             it.Index--;
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
             this.ListChange.emit(it, it.Index);
+            this.UpdateDescriptionCaption();
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuAutoListItem) {
             const it = <UIMenuAutoListItem>this.MenuItems[this.CurrentSelection];
@@ -447,6 +449,7 @@ export default class NativeUI {
             }
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
             this.AutoListChange.emit(it, it.SelectedValue, ChangeDirection.Left);
+            this.UpdateDescriptionCaption();
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuDynamicListItem) {
             const it = <UIMenuDynamicListItem>this.MenuItems[this.CurrentSelection];
@@ -455,12 +458,14 @@ export default class NativeUI {
                 this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Left);
             });
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
+            this.UpdateDescriptionCaption();
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem) {
             const it = <UIMenuSliderItem>this.MenuItems[this.CurrentSelection];
             it.Index = it.Index - 1;
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
             this.SliderChange.emit(it, it.Index, it.IndexToItem(it.Index));
+            this.UpdateDescriptionCaption();
         }
     }
 
@@ -477,6 +482,7 @@ export default class NativeUI {
             it.Index++;
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
             this.ListChange.emit(it, it.Index);
+            this.UpdateDescriptionCaption();
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuAutoListItem) {
             const it = <UIMenuAutoListItem>this.MenuItems[this.CurrentSelection];
@@ -487,6 +493,7 @@ export default class NativeUI {
             }
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
             this.AutoListChange.emit(it, it.SelectedValue, ChangeDirection.Right);
+            this.UpdateDescriptionCaption();
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuDynamicListItem) {
             const it = <UIMenuDynamicListItem>this.MenuItems[this.CurrentSelection];
@@ -495,12 +502,14 @@ export default class NativeUI {
                 this.DynamicListChange.emit(it, it.SelectedValue, ChangeDirection.Right);
             });
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
+            this.UpdateDescriptionCaption();
         }
         else if (this.MenuItems[this.CurrentSelection] instanceof UIMenuSliderItem) {
             const it = <UIMenuSliderItem>this.MenuItems[this.CurrentSelection];
             it.Index++;
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
             this.SliderChange.emit(it, it.Index, it.IndexToItem(it.Index));
+            this.UpdateDescriptionCaption();
         }
     }
 
