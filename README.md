@@ -2,7 +2,7 @@
 This project is a (fully TypeScript compatible) port of RageMP-NativeUI [Kar](https://github.com/karscopsandrobbers/RAGEMP-NativeUI) for alt:V. It provides a simple way to use NativeUI menus in your clientside scripts. A lot of credits to [datWeazel](https://github.com/datWeazel/alt-V-NativeUI) who made the initial port of the RageMP-NativeUI.
 
 ## Usage:
-### With package:
+### With bundler:
 1. Create in your `package.json` location a file named `.npmrc` and add this line:
     ```
     @durtyfree:registry=https://npm.pkg.github.com
@@ -12,7 +12,7 @@ This project is a (fully TypeScript compatible) port of RageMP-NativeUI [Kar](ht
     ```typescript
     import * as NativeUI from "@durtyfree/altv-nativeui";
     ```
-### Without package:
+### Without bundler:
 1. Download `.zip` archive you want from [releases page](https://github.com/DurtyFree/alt-V-NativeUI/releases).
 2. Unpack archive in client's folder, and import like any other file:
     ```javascript

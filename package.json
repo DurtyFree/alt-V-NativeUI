@@ -1,6 +1,6 @@
 {
   "name": "@DurtyFree/altv-nativeui",
-  "version": "1.4.1",
+  "version": "1.4.3",
   "description": "NativeUI for GTA V alt:V Multiplayer mod written in Javascript / TypeScript",
   "main": "dist/nativeui/nativeui.min.js",
   "types": "dist/nativeui/types/NativeUi.d.ts",
