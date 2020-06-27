@@ -7,6 +7,7 @@ import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Screen from "../utils/Screen";
 import UIMenuItem from "./UIMenuItem";
+import { fixFloat } from "../utils/Number";
 export default class UIMenuAutoListItem extends UIMenuItem {
     constructor(text, description = "", lowerThreshold = 0, upperThreshold = 10, startValue = 0, data = null) {
         super(text, description, data);
@@ -91,7 +92,7 @@ export default class UIMenuAutoListItem extends UIMenuItem {
     set SelectedValue(value) {
         if (value < this._lowerThreshold || value > this._upperThreshold)
             throw new Error("The value can not be outside the lower or upper limits");
-        this._selectedValue = value;
+        this._selectedValue = fixFloat(value);
         this._currentOffset = Screen.GetTextWidth(this.PreCaptionText + this._selectedValue.toString() + this.PostCaptionText, this._itemText && this._itemText.Font ? this._itemText.Font : 0, this._itemText && this._itemText.Scale ? this._itemText.Scale : 0.35);
     }
     SetVerticalPosition(y) {
