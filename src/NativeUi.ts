@@ -520,13 +520,13 @@ export default class NativeUI {
         }
 
         const it = <UIMenuCheckboxItem>this.MenuItems[this.CurrentSelection];
+        Common.PlaySound(this.AUDIO_SELECT, this.AUDIO_LIBRARY);
+        this.ItemSelect.emit(it, this.CurrentSelection);
+
         if (this.MenuItems[this.CurrentSelection] instanceof UIMenuCheckboxItem) {
             it.Checked = !it.Checked;
-            Common.PlaySound(this.AUDIO_SELECT, this.AUDIO_LIBRARY);
             this.CheckboxChange.emit(it, it.Checked);
         } else {
-            Common.PlaySound(this.AUDIO_SELECT, this.AUDIO_LIBRARY);
-            this.ItemSelect.emit(it, this.CurrentSelection);
             if (this.Children.has(it.Id)) {
                 const subMenu = this.Children.get(it.Id);
                 this.Visible = false;
