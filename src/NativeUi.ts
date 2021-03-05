@@ -345,7 +345,7 @@ export default class NativeUI {
         if (this._bannerSprite != null) {
             this._bannerSprite.Size = new Size(431 + this.WidthOffset, 107);
         }
-        this._mainMenu.Items[0].pos = new Point((this.WidthOffset + this._offset.X + 431) / 2, 20 + this._offset.Y);
+        this._mainMenu.Items[0].pos = new Point(215 + this._offset.X + (this.WidthOffset / 2), 20 + this._offset.Y);
         if (this._counterText) {
             this._counterText.Pos = new Point(425 + this._offset.X + widthOffset, 110 + this._offset.Y);
         }
