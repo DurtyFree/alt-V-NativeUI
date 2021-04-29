@@ -136,11 +136,11 @@ export default class NativeUI {
     }
 
     public get GetSubTitle(): ResText {
-        return this._titleResText;
+        return this._subtitleResText;
     }
 
     public get SubTitle(): string {
-        return this._titleResText.Caption;
+        return this._subtitleResText.Caption;
     }
     
     public set SubTitle(text: string) {
