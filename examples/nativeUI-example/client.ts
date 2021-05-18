@@ -124,7 +124,7 @@ const banners: { dict: string; name: string; }[] = [
     { dict: "shopui_title_gasstation", name: "shopui_title_gasstation" },
     { dict: "shopui_title_golfshop", name: "shopui_title_golfshop" },
     { dict: "shopui_title_graphics_franklin", name: "shopui_title_graphics_franklin" },
-    { dict: "shopui_title_graphics_micheal", name: "shopui_title_graphics_micheal" },
+    { dict: "shopui_title_graphics_michael", name: "shopui_title_graphics_michael" },
     { dict: "shopui_title_graphics_trevor", name: "shopui_title_graphics_trevor" },
     { dict: "shopui_title_gunclub", name: "shopui_title_gunclub" },
     { dict: "shopui_title_highendfashion", name: "shopui_title_highendfashion" },
