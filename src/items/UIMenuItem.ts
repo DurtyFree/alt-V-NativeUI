@@ -55,7 +55,7 @@ export default class UIMenuItem {
     }
     public set Description(text) {
         this._description = text;
-        if (this.hasOwnProperty('Parent')) {
+        if (this != undefined && this.Parent != undefined) {
             this.Parent.UpdateDescriptionCaption();
         }
     }
