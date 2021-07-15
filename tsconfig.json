@@ -2,6 +2,7 @@
     "compilerOptions": {
       "target": "ESNext",
       "module": "ESNext",
+      "noEmit": true,
       "moduleResolution": "Node",
       "declaration": true,
       "resolveJsonModule": true,

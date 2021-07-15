@@ -1,5 +1,6 @@
-import { getCursorPos, setInterval, clearInterval, logWarning, emit, logError, clearTimeout, setTimeout, everyTick, getGxtText, showCursor } from 'alt-client';
-import game__default, { requestScaleformMovie, hasScaleformMovieLoaded, beginScaleformMovieMethod, scaleformMovieMethodAddParamBool, scaleformMovieMethodAddParamPlayerNameString, scaleformMovieMethodAddParamFloat, scaleformMovieMethodAddParamInt, endScaleformMovieMethod, endScaleformMovieMethodReturnValue, drawScaleformMovieFullscreen, setScaleformMovieAsNoLongerNeeded } from 'natives';
+import * as alt from 'alt-client';
+import * as game from 'natives';
+import game__default from 'natives';
 
 var BadgeStyle;
 (function (BadgeStyle) {
@@ -708,7 +709,7 @@ class Screen {
     }
     static MousePosition(relative = false) {
         const res = Screen.ResolutionMaintainRatio;
-        const cursor = getCursorPos();
+        const cursor = alt.getCursorPos();
         let [mouseX, mouseY] = [cursor.x, cursor.y];
         if (relative)
             [mouseX, mouseY] = [cursor.x / res.Width, cursor.y / res.Height];
@@ -768,9 +769,9 @@ class Sprite {
     requestTextureDictPromise(textureDict) {
         return new Promise((resolve, reject) => {
             game__default.requestStreamedTextureDict(textureDict, true);
-            let inter = setInterval(() => {
+            let inter = alt.setInterval(() => {
                 if (game__default.hasStreamedTextureDictLoaded(textureDict)) {
-                    clearInterval(inter);
+                    alt.clearInterval(inter);
                     return resolve(true);
                 }
             }, 10);
@@ -895,7 +896,6 @@ class ResText extends Text {
                 centered = undefined;
                 dropShadow = this.DropShadow;
                 outline = this.Outline;
-                wordWrap = this.WordWrap;
             }
         }
         const screenw = Screen.Width;
@@ -915,7 +915,7 @@ class ResText extends Text {
             if (dropShadow)
                 game__default.setTextDropshadow(2, 0, 0, 0, 0);
             if (outline)
-                logWarning("[NativeUI] ResText outline not working!");
+                alt.logWarning("[NativeUI] ResText outline not working!");
             switch (textAlignment) {
                 case Alignment$1.Centered:
                     game__default.setTextCentre(true);
@@ -992,7 +992,7 @@ class UIMenuItem {
     }
     set Description(text) {
         this._description = text;
-        if (this.hasOwnProperty('Parent')) {
+        if (this != undefined && this.Parent != undefined) {
             this.Parent.UpdateDescriptionCaption();
         }
     }
@@ -1009,7 +1009,7 @@ class UIMenuItem {
     }
     fireEvent() {
         if (this._event) {
-            emit(this._event.event, ...this._event.args);
+            alt.emit(this._event.event, ...this._event.args);
         }
     }
     Draw() {
@@ -1655,7 +1655,7 @@ class Scaleform {
     constructor(scaleForm) {
         this._handle = 0;
         this.scaleForm = scaleForm;
-        this._handle = requestScaleformMovie(this.scaleForm);
+        this._handle = game.requestScaleformMovie(this.scaleForm);
     }
     get handle() {
         return this._handle;
@@ -1664,63 +1664,63 @@ class Scaleform {
         return this._handle != 0;
     }
     get isLoaded() {
-        return hasScaleformMovieLoaded(this._handle);
+        return game.hasScaleformMovieLoaded(this._handle);
     }
     callFunctionHead(funcName, ...args) {
         if (!this.isValid || !this.isLoaded)
             return;
-        beginScaleformMovieMethod(this._handle, funcName);
+        game.beginScaleformMovieMethod(this._handle, funcName);
         args.forEach((arg) => {
             switch (typeof arg) {
                 case "number":
                     {
                         if (Number(arg) === arg && arg % 1 !== 0) {
-                            scaleformMovieMethodAddParamFloat(arg);
+                            game.scaleformMovieMethodAddParamFloat(arg);
                         }
                         else {
-                            scaleformMovieMethodAddParamInt(arg);
+                            game.scaleformMovieMethodAddParamInt(arg);
                         }
                     }
                 case "string":
                     {
-                        scaleformMovieMethodAddParamPlayerNameString(arg);
+                        game.scaleformMovieMethodAddParamPlayerNameString(arg);
                         break;
                     }
                 case "boolean":
                     {
-                        scaleformMovieMethodAddParamBool(arg);
+                        game.scaleformMovieMethodAddParamBool(arg);
                         break;
                     }
                 default:
                     {
-                        logError(`Unknown argument type ${typeof arg} = ${arg.toString()} passed to scaleform with handle ${this._handle}`);
+                        alt.logError(`Unknown argument type ${typeof arg} = ${arg.toString()} passed to scaleform with handle ${this._handle}`);
                     }
             }
         });
     }
     callFunction(funcName, ...args) {
         this.callFunctionHead(funcName, ...args);
-        endScaleformMovieMethod();
+        game.endScaleformMovieMethod();
     }
     callFunctionReturn(funcName, ...args) {
         this.callFunctionHead(funcName, ...args);
-        return endScaleformMovieMethodReturnValue();
+        return game.endScaleformMovieMethodReturnValue();
     }
     render2D() {
         if (!this.isValid || !this.isLoaded)
             return;
-        drawScaleformMovieFullscreen(this._handle, 255, 255, 255, 255, 0);
+        game.drawScaleformMovieFullscreen(this._handle, 255, 255, 255, 255, 0);
     }
     recreate() {
         if (!this.isValid || !this.isLoaded)
             return;
-        setScaleformMovieAsNoLongerNeeded(this._handle);
-        this._handle = requestScaleformMovie(this.scaleForm);
+        game.setScaleformMovieAsNoLongerNeeded(this._handle);
+        this._handle = game.requestScaleformMovie(this.scaleForm);
     }
     destroy() {
         if (!this.isValid)
             return;
-        setScaleformMovieAsNoLongerNeeded(this._handle);
+        game.setScaleformMovieAsNoLongerNeeded(this._handle);
         this._handle = 0;
     }
 }
@@ -1738,12 +1738,12 @@ class Message {
     }
     static Load() {
         if (this._delayedTransitionInTimeout != null) {
-            clearTimeout(this._delayedTransitionInTimeout);
+            alt.clearTimeout(this._delayedTransitionInTimeout);
             this._delayedTransitionInTimeout = null;
         }
     }
     static SetDelayedTransition(messageHandler, time) {
-        this._delayedTransitionInTimeout = setTimeout(() => {
+        this._delayedTransitionInTimeout = alt.setTimeout(() => {
             this._delayedTransitionInTimeout = null;
             this.TransitionIn(messageHandler, time);
         }, this._transitionOutTimeMs);
@@ -1767,15 +1767,15 @@ class Message {
         if (!this._messageVisible)
             return;
         if (this._transitionOutTimeout != null) {
-            clearTimeout(this._transitionOutTimeout);
+            alt.clearTimeout(this._transitionOutTimeout);
             this._transitionOutTimeout = null;
         }
         if (this._transitionOutFinishedTimeout != null) {
-            clearTimeout(this._transitionOutFinishedTimeout);
+            alt.clearTimeout(this._transitionOutFinishedTimeout);
             this._transitionOutFinishedTimeout = null;
         }
         this._scaleform.callFunction(this._transitionOutAnimName);
-        this._transitionOutFinishedTimeout = setTimeout(() => {
+        this._transitionOutFinishedTimeout = alt.setTimeout(() => {
             this._messageVisible = false;
             this._scaleform.recreate();
         }, this._transitionOutTimeMs);
@@ -1786,7 +1786,7 @@ class Message {
         this.SetTransitionOutTimer(transitionOutTime);
     }
     static SetTransitionOutTimer(time) {
-        this._transitionOutTimeout = setTimeout(() => {
+        this._transitionOutTimeout = alt.setTimeout(() => {
             this._transitionOutTimeout = null;
             this.TransitionOut();
         }, time);
@@ -1808,7 +1808,7 @@ Message._transitionOutAnimName = null;
 class BigMessage extends Message {
     static Initialize(scaleForm, transitionOutAnimName) {
         super.Initialize(scaleForm, transitionOutAnimName);
-        everyTick(() => this.Render());
+        alt.everyTick(() => this.Render());
     }
     static ShowMissionPassedMessage(msg, subtitle = "", time = 5000) {
         this.ShowCustomShard("SHOW_MISSION_PASSED_MESSAGE", time, msg, subtitle, 100, true, 0, true);
@@ -1846,7 +1846,7 @@ BigMessage.Initialize("MP_BIG_MESSAGE_FREEMODE", "TRANSITION_OUT");
 class MidsizedMessage extends Message {
     static Initialize(scaleForm, transitionOutAnimName) {
         super.Initialize(scaleForm, transitionOutAnimName);
-        everyTick(() => this.Render());
+        alt.everyTick(() => this.Render());
     }
     static ShowMidsizedMessage(title, message = "", time = 5000) {
         this.ShowCustomShard("SHOW_MIDSIZED_MESSAGE", time, title, message);
@@ -1871,10 +1871,10 @@ class UIMenuDynamicListItem extends UIMenuItem {
         this._selectedStartValueHandler = null;
         this.SelectionChangeHandler = null;
         if (!this.isVariableFunction(selectionChangeHandler)) {
-            logError(`[UIMenuDynamicListItem] ${text} is not created with a valid selectionChangeHandler, needs to be function. Please see docs.`);
+            alt.logError(`[UIMenuDynamicListItem] ${text} is not created with a valid selectionChangeHandler, needs to be function. Please see docs.`);
         }
         if (!this.isVariableFunction(selectedStartValueHandler)) {
-            logError(`[UIMenuDynamicListItem] ${text} is not created with a valid selectedStartValueHandler, needs to be function. Please see docs.`);
+            alt.logError(`[UIMenuDynamicListItem] ${text} is not created with a valid selectedStartValueHandler, needs to be function. Please see docs.`);
         }
         this.SelectionChangeHandler = selectionChangeHandler;
         this._selectedStartValueHandler = selectedStartValueHandler;
@@ -1990,8 +1990,8 @@ class NativeUI {
         this._defaultTitleScale = 1.15;
         this._maxMenuItems = 1000;
         this.Id = UUIDV4();
-        this.SelectTextLocalized = getGxtText("HUD_INPUT2");
-        this.BackTextLocalized = getGxtText("HUD_INPUT3");
+        this.SelectTextLocalized = alt.getGxtText("HUD_INPUT2");
+        this.BackTextLocalized = alt.getGxtText("HUD_INPUT3");
         this.WidthOffset = 0;
         this.ParentMenu = null;
         this.ParentItem = null;
@@ -2043,7 +2043,7 @@ class NativeUI {
         this._descriptionText.Wrap = 400;
         this._background = new Sprite("commonmenu", "gradient_bgd", new Point(this._offset.X, 144 + this._offset.Y - 37 + this._extraOffset), new Size(290, 25));
         this._visible = false;
-        everyTick(this.render.bind(this));
+        alt.everyTick(this.render.bind(this));
     }
     GetSpriteBanner() {
         return this._bannerSprite;
@@ -2405,7 +2405,7 @@ class NativeUI {
             this.MenuItems.filter(i => i.Hovered).forEach(i => (i.Hovered = false));
             return;
         }
-        showCursor(true);
+        alt.showCursor(true);
         let limit = this.MenuItems.length - 1;
         let counter = 0;
         if (this.MenuItems.length > this._maxItemsOnScreen + 1)
