@@ -62,7 +62,7 @@ export default class ResText extends Text {
         const x = this.Pos.X / width;
         const y = this.Pos.Y / height;
 
-        game.setTextFont(parseInt(font as string));
+        game.setTextFont(parseInt((font) as any));
         game.setTextScale(1.0, scale);
         game.setTextColour(color.R, color.G, color.B, color.A);
 

@@ -33,7 +33,7 @@ export default class Text extends IElement {
         const x = pos.X / 1280.0;
         const y = pos.Y / 720.0;
 
-        game.setTextFont(parseInt(font as string));
+        game.setTextFont(parseInt((font) as any));
         game.setTextScale(scale, scale);
         game.setTextColour(color.R, color.G, color.B, color.A);
         game.setTextCentre(centered);
@@ -48,7 +48,7 @@ export default class Text extends IElement {
 
         const maxStringLength = 99;
 
-        for (let i = 0, position; i < text.length; i += maxStringLength) {
+        for (let i = 0, position: any; i < text.length; i += maxStringLength) {
             let currentText = text.substr(i, i + maxStringLength);
             let currentIndex = i;
             if ((currentText.match(/~/g) || []).length % 2 !== 0) {

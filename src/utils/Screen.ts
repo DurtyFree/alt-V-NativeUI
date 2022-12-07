@@ -5,7 +5,7 @@ import Point from "./Point";
 import Size from "./Size";
 import Text from '../modules/Text';
 
-const gameScreen = game.getActiveScreenResolution(0, 0);
+const gameScreen = game.getActualScreenResolution(0, 0);
 
 export default class Screen {
     public static Width: number = gameScreen[1];
@@ -41,7 +41,7 @@ export default class Screen {
 
     public static GetTextWidth(text: string, font: Font, scale: number): number {
         // Start by requesting the game to start processing a width measurement
-        game.beginTextCommandGetWidth("CELL_EMAIL_BCON");
+        game.beginTextCommandGetScreenWidthOfDisplayText("CELL_EMAIL_BCON");
         // Add the text string
         Text.AddLongString(text);
 
@@ -50,7 +50,7 @@ export default class Screen {
         game.setTextScale(1.0, scale);
 
         // Ask the game for the relative string width
-        const width: number = game.endTextCommandGetWidth(true);
+        const width: number = game.endTextCommandGetScreenWidthOfDisplayText(true);
         // And return the literal result
         const res = Screen.ResolutionMaintainRatio;
         return res.Width * width;
@@ -58,7 +58,7 @@ export default class Screen {
 
     public static GetLineCount(text: string, position: Point, font: Font, scale: number, wrap: number): number {
         // Tell the game that we are going to request the number of lines
-        game.beginTextCommandLineCount("CELL_EMAIL_BCON");
+        game.beginTextCommandGetNumberOfLinesForString("CELL_EMAIL_BCON");
         // Add the text that has been sent to us
         Text.AddLongString(text);
 
@@ -82,7 +82,7 @@ export default class Screen {
         }
 
         // Finally, return the number of lines being made by the string  
-        let lineCount = game.endTextCommandLineCount(x, y);
+        let lineCount = game.endTextCommandGetNumberOfLinesForString(x, y);
         return lineCount;
     }
 }

@@ -77,6 +77,6 @@ export default class Sprite {
         const x = this.Pos.X / width + w * 0.5;
         const y = this.Pos.Y / height + h * 0.5;
 
-        game.drawSprite(textureDictionary, textureName, x, y, w, h, heading, color.R, color.G, color.B, color.A, true);
+        game.drawSprite(textureDictionary, textureName, x, y, w, h, heading, color.R, color.G, color.B, color.A, true, false);
     }
 }

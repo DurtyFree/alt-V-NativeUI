@@ -74,7 +74,7 @@ export default class UIMenuListItem extends UIMenuItem {
         this._currentOffset = Screen.GetTextWidth(caption, this._itemText && this._itemText.Font ? this._itemText.Font : 0, 0.35); // this._itemText && this._itemText.font ? this._itemText.font : 0, this._itemText && this._itemText.scale ? this._itemText.scale : 0.35
     }
 
-    constructor(text: string, description: string = "", collection: ItemsCollection = new ItemsCollection([]), startIndex: number = 0, data: any = null) {
+    constructor(text: string, description: string = "", collection: ItemsCollection = new ItemsCollection(([]) as any), startIndex: number = 0, data: any = null) {
         super(text, description, data);
 
         let y = 0;

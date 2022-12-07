@@ -34,6 +34,6 @@ export default class InstructionalButton {
     }
 
     public GetButtonId(): string {
-        return this._usingControls ? game.getControlInstructionalButton(2, this._buttonControl as number, false) : "t_" + this._buttonString;
+        return this._usingControls ? game.getControlInstructionalButtonsString(2, this._buttonControl as number, false) : "t_" + this._buttonString;
     }
 }

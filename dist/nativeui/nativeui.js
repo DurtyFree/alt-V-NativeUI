@@ -673,7 +673,7 @@ class Text extends IElement {
         }
         const x = pos.X / 1280.0;
         const y = pos.Y / 720.0;
-        game__default.setTextFont(parseInt(font));
+        game__default.setTextFont(parseInt((font)));
         game__default.setTextScale(scale, scale);
         game__default.setTextColour(color.R, color.G, color.B, color.A);
         game__default.setTextCentre(centered);
@@ -700,7 +700,7 @@ class Text extends IElement {
     }
 }
 
-const gameScreen = game__default.getActiveScreenResolution(0, 0);
+const gameScreen = game__default.getActualScreenResolution(0, 0);
 class Screen {
     static get ResolutionMaintainRatio() {
         const ratio = Screen.Width / Screen.Height;
@@ -725,16 +725,16 @@ class Screen {
             (mousePosition.Y > topLeft.Y && mousePosition.Y < topLeft.Y + boxSize.Height));
     }
     static GetTextWidth(text, font, scale) {
-        game__default.beginTextCommandGetWidth("CELL_EMAIL_BCON");
+        game__default.beginTextCommandGetScreenWidthOfDisplayText("CELL_EMAIL_BCON");
         Text.AddLongString(text);
         game__default.setTextFont(font);
         game__default.setTextScale(1.0, scale);
-        const width = game__default.endTextCommandGetWidth(true);
+        const width = game__default.endTextCommandGetScreenWidthOfDisplayText(true);
         const res = Screen.ResolutionMaintainRatio;
         return res.Width * width;
     }
     static GetLineCount(text, position, font, scale, wrap) {
-        game__default.beginTextCommandLineCount("CELL_EMAIL_BCON");
+        game__default.beginTextCommandGetNumberOfLinesForString("CELL_EMAIL_BCON");
         Text.AddLongString(text);
         const res = Screen.ResolutionMaintainRatio;
         const x = position.X / res.Width;
@@ -746,7 +746,7 @@ class Screen {
             const end = start + (wrap / res.Width);
             game__default.setTextWrap(x, end);
         }
-        let lineCount = game__default.endTextCommandLineCount(x, y);
+        let lineCount = game__default.endTextCommandGetNumberOfLinesForString(x, y);
         return lineCount;
     }
 }
@@ -809,7 +809,7 @@ class Sprite {
         const h = this.Size.Height / height;
         const x = this.Pos.X / width + w * 0.5;
         const y = this.Pos.Y / height + h * 0.5;
-        game__default.drawSprite(textureDictionary, textureName, x, y, w, h, heading, color.R, color.G, color.B, color.A, true);
+        game__default.drawSprite(textureDictionary, textureName, x, y, w, h, heading, color.R, color.G, color.B, color.A, true, false);
     }
 }
 
@@ -896,6 +896,7 @@ class ResText extends Text {
                 centered = undefined;
                 dropShadow = this.DropShadow;
                 outline = this.Outline;
+                this.WordWrap;
             }
         }
         const screenw = Screen.Width;
@@ -905,7 +906,7 @@ class ResText extends Text {
         const width = height * ratio;
         const x = this.Pos.X / width;
         const y = this.Pos.Y / height;
-        game__default.setTextFont(parseInt(font));
+        game__default.setTextFont(parseInt((font)));
         game__default.setTextScale(1.0, scale);
         game__default.setTextColour(color.R, color.G, color.B, color.A);
         if (centered !== undefined) {
@@ -1264,7 +1265,7 @@ class ItemsCollection {
 }
 
 class UIMenuListItem extends UIMenuItem {
-    constructor(text, description = "", collection = new ItemsCollection([]), startIndex = 0, data = null) {
+    constructor(text, description = "", collection = new ItemsCollection(([])), startIndex = 0, data = null) {
         super(text, description, data);
         this.ScrollingEnabled = true;
         this.HoldTimeBeforeScroll = 200;
@@ -1647,7 +1648,7 @@ class InstructionalButton {
         this._itemBind = item;
     }
     GetButtonId() {
-        return this._usingControls ? game__default.getControlInstructionalButton(2, this._buttonControl, false) : "t_" + this._buttonString;
+        return this._usingControls ? game__default.getControlInstructionalButtonsString(2, this._buttonControl, false) : "t_" + this._buttonString;
     }
 }
 
@@ -2123,7 +2124,7 @@ class NativeUI {
                 }
             }
             if (menuPool.length === 0) {
-                game__default.setMouseCursorSprite(1);
+                game__default.setMouseCursorStyle(1);
             }
         }
     }
@@ -2383,7 +2384,7 @@ class NativeUI {
         return false;
     }
     IsMouseInListItemArrows(item, topLeft, safezone) {
-        game__default.beginTextCommandGetWidth("jamyfafi");
+        game__default.beginTextCommandGetScreenWidthOfDisplayText("jamyfafi");
         game__default.addTextComponentSubstringPlayerName(item.Text);
         let res = Screen.ResolutionMaintainRatio;
         let screenw = res.Width;
@@ -2391,7 +2392,7 @@ class NativeUI {
         const height = 1080.0;
         const ratio = screenw / screenh;
         let width = height * ratio;
-        const labelSize = game__default.endTextCommandGetWidth(false) * width * 0.35;
+        const labelSize = game__default.endTextCommandGetScreenWidthOfDisplayText(false) * width * 0.35;
         const labelSizeX = 5 + labelSize + 10;
         const arrowSizeX = 431 - labelSizeX;
         return Screen.IsMouseInBounds(topLeft, new Size(labelSizeX, 38))
@@ -2412,14 +2413,14 @@ class NativeUI {
             limit = this._maxItem;
         if (Screen.IsMouseInBounds(new Point(0, 0), new Size(30, 1080)) && this._mouseEdgeEnabled) {
             game__default.setGameplayCamRelativeHeading(game__default.getGameplayCamRelativeHeading() + 5.0);
-            game__default.setMouseCursorSprite(6);
+            game__default.setMouseCursorStyle(6);
         }
         else if (Screen.IsMouseInBounds(new Point(Screen.ResolutionMaintainRatio.Width - 30.0, 0), new Size(30, 1080)) && this._mouseEdgeEnabled) {
             game__default.setGameplayCamRelativeHeading(game__default.getGameplayCamRelativeHeading() - 5.0);
-            game__default.setMouseCursorSprite(7);
+            game__default.setMouseCursorStyle(7);
         }
         else if (this._mouseEdgeEnabled) {
-            game__default.setMouseCursorSprite(1);
+            game__default.setMouseCursorStyle(1);
         }
         for (let i = this._minItem; i <= limit; i++) {
             let xpos = this._offset.X;
@@ -2431,7 +2432,7 @@ class NativeUI {
                 uiMenuItem.Hovered = true;
                 const res = this.IsMouseInListItemArrows(this.MenuItems[i], new Point(xpos, ypos), 0);
                 if (uiMenuItem.Hovered && res == 1 && (this.MenuItems[i] instanceof UIMenuListItem || this.MenuItems[i] instanceof UIMenuAutoListItem || this.MenuItems[i] instanceof UIMenuDynamicListItem)) {
-                    game__default.setMouseCursorSprite(5);
+                    game__default.setMouseCursorStyle(5);
                 }
                 if (game__default.isControlJustReleased(0, 24) || game__default.isDisabledControlJustReleased(0, 24))
                     if (uiMenuItem.Selected && uiMenuItem.Enabled) {
@@ -2689,8 +2690,8 @@ class NativeUI {
         this._instructionalButtonsScaleform.callFunction("CLEAR_ALL");
         this._instructionalButtonsScaleform.callFunction("TOGGLE_MOUSE_BUTTONS", 0);
         this._instructionalButtonsScaleform.callFunction("CREATE_CONTAINER");
-        this._instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 0, game__default.getControlInstructionalButton(2, Control$1.PhoneSelect, false), this.SelectTextLocalized);
-        this._instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 1, game__default.getControlInstructionalButton(2, Control$1.PhoneCancel, false), this.BackTextLocalized);
+        this._instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 0, game__default.getControlInstructionalButtonsString(2, Control$1.PhoneSelect, false), this.SelectTextLocalized);
+        this._instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", 1, game__default.getControlInstructionalButtonsString(2, Control$1.PhoneCancel, false), this.BackTextLocalized);
         let count = 2;
         this._instructionalButtons.filter(b => b.ItemBind == null || this.MenuItems[this.CurrentSelection] == b.ItemBind).forEach((button) => {
             this._instructionalButtonsScaleform.callFunction("SET_DATA_SLOT", count, button.GetButtonId(), button.Text);
@@ -2780,5 +2781,4 @@ class NativeUI {
     }
 }
 
-export default NativeUI;
-export { Alignment$1 as Alignment, BadgeStyle$1 as BadgeStyle, BigMessage, ChangeDirection$1 as ChangeDirection, Color, Control$1 as Control, Font$1 as Font, HudColor$1 as HudColor, InstructionalButton, ItemsCollection, ListItem, NativeUI as Menu, MidsizedMessage, Point, ResRectangle, Size, Sprite, UIMenuAutoListItem, UIMenuCheckboxItem, UIMenuDynamicListItem, UIMenuItem, UIMenuListItem, UIMenuSliderItem };
+export { Alignment$1 as Alignment, BadgeStyle$1 as BadgeStyle, BigMessage, ChangeDirection$1 as ChangeDirection, Color, Control$1 as Control, Font$1 as Font, HudColor$1 as HudColor, InstructionalButton, ItemsCollection, ListItem, NativeUI as Menu, MidsizedMessage, Point, ResRectangle, Size, Sprite, UIMenuAutoListItem, UIMenuCheckboxItem, UIMenuDynamicListItem, UIMenuItem, UIMenuListItem, UIMenuSliderItem, NativeUI as default };

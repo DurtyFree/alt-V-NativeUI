@@ -13,7 +13,7 @@ export default class ItemsCollection {
 	}
 
 	public getListItems() {
-		const items = [];
+		const items: any[] = [];
 		for (const item of this.items) {
 			if (item instanceof ListItem) {
 				items.push(item);
