@@ -1,6 +1,6 @@
-import Font from "../enums/Font";
-import Point from "./Point";
-import Size from "./Size";
+import Font from "../enums/Font.js";
+import Point from "./Point.js";
+import Size from "./Size.js";
 export default class Screen {
     static Width: number;
     static Height: number;

@@ -1,6 +1,6 @@
 ﻿import * as alt from 'alt-client';
-import HudColor from '../enums/HudColor';
-import Message from './Message';
+import HudColor from '../enums/HudColor.js';
+import Message from './Message.js';
 
 export default class BigMessage extends Message {
     public static Initialize(scaleForm: string, transitionOutAnimName: string) {

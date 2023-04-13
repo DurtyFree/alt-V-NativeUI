@@ -1,5 +1,5 @@
-import BadgeStyle from "../enums/BadgeStyle";
-import UIMenuItem from "./UIMenuItem";
+import BadgeStyle from "../enums/BadgeStyle.js";
+import UIMenuItem from "./UIMenuItem.js";
 export default class UIMenuCheckboxItem extends UIMenuItem {
     private readonly _checkedSprite;
     Checked: boolean;

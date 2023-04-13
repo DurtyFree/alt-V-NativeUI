@@ -1,6 +1,6 @@
 import game from 'natives';
-import UIMenuItem from "../items/UIMenuItem";
-import Control from '../enums/Control';
+import UIMenuItem from "../items/UIMenuItem.js";
+import Control from '../enums/Control.js';
 
 export default class InstructionalButton {
     public Text: string;

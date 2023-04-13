@@ -1,9 +1,9 @@
 import * as alt from 'alt-client';
 import game from 'natives';
-import Color from "../utils/Color";
-import Point from "../utils/Point";
-import Size from "../utils/Size";
-import Screen from "../utils/Screen";
+import Color from "../utils/Color.js";
+import Point from "../utils/Point.js";
+import Size from "../utils/Size.js";
+import Screen from "../utils/Screen.js";
 
 export default class Sprite {
     public TextureName: string;
@@ -77,6 +77,6 @@ export default class Sprite {
         const x = this.Pos.X / width + w * 0.5;
         const y = this.Pos.Y / height + h * 0.5;
 
-        game.drawSprite(textureDictionary, textureName, x, y, w, h, heading, color.R, color.G, color.B, color.A, true, false);
+        game.drawSprite(textureDictionary, textureName, x, y, w, h, heading, color.R, color.G, color.B, color.A, true, 0);
     }
 }

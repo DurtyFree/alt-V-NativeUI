@@ -1,5 +1,5 @@
-import HudColor from '../enums/HudColor';
-import Message from './Message';
+import HudColor from '../enums/HudColor.js';
+import Message from './Message.js';
 export default class BigMessage extends Message {
     static Initialize(scaleForm: string, transitionOutAnimName: string): void;
     static ShowMissionPassedMessage(msg: string, subtitle?: string, time?: number): void;

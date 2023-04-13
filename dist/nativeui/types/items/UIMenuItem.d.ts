@@ -1,10 +1,10 @@
-import BadgeStyle from "../enums/BadgeStyle";
-import NativeUI from "../NativeUi";
-import ResRectangle from "../modules/ResRectangle";
-import ResText from "../modules/ResText";
-import Sprite from "../modules/Sprite";
-import Color from "../utils/Color";
-import Point from "../utils/Point";
+import BadgeStyle from "../enums/BadgeStyle.js";
+import NativeUI from "../NativeUi.js";
+import ResRectangle from "../modules/ResRectangle.js";
+import ResText from "../modules/ResText.js";
+import Sprite from "../modules/Sprite.js";
+import Color from "../utils/Color.js";
+import Point from "../utils/Point.js";
 export default class UIMenuItem {
     readonly Id: string;
     static readonly DefaultBackColor: Color;

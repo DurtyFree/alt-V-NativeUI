@@ -1,6 +1,6 @@
 import * as alt from 'alt-client';
 import * as game from 'natives';
-import * as NativeUI from './includes/NativeUI/NativeUI';
+import * as NativeUI from './includes/NativeUI/NativeUI.js';
 
 // Simple menu with default banner
 const menu = new NativeUI.Menu("NativeUI Test", "Test Subtitle", new NativeUI.Point(50, 50));

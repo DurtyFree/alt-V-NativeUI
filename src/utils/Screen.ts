@@ -1,9 +1,9 @@
 import * as alt from 'alt-client';
 import game from 'natives';
-import Font from "../enums/Font";
-import Point from "./Point";
-import Size from "./Size";
-import Text from '../modules/Text';
+import Font from "../enums/Font.js";
+import Point from "./Point.js";
+import Size from "./Size.js";
+import Text from '../modules/Text.js';
 
 const gameScreen = game.getActualScreenResolution(0, 0);
 

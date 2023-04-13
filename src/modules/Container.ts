@@ -1,9 +1,9 @@
 import game from 'natives';
-import Size from "../utils/Size";
-import Rectangle from "./Rectangle";
-import Screen from "../utils/Screen";
-import Point from '../utils/Point';
-import Color from '../utils/Color';
+import Size from "../utils/Size.js";
+import Rectangle from "./Rectangle.js";
+import Screen from "../utils/Screen.js";
+import Point from '../utils/Point.js';
+import Color from '../utils/Color.js';
 
 export default class Container extends Rectangle {
     public Items: any[];

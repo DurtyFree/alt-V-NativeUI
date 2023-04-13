@@ -1,9 +1,9 @@
-import BadgeStyle from "../enums/BadgeStyle";
-import Sprite from "../modules/Sprite";
-import Color from "../utils/Color";
-import Point from "../utils/Point";
-import Size from "../utils/Size";
-import UIMenuItem from "./UIMenuItem";
+import BadgeStyle from "../enums/BadgeStyle.js";
+import Sprite from "../modules/Sprite.js";
+import Color from "../utils/Color.js";
+import Point from "../utils/Point.js";
+import Size from "../utils/Size.js";
+import UIMenuItem from "./UIMenuItem.js";
 
 export default class UIMenuCheckboxItem extends UIMenuItem {
     private readonly _checkedSprite: Sprite;

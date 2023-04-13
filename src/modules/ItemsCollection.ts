@@ -1,4 +1,4 @@
-import ListItem from "../modules/ListItem";
+import ListItem from "../modules/ListItem.js";
 
 export default class ItemsCollection {
     private items: ListItem[] | string[] | number[];

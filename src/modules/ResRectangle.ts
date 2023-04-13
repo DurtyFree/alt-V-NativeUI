@@ -1,9 +1,9 @@
 import game from 'natives';
-import Point from "../utils/Point";
-import Size from "../utils/Size";
-import Rectangle from "./Rectangle";
-import Screen from "../utils/Screen";
-import Color from '../utils/Color';
+import Point from "../utils/Point.js";
+import Size from "../utils/Size.js";
+import Rectangle from "./Rectangle.js";
+import Screen from "../utils/Screen.js";
+import Color from '../utils/Color.js';
 
 export default class ResRectangle extends Rectangle {
     constructor(pos: Point, size: Size, color: Color) {

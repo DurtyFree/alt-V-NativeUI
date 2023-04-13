@@ -1,8 +1,8 @@
-import BadgeStyle from "../enums/BadgeStyle";
-import ChangeDirection from "../enums/ChangeDirection";
-import ResText from "../modules/ResText";
-import Sprite from "../modules/Sprite";
-import UIMenuItem from "./UIMenuItem";
+import BadgeStyle from "../enums/BadgeStyle.js";
+import ChangeDirection from "../enums/ChangeDirection.js";
+import ResText from "../modules/ResText.js";
+import Sprite from "../modules/Sprite.js";
+import UIMenuItem from "./UIMenuItem.js";
 interface SelectionChangeHandler {
     (item: UIMenuDynamicListItem, selectedValue: string, changeDirection: ChangeDirection): string;
 }

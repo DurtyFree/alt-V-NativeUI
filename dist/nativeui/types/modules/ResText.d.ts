@@ -1,8 +1,8 @@
-import Alignment from "../enums/Alignment";
-import Color from "../utils/Color";
-import Point from "../utils/Point";
-import Size from "../utils/Size";
-import Text from "./Text";
+import Alignment from "../enums/Alignment.js";
+import Color from "../utils/Color.js";
+import Point from "../utils/Point.js";
+import Size from "../utils/Size.js";
+import Text from "./Text.js";
 export default class ResText extends Text {
     TextAlignment: Alignment;
     DropShadow: boolean;

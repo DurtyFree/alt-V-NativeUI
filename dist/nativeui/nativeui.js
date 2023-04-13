@@ -809,7 +809,7 @@ class Sprite {
         const h = this.Size.Height / height;
         const x = this.Pos.X / width + w * 0.5;
         const y = this.Pos.Y / height + h * 0.5;
-        game__default.drawSprite(textureDictionary, textureName, x, y, w, h, heading, color.R, color.G, color.B, color.A, true, false);
+        game__default.drawSprite(textureDictionary, textureName, x, y, w, h, heading, color.R, color.G, color.B, color.A, true, 0);
     }
 }
 

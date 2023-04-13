@@ -1,15 +1,15 @@
 import * as alt from 'alt-client';
-import BadgeStyle from "../enums/BadgeStyle";
-import Font from "../enums/Font";
-import Alignment from "../enums/Alignment";
-import NativeUI from "../NativeUi";
-import ResRectangle from "../modules/ResRectangle";
-import ResText from "../modules/ResText";
-import Sprite from "../modules/Sprite";
-import Color from "../utils/Color";
-import Point from "../utils/Point";
-import Size from "../utils/Size";
-import UUIDV4 from "../utils/UUIDV4";
+import BadgeStyle from "../enums/BadgeStyle.js";
+import Font from "../enums/Font.js";
+import Alignment from "../enums/Alignment.js";
+import NativeUI from "../NativeUi.js";
+import ResRectangle from "../modules/ResRectangle.js";
+import ResText from "../modules/ResText.js";
+import Sprite from "../modules/Sprite.js";
+import Color from "../utils/Color.js";
+import Point from "../utils/Point.js";
+import Size from "../utils/Size.js";
+import UUIDV4 from "../utils/UUIDV4.js";
 
 export default class UIMenuItem {
     public readonly Id: string = UUIDV4();

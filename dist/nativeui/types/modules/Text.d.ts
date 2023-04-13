@@ -1,7 +1,7 @@
-import Color from "../utils/Color";
-import Point from "../utils/Point";
-import IElement from "./IElement";
-import Size from '../utils/Size';
+import Color from "../utils/Color.js";
+import Point from "../utils/Point.js";
+import IElement from "./IElement.js";
+import Size from '../utils/Size.js';
 export default class Text extends IElement {
     Caption: string;
     Pos: Point;

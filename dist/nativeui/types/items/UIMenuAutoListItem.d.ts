@@ -1,7 +1,7 @@
-import BadgeStyle from "../enums/BadgeStyle";
-import ResText from "../modules/ResText";
-import Sprite from "../modules/Sprite";
-import UIMenuItem from "./UIMenuItem";
+import BadgeStyle from "../enums/BadgeStyle.js";
+import ResText from "../modules/ResText.js";
+import Sprite from "../modules/Sprite.js";
+import UIMenuItem from "./UIMenuItem.js";
 export default class UIMenuAutoListItem extends UIMenuItem {
     protected _itemText: ResText;
     protected _arrowLeft: Sprite;

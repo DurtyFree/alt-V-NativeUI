@@ -1,7 +1,7 @@
-import Color from "../utils/Color";
-import Point from "../utils/Point";
-import Size from "../utils/Size";
-import IElement from "./IElement";
+import Color from "../utils/Color.js";
+import Point from "../utils/Point.js";
+import Size from "../utils/Size.js";
+import IElement from "./IElement.js";
 export default class Rectangle extends IElement {
     Pos: Point;
     Size: Size;

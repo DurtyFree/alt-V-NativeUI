@@ -1,15 +1,15 @@
-import BadgeStyle from "../enums/BadgeStyle";
-import Font from "../enums/Font";
-import Alignment from "../enums/Alignment";
-import ItemsCollection from "../modules/ItemsCollection";
-import ListItem from "../modules/ListItem";
-import ResText from "../modules/ResText";
-import Sprite from "../modules/Sprite";
-import Color from "../utils/Color";
-import Point from "../utils/Point";
-import Size from "../utils/Size";
-import Screen from "../utils/Screen";
-import UIMenuItem from "./UIMenuItem";
+import BadgeStyle from "../enums/BadgeStyle.js";
+import Font from "../enums/Font.js";
+import Alignment from "../enums/Alignment.js";
+import ItemsCollection from "../modules/ItemsCollection.js";
+import ListItem from "../modules/ListItem.js";
+import ResText from "../modules/ResText.js";
+import Sprite from "../modules/Sprite.js";
+import Color from "../utils/Color.js";
+import Point from "../utils/Point.js";
+import Size from "../utils/Size.js";
+import Screen from "../utils/Screen.js";
+import UIMenuItem from "./UIMenuItem.js";
 
 export default class UIMenuListItem extends UIMenuItem {
     public ScrollingEnabled: boolean = true;

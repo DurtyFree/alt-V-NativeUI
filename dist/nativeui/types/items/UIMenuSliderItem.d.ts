@@ -1,5 +1,5 @@
-import BadgeStyle from "../enums/BadgeStyle";
-import UIMenuItem from "./UIMenuItem";
+import BadgeStyle from "../enums/BadgeStyle.js";
+import UIMenuItem from "./UIMenuItem.js";
 export default class UIMenuSliderItem extends UIMenuItem {
     private _arrowLeft;
     private _arrowRight;

@@ -1,9 +1,9 @@
-import BadgeStyle from "../enums/BadgeStyle";
-import ItemsCollection from "../modules/ItemsCollection";
-import ListItem from "../modules/ListItem";
-import ResText from "../modules/ResText";
-import Sprite from "../modules/Sprite";
-import UIMenuItem from "./UIMenuItem";
+import BadgeStyle from "../enums/BadgeStyle.js";
+import ItemsCollection from "../modules/ItemsCollection.js";
+import ListItem from "../modules/ListItem.js";
+import ResText from "../modules/ResText.js";
+import Sprite from "../modules/Sprite.js";
+import UIMenuItem from "./UIMenuItem.js";
 export default class UIMenuListItem extends UIMenuItem {
     ScrollingEnabled: boolean;
     HoldTimeBeforeScroll: number;

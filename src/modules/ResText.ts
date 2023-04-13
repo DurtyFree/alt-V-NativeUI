@@ -1,11 +1,11 @@
 import * as alt from 'alt-client';
-import Alignment from "../enums/Alignment";
+import Alignment from "../enums/Alignment.js";
 import game from 'natives';
-import Color from "../utils/Color";
-import Point from "../utils/Point";
-import Size from "../utils/Size";
-import Text from "./Text";
-import Screen from "../utils/Screen";
+import Color from "../utils/Color.js";
+import Point from "../utils/Point.js";
+import Size from "../utils/Size.js";
+import Text from "./Text.js";
+import Screen from "../utils/Screen.js";
 
 export default class ResText extends Text {
     public TextAlignment: Alignment = Alignment.Left;

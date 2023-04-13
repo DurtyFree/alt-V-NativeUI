@@ -1,6 +1,6 @@
-import Color from "../utils/Color";
-import Point from "../utils/Point";
-import Size from "../utils/Size";
+import Color from "../utils/Color.js";
+import Point from "../utils/Point.js";
+import Size from "../utils/Size.js";
 export default class Sprite {
     TextureName: string;
     Pos: Point;

@@ -1,4 +1,4 @@
-import Scaleform from '../utils/Scaleform';
+import Scaleform from '../utils/Scaleform.js';
 export default class Message {
     private static _messageVisible;
     private static _transitionOutTimeout;

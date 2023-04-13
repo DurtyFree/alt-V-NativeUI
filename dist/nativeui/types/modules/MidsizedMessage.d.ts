@@ -1,5 +1,5 @@
-import HudColor from '../enums/HudColor';
-import Message from './Message';
+import HudColor from '../enums/HudColor.js';
+import Message from './Message.js';
 export default class MidsizedMessage extends Message {
     static Initialize(scaleForm: string, transitionOutAnimName: string): void;
     static ShowMidsizedMessage(title: string, message?: string, time?: number): void;

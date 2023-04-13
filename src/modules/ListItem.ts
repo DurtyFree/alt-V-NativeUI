@@ -1,4 +1,4 @@
-import UUIDV4 from "../utils/UUIDV4";
+import UUIDV4 from "../utils/UUIDV4.js";
 
 export default class ListItem {
 	public readonly Id: string = UUIDV4();

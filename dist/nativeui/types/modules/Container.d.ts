@@ -1,7 +1,7 @@
-import Size from "../utils/Size";
-import Rectangle from "./Rectangle";
-import Point from '../utils/Point';
-import Color from '../utils/Color';
+import Size from "../utils/Size.js";
+import Rectangle from "./Rectangle.js";
+import Point from '../utils/Point.js';
+import Color from '../utils/Color.js';
 export default class Container extends Rectangle {
     Items: any[];
     constructor(pos: Point, size: Size, color: Color);
