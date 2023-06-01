@@ -45,6 +45,6 @@
     "typescript": "^3.9.10"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "@DurtyFree:registry": "https://npm.pkg.github.com"
   }
 }
